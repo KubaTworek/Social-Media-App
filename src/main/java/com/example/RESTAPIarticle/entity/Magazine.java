@@ -1,6 +1,6 @@
 package com.example.RESTAPIarticle.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -20,7 +20,7 @@ public class Magazine {
     private String name;
 
     @OneToMany(mappedBy = "magazine", cascade = { ALL })
-    @JsonManagedReference(value="magazine_id")
+    @JsonIgnore
     private List<Article> articles;
 
     public Magazine() {

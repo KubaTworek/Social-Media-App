@@ -28,20 +28,21 @@ public class ArticleRestController {
         return articleService.findById(articleId);
     }
 
-    /*@GetMapping("/articles/{keyword}")
+    @GetMapping("/articles/{keyword}")
     public List<Article> getArticlesByKeyword(@PathVariable String keyword){
         return articleService.findAllByKeyword(keyword);
-    }*/
+    }
 
     @PostMapping("/article")
     public Article saveArticle(@RequestBody Article theArticle){
         theArticle.setId(0);
+        theArticle.getContent().setId(0);
         articleService.save(theArticle);
 
         return theArticle;
     }
 
-    @PostMapping("/article/update")
+    @PutMapping("/article")
     public Article updateArticle(@RequestBody Article theArticle){
         articleService.save(theArticle);
 

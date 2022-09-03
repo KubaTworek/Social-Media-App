@@ -1,36 +1,38 @@
 package com.example.RESTAPIarticle.entity;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="Article")
+@Component
 public class Article {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "content_id")
     private ArticleContent content;
 
     @Column(name="date")
     private String date;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="magazine_id")
-    //@JsonBackReference(value="magazine_id")
     private Magazine magazine;
 
-    @ManyToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name="author_id")
-    //@JsonBackReference(value="author_id")
     private Author author;
 
     @Column(name="timestamp")
-    private String timestamp;
+    private long timestamp;
 
     public Article() {
+        this.timestamp = System.currentTimeMillis();
     }
 
     public int getId() {
@@ -73,11 +75,11 @@ public class Article {
         this.author = author;
     }
 
-    public String getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(int timestamp) {
         this.timestamp = timestamp;
     }
 

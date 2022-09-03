@@ -1,5 +1,7 @@
 package com.example.RESTAPIarticle.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class ArticleContent {
     private String text;
 
     @OneToOne(mappedBy = "content")
+    @JsonIgnore
     private Article article;
 
     public ArticleContent() {
