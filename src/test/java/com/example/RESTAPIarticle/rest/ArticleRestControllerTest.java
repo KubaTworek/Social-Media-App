@@ -16,7 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,8 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = "spring.main.lazy-initialization=true")
 @Transactional
 public class ArticleRestControllerTest {
-    private static MockHttpServletRequest request;
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -181,7 +178,7 @@ public class ArticleRestControllerTest {
         article.setContent(content);
         article.setDate("2022-10-23");
 
-        mockMvc.perform(post("/article")
+        mockMvc.perform(post("/articles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(article)))
                 .andExpect(status().isOk());

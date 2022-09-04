@@ -1,10 +1,6 @@
 package com.example.RESTAPIarticle.service;
 
-import com.example.RESTAPIarticle.entity.Article;
-import com.example.RESTAPIarticle.entity.ArticleContent;
 import com.example.RESTAPIarticle.entity.Author;
-import com.example.RESTAPIarticle.entity.Magazine;
-import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,20 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
 @Transactional
 public class AuthorServiceTest {
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private JdbcTemplate jdbc;
 
@@ -74,8 +62,6 @@ public class AuthorServiceTest {
         assertEquals("John",authorService.findById(4).getFirstName());
         assertEquals("Smith",authorService.findById(4).getLastName());
     }
-
-
 
     @AfterEach
     public void setupAfterTransaction() {

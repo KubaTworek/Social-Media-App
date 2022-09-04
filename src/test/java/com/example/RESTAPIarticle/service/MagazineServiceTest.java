@@ -1,6 +1,5 @@
 package com.example.RESTAPIarticle.service;
 
-import com.example.RESTAPIarticle.entity.Author;
 import com.example.RESTAPIarticle.entity.Magazine;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,17 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
 @Transactional
 public class MagazineServiceTest {
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private JdbcTemplate jdbc;
 
@@ -64,8 +58,6 @@ public class MagazineServiceTest {
         assertEquals("Times",magazineService.findById(1).getName());
         assertEquals("Forbes",magazineService.findById(1).getName());
     }
-
-
 
     @AfterEach
     public void setupAfterTransaction() {

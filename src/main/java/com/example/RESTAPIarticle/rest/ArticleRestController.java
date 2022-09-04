@@ -6,7 +6,6 @@ import com.example.RESTAPIarticle.errors.PropertyIsNullException;
 import com.example.RESTAPIarticle.service.ArticleService;
 import com.example.RESTAPIarticle.service.AuthorService;
 import com.example.RESTAPIarticle.service.MagazineService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class ArticleRestController {
         return articleService.findAllByKeyword(keyword);
     }
 
-    @PostMapping( "/article")
+    @PostMapping( "/articles")
     public Article saveArticle(@RequestBody Article theArticle){
         if(isNecessaryPropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
             theArticle.setId(0);
@@ -55,7 +54,7 @@ public class ArticleRestController {
         return theArticle;
     }
 
-    @PutMapping("/article")
+    @PutMapping("/articles")
     public Article updateArticle(@RequestBody Article theArticle){
         if(isNecessaryPropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
             articleService.save(theArticle);
