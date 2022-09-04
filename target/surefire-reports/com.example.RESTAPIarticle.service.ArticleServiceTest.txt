@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.RESTAPIarticle.service.ArticleServiceTest
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.683 s - in com.example.RESTAPIarticle.service.ArticleServiceTest

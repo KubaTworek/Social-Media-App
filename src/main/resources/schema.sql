@@ -1,24 +1,24 @@
 CREATE DATABASE IF NOT EXISTS `articlerest-db`;
 USE `articlerest-db`;
 
-CREATE TABLE `Author` (
+CREATE TABLE IF NOT EXISTS `Author` (
                           `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                           `first_name` varchar(20) DEFAULT NULL,
                           `last_name` varchar(20) DEFAULT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `Magazine` (
+CREATE TABLE IF NOT EXISTS `Magazine` (
                             `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `name` varchar(20) DEFAULT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `Content` (
+CREATE TABLE IF NOT EXISTS `Content` (
                            `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                            `title` varchar(50) DEFAULT NULL,
                            `text` LONGTEXT DEFAULT NULL
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE `Article` (
+CREATE TABLE IF NOT EXISTS `Article` (
                            `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
                            `content_id` int DEFAULT NULL,
                            `date` date DEFAULT NULL,

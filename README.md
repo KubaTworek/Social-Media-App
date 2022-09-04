@@ -12,7 +12,6 @@ mvn spring-boot:run
 
 To execute unit and acceptance tests
 
-
 ```
 mvn test
 ```
