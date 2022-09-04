@@ -74,6 +74,41 @@ Content-Type: application/json
 }
 ```
 
+# Authors:
+```
+"author": {
+    "id": 1,
+    "firstName": "Adam",
+    "lastName": "Smith"
+}
+"author": {
+    "id": 2,
+    "firstName": "John",
+    "lastName": "Cook"
+}
+"author": {
+    "id": 3,
+    "firstName": "Jerry",
+    "lastName": "Kowalsky"
+}
+```
+
+# Authors:
+```
+"magazine": {
+        "id": 1,
+        "name": "Times"
+     }
+"magazine": {
+        "id": 2,
+        "name": "Pudelek"
+     }
+"magazine": {
+        "id": 3,
+        "name": "WP"
+     }     
+```
+
 When succeed 201 Status code and newly created article object are returned.
 
 
