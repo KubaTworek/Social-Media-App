@@ -1,6 +1,7 @@
 package com.example.RESTAPIarticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name="Author")
+@Component
 public class Author {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

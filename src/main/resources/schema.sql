@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `articlerest-db`;
+CREATE DATABASE IF NOT EXISTS `articlerest-db`;
 USE `articlerest-db`;
 
 CREATE TABLE `Author` (
@@ -29,6 +29,7 @@ CREATE TABLE `Article` (
                            FOREIGN KEY(`magazine_id`) REFERENCES `Magazine`(`id`),
                            FOREIGN KEY(`author_id`) REFERENCES `Author`(`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 
 INSERT INTO `Author` VALUES
                          (1,'Adam','Smith'),

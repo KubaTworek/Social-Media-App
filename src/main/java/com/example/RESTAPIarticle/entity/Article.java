@@ -13,7 +13,7 @@ public class Article {
     @Column(name="id")
     private int id;
 
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL, CascadeType.ALL})
     @JoinColumn(name = "content_id")
     private ArticleContent content;
 

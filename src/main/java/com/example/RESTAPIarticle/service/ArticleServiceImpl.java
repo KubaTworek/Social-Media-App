@@ -4,6 +4,7 @@ import com.example.RESTAPIarticle.dao.ArticleDAO;
 import com.example.RESTAPIarticle.dao.ContentDAO;
 import com.example.RESTAPIarticle.entity.Article;
 import com.example.RESTAPIarticle.entity.ArticleContent;
+import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,8 @@ public class ArticleServiceImpl implements ArticleService{
             theArticle = result.get();
         }
 
+        if(theArticle == null) throw new ArticleNotFoundException("Article id not found - " + theId);
+
         return theArticle;
     }
 
@@ -57,6 +60,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public void deleteById(int theId) {
+        if(findById(theId) == null) throw new ArticleNotFoundException("Article id not found - " + theId);
         articleDAO.deleteById(theId);
     }
 }

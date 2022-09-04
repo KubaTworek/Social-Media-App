@@ -1,11 +1,13 @@
 package com.example.RESTAPIarticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name="Content")
+@Component
 public class ArticleContent {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
