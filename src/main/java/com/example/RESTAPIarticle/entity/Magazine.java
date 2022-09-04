@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -47,6 +48,15 @@ public class Magazine {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
+    }
+
+    public void add(Article tempArticle) {
+        if(articles == null) {
+            articles = new ArrayList<>();
+        }
+
+        articles.add(tempArticle);
+        tempArticle.setMagazine(this);
     }
 
     @Override

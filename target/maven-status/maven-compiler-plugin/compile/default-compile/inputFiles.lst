@@ -1,0 +1,11 @@
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/entity/Article.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/service/ArticleServiceImpl.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/RestApiArticleApplication.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/entity/ArticleContent.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/entity/Author.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/rest/ArticleRestController.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/model/ArticleComparator.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/dao/ContentDAO.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/dao/ArticleDAO.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/entity/Magazine.java
+/home/kuba/Documents/GitHub/REST-API-articles/src/main/java/com/example/RESTAPIarticle/service/ArticleService.java
