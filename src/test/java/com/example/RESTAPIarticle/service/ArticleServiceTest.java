@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
@@ -69,6 +70,7 @@ public class ArticleServiceTest {
         assertEquals("Tim",article.getAuthor().getFirstName());
         assertEquals("Cook",article.getAuthor().getLastName());
         assertEquals("Times",article.getMagazine().getName());
+        assertThrows(ArticleNotFoundException.class, () -> articleService.findById(2));
     }
 
     @Test
@@ -145,6 +147,7 @@ public class ArticleServiceTest {
         }
 
         assertEquals(0,articles.size());
+        assertThrows(ArticleNotFoundException.class, () -> articleService.findById(1));
     }
 
     @AfterEach

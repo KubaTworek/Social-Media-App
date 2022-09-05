@@ -3,6 +3,7 @@ package com.example.RESTAPIarticle.service;
 import com.example.RESTAPIarticle.dao.ArticleDAO;
 import com.example.RESTAPIarticle.dao.ContentDAO;
 import com.example.RESTAPIarticle.entity.Article;
+import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public Article findById(int theId) {
-        return articleDAO.findById(theId).orElse(null);
+        return articleDAO.findById(theId).orElseThrow(() -> new ArticleNotFoundException("Article id not found - " + theId));
     }
 
     @Override

@@ -44,8 +44,6 @@ public class ArticleRestController {
 
     @GetMapping("/article/{articleId}")
     public EntityModel<Article> getArticleById(@PathVariable int articleId) {
-        if(articleService.findById(articleId) == null) throw new ArticleNotFoundException("Article id not found - " + articleId);
-
         return EntityModel.of(articleService.findById(articleId),
                 linkTo(methodOn(ArticleRestController.class).getArticleById(articleId)).withSelfRel(),
                 linkTo(methodOn(ArticleRestController.class).getArticlesOrderByDateDesc()).withRel("articles")
@@ -87,7 +85,6 @@ public class ArticleRestController {
 
     @PutMapping("/articles/{articleId}")
     public ResponseEntity<Object> updateArticle(@PathVariable int articleId, @RequestBody Article theArticle){
-        if(articleService.findById(articleId) == null) throw new ArticleNotFoundException("Article id not found - " + articleId);
         if(isNecessaryPropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
             articleService.save(new Article(
                     articleId,
@@ -102,7 +99,6 @@ public class ArticleRestController {
 
     @DeleteMapping("/article/{articleId}")
     public String deleteArticle(@PathVariable int articleId) {
-        if(articleService.findById(articleId) == null) throw new ArticleNotFoundException("Article id not found - " + articleId);
         articleService.deleteById(articleId);
 
         return "Deleted article is - " + articleId;
