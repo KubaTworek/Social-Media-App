@@ -18,8 +18,6 @@ mvn test
 
 ## Endpoints
 
-**Important:** `Content-Type: application/json` header must be present to use API.
-
 The most common HTTP status codes are returned when there is an error.
 
 ### Get articles
@@ -52,7 +50,7 @@ Get articles by keyword contains in article content and sorted by date descendin
 ### Add an article
 
 ```
-/article [POST]
+/articles [POST]
 
 Content-Type: application/json
 
@@ -88,7 +86,7 @@ If we type id and properties, we will choose object from database with that id, 
 ### Update an article
 
 ```
-/article [PUT]
+/articles/{id} [PUT]
 
 Content-Type: application/json
 
@@ -110,7 +108,7 @@ Content-Type: application/json
 }
 ```
 
-When succeed 201 Status code and updated article object are returned.
+When succeed 201 Status code and nothing is returned.
 
 
 ### Delete an article
