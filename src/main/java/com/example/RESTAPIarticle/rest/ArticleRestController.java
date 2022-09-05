@@ -1,7 +1,6 @@
 package com.example.RESTAPIarticle.rest;
 
 import com.example.RESTAPIarticle.entity.Article;
-import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
