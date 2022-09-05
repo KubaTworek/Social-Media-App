@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.RESTAPIarticle.utils.AppUtils.isArticlePropertiesNotNull;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -64,7 +65,7 @@ public class ArticleRestController {
 
     @PostMapping( "/articles")
     public ResponseEntity<EntityModel<Article>> saveArticle(@RequestBody Article theArticle){
-        if(isNecessaryPropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
+        if(isArticlePropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
             Article article = articleService.save(new Article(
                     EMPTY_ID,
                     theArticle.getContent(),
@@ -84,7 +85,7 @@ public class ArticleRestController {
 
     @PutMapping("/articles/{articleId}")
     public ResponseEntity<Object> updateArticle(@PathVariable int articleId, @RequestBody Article theArticle){
-        if(isNecessaryPropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
+        if(isArticlePropertiesNotNull(theArticle) && isNecessaryPropertiesExist(theArticle)){
             articleService.save(new Article(
                     articleId,
                     theArticle.getContent(),
@@ -106,16 +107,6 @@ public class ArticleRestController {
     private boolean isNecessaryPropertiesExist(Article theArticle){
         if(!isAuthorExist(theArticle)) authorService.save(theArticle.getAuthor());
         if(!isMagazineExist(theArticle)) magazineService.save(theArticle.getMagazine());
-        return true;
-    }
-
-    private boolean isNecessaryPropertiesNotNull(Article theArticle){
-        if(theArticle.getContent() == null) throw new PropertyIsNullException("Content is null");
-        if(theArticle.getContent().getTitle() == null) throw new PropertyIsNullException("Title is null");
-        if(theArticle.getContent().getText() == null) throw new PropertyIsNullException("Text is null");
-        if(theArticle.getDate() == null) throw new PropertyIsNullException("Date is null");
-        if(theArticle.getAuthor() == null) throw new PropertyIsNullException("Author is null");
-        if(theArticle.getMagazine() == null) throw new PropertyIsNullException("Magazine is null");
         return true;
     }
 
