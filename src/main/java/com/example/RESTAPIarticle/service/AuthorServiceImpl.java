@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService{
     private final AuthorDAO authorDAO;
-
     @Override
     public Author findById(int theId) {
-        return authorDAO.findById(theId).orElseThrow();
+        return authorDAO.findById(theId).orElse(null);
     }
 
     @Override

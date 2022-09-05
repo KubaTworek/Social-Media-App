@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestPropertySource("/application.properties")
 @SpringBootTest
@@ -36,10 +35,10 @@ public class ArticleServiceTest {
 
     @BeforeEach
     public void setupDatabase() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
         jdbc.execute("INSERT INTO Author(id, first_name, last_name)" + "VALUES (1,'Tim','Cook')");
         jdbc.execute("INSERT INTO Magazine(id, name)" + "VALUES (1,'Times')");
         jdbc.execute("INSERT INTO Content(id, title, text)" + "VALUES (1,'Title','Text')");
@@ -70,8 +69,6 @@ public class ArticleServiceTest {
         assertEquals("Tim",article.getAuthor().getFirstName());
         assertEquals("Cook",article.getAuthor().getLastName());
         assertEquals("Times",article.getMagazine().getName());
-
-        assertThrows(ArticleNotFoundException.class,() -> articleService.findById(2));
     }
 
     @Test
@@ -148,15 +145,14 @@ public class ArticleServiceTest {
         }
 
         assertEquals(0,articles.size());
-        assertThrows(ArticleNotFoundException.class,() -> articleService.findById(1));
     }
 
     @AfterEach
     public void setupAfterTransaction() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
     }
 
 }

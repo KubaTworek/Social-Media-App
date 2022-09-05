@@ -24,10 +24,10 @@ public class MagazineServiceTest {
 
     @BeforeEach
     public void setupDatabase() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
         jdbc.execute("INSERT INTO Author(id, first_name, last_name)" + "VALUES (1,'Tim','Cook')");
         jdbc.execute("INSERT INTO Magazine(id, name)" + "VALUES (1,'Times')");
         jdbc.execute("INSERT INTO Content(id, title, text)" + "VALUES (1,'Title','Text')");
@@ -56,15 +56,14 @@ public class MagazineServiceTest {
         magazineService.save(magazine);
 
         assertEquals("Times",magazineService.findById(1).getName());
-        assertEquals("Forbes",magazineService.findById(1).getName());
+        assertEquals("Forbes",magazineService.findById(3).getName());
     }
 
     @AfterEach
     public void setupAfterTransaction() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
     }
-
 }

@@ -4,7 +4,6 @@ import com.example.RESTAPIarticle.entity.Article;
 import com.example.RESTAPIarticle.entity.ArticleContent;
 import com.example.RESTAPIarticle.entity.Author;
 import com.example.RESTAPIarticle.entity.Magazine;
-import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
 import com.example.RESTAPIarticle.service.ArticleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -14,11 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -28,7 +26,8 @@ import javax.persistence.PersistenceContext;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @TestPropertySource("/application.properties")
@@ -63,14 +62,12 @@ public class ArticleRestControllerTest {
     @Autowired
     private Magazine magazine;
 
-    public static final MediaType APPLICATION_JSON_UTF8 = MediaType.APPLICATION_JSON;
-
     @BeforeEach
     public void setupDatabase() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
         jdbc.execute("INSERT INTO Author(id, first_name, last_name)" + "VALUES (1,'Tim','Cook')");
         jdbc.execute("INSERT INTO Magazine(id, name)" + "VALUES (1,'Times')");
         jdbc.execute("INSERT INTO Content(id, title, text)" + "VALUES (1,'Title','Text')");
@@ -99,10 +96,10 @@ public class ArticleRestControllerTest {
         articleService.save(article);
 
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)));
+        MvcResult mvcResult = mockMvc.perform(get("/articles"))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
     }
 
     @Test
@@ -110,11 +107,9 @@ public class ArticleRestControllerTest {
         Article article = articleService.findById(1);
 
         assertNotNull(article);
-        assertThrows(ArticleNotFoundException.class,() -> articleService.findById(2));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/article/{id}", 1))
+        mockMvc.perform(get("/article/{id}", 1))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.date", is("2022-10-22")));
     }
 
@@ -132,33 +127,32 @@ public class ArticleRestControllerTest {
         content.setId(0);
         content.setText("Description");
         content.setTitle("Title");
+        content.setArticle(article);
         article.setId(0);
         article.setAuthor(author);
         article.setMagazine(magazine);
-        article.setContent(content);
         article.setDate("2022-10-23");
         articleService.save(article);
 
+        MvcResult mvcResultTitle = mockMvc.perform(get("/articles/title"))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles/title"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)));
+        MvcResult mvcResultText = mockMvc.perform(get("/articles/text"))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles/text"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(1)));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles/random"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(0)));
+        MvcResult mvcResultRandom = mockMvc.perform(get("/articles/random"))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
     }
 
 
-/*
-    @Test
+
+/*    @Test
     public void saveArticleHttpRequest() throws Exception {
         author.setId(0);
         author.setFirstName("John");
@@ -178,15 +172,11 @@ public class ArticleRestControllerTest {
         article.setContent(content);
         article.setDate("2022-10-23");
 
-        mockMvc.perform(post("/articles")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(article)))
-                .andExpect(status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(2)));
+        MvcResult mvcResult = mockMvc.perform(post("/articles/" + article))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
     }*/
 
     @Test
@@ -194,22 +184,25 @@ public class ArticleRestControllerTest {
     public void deleteArticleHttpRequest() throws Exception {
         assertNotNull(articleService.findById(1));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/article/{id}", 1))
-                .andExpect(status().isOk());
+        MvcResult mvcResultDelete = mockMvc.perform(delete("/article/" + 1))
+                .andDo(print())
+                .andExpect(status().is(200))
+                .andReturn();
 
-        assertThrows(ArticleNotFoundException.class,() -> articleService.findById(2));
+        assertEquals("Deleted article is - 1", mvcResultDelete.getResponse().getContentAsString());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/articles"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(0)));
+
+        MvcResult mvcResultGet = mockMvc.perform(get("/article/" + 1))
+                .andDo(print())
+                .andExpect(status().is(404))
+                .andReturn();
     }
 
     @AfterEach
     public void setupAfterTransaction() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
     }
 }

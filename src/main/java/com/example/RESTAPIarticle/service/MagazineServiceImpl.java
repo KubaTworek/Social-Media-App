@@ -12,7 +12,7 @@ public class MagazineServiceImpl implements MagazineService{
 
     @Override
     public Magazine findById(int theId) {
-        return magazineDAO.findById(theId).orElseThrow();
+        return magazineDAO.findById(theId).orElse(null);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.RESTAPIarticle.rest;
 
 import com.example.RESTAPIarticle.entity.Article;
 import com.example.RESTAPIarticle.errors.ArticleNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import com.example.RESTAPIarticle.errors.PropertyIsNullException;
@@ -19,6 +20,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/")
 public class ArticleRestController {
 
@@ -26,12 +28,6 @@ public class ArticleRestController {
     private final AuthorService authorService;
     private final MagazineService magazineService;
     private final ArticleService articleService;
-
-    public ArticleRestController(AuthorService authorService, MagazineService magazineService, ArticleService articleService) {
-        this.authorService = authorService;
-        this.magazineService = magazineService;
-        this.articleService = articleService;
-    }
 
     @GetMapping("/articles")
     public CollectionModel<EntityModel<Article>> getArticlesOrderByDateDesc(){

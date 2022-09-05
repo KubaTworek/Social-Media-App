@@ -24,10 +24,10 @@ public class AuthorServiceTest {
 
     @BeforeEach
     public void setupDatabase() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
         jdbc.execute("INSERT INTO Author(id, first_name, last_name)" + "VALUES (1,'Tim','Cook')");
         jdbc.execute("INSERT INTO Magazine(id, name)" + "VALUES (1,'Times')");
         jdbc.execute("INSERT INTO Content(id, title, text)" + "VALUES (1,'Title','Text')");
@@ -59,16 +59,15 @@ public class AuthorServiceTest {
 
         assertEquals("Tim",authorService.findById(1).getFirstName());
         assertEquals("Cook",authorService.findById(1).getLastName());
-        assertEquals("John",authorService.findById(4).getFirstName());
-        assertEquals("Smith",authorService.findById(4).getLastName());
+        assertEquals("John",authorService.findById(3).getFirstName());
+        assertEquals("Smith",authorService.findById(3).getLastName());
     }
 
     @AfterEach
     public void setupAfterTransaction() {
+        jdbc.execute("DELETE FROM Article");
         jdbc.execute("DELETE FROM Author");
         jdbc.execute("DELETE FROM Magazine");
         jdbc.execute("DELETE FROM Content");
-        jdbc.execute("DELETE FROM Article");
     }
-
 }

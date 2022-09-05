@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ArticleDAO extends JpaRepository<Article, Integer> {
-    List<Article> findAllByContentOrderByDateDesc(ArticleContent theContent);
+
 }
