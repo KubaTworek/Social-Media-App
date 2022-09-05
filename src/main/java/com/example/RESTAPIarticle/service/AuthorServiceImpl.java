@@ -2,29 +2,17 @@ package com.example.RESTAPIarticle.service;
 
 import com.example.RESTAPIarticle.dao.AuthorDAO;
 import com.example.RESTAPIarticle.entity.Author;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService{
     private final AuthorDAO authorDAO;
 
-    public AuthorServiceImpl(AuthorDAO authorDAO) {
-        this.authorDAO = authorDAO;
-    }
-
     @Override
     public Author findById(int theId) {
-        Optional<Author> result = authorDAO.findById(theId);
-
-        Author theAuthor = null;
-
-        if (result.isPresent()) {
-            theAuthor = result.get();
-        }
-
-        return theAuthor;
+        return authorDAO.findById(theId).orElseThrow();
     }
 
     @Override

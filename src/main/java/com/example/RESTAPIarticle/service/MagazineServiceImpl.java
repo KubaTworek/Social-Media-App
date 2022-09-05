@@ -2,29 +2,17 @@ package com.example.RESTAPIarticle.service;
 
 import com.example.RESTAPIarticle.dao.MagazineDAO;
 import com.example.RESTAPIarticle.entity.Magazine;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class MagazineServiceImpl implements MagazineService{
     private final MagazineDAO magazineDAO;
 
-    public MagazineServiceImpl(MagazineDAO magazineDAO) {
-        this.magazineDAO = magazineDAO;
-    }
-
     @Override
     public Magazine findById(int theId) {
-        Optional<Magazine> result = magazineDAO.findById(theId);
-
-        Magazine theMagazine = null;
-
-        if (result.isPresent()) {
-            theMagazine = result.get();
-        }
-
-        return theMagazine;
+        return magazineDAO.findById(theId).orElseThrow();
     }
 
     @Override
