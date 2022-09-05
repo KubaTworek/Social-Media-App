@@ -35,6 +35,15 @@ public class Article {
         this.timestamp = System.currentTimeMillis();
     }
 
+    public Article(int emptyId, ArticleContent content, String date, Magazine magazine, Author author) {
+        this.id = emptyId;
+        this.content = content;
+        this.date = date;
+        this.magazine = magazine;
+        this.author = author;
+        this.timestamp = System.currentTimeMillis();
+    }
+
     public int getId() {
         return id;
     }
