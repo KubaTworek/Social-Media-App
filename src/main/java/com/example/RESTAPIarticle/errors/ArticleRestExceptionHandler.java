@@ -31,16 +31,6 @@ public class ArticleRestExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ArticleErrorResponse> handleException(PropertyIsNotExistException exc){
-        ArticleErrorResponse error = new ArticleErrorResponse();
-
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
     @ResponseBody
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ResponseEntity<ArticleErrorResponse> handleHttpMediaTypeNotAcceptableException() {

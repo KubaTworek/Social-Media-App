@@ -80,6 +80,7 @@ When succeed 201 Status code and newly created article object are returned.
 
 # Magazine and Author
 
+If we did not type any magazine or author, we will get error and 400 Status Code.
 If we type only id, we will choose object from database with that id, if there are not object with that id, we will get error and 400 Status code.
 If we type only properties, we will choose object from database with that properties, if there are not object with that properties, it will create new object to database.
 If we type id and properties, we will choose object from database with that id, if there are not object with that id, system checks is there an object with that properties, if there is not it will create new object to database. If id(higher priority) or properties(lower quality) will be same as any other in database, system will use that object.
