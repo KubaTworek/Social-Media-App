@@ -1,6 +1,7 @@
 package com.example.RESTAPIarticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="Content")
 @Component
+@NoArgsConstructor
 public class ArticleContent {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -23,9 +25,6 @@ public class ArticleContent {
     @OneToOne(mappedBy = "content")
     @JsonIgnore
     private Article article;
-
-    public ArticleContent() {
-    }
 
     public int getId() {
         return id;

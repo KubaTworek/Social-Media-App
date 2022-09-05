@@ -1,6 +1,7 @@
 package com.example.RESTAPIarticle.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @Table(name="Author")
 @Component
+@NoArgsConstructor
 public class Author {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -27,9 +29,6 @@ public class Author {
     @OneToMany(mappedBy = "author", cascade = { ALL })
     @JsonIgnore
     private List<Article> articles;
-
-    public Author() {
-    }
 
     public int getId() {
         return id;
