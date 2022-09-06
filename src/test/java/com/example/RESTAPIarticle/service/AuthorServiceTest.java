@@ -53,14 +53,17 @@ public class AuthorServiceTest {
     @Test
     public void saveAuthorTest(){
         Author author = new Author();
+        author.setId(2);
         author.setFirstName("John");
         author.setLastName("Smith");
         authorService.save(author);
 
         assertEquals("Tim",authorService.findById(1).getFirstName());
         assertEquals("Cook",authorService.findById(1).getLastName());
-        assertEquals("John",authorService.findById(3).getFirstName());
-        assertEquals("Smith",authorService.findById(3).getLastName());
+        assertEquals("John",authorService.findById(2).getFirstName());
+        assertEquals("Smith",authorService.findById(2).getLastName());
+
+
     }
 
     @AfterEach

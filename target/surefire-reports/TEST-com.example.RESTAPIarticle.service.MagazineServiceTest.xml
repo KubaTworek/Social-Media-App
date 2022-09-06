@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.113" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.RESTAPIarticle.service.MagazineServiceTest" time="0.05" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="gnome"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
@@ -57,9 +57,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="saveArticleTest" classname="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.016"/>
-  <testcase name="findAllArticlesByKeywordTest" classname="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.032"/>
-  <testcase name="deleteByIdArticleTest" classname="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.027"/>
-  <testcase name="findByIdArticleTest" classname="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.013"/>
-  <testcase name="findAllArticlesTest" classname="com.example.RESTAPIarticle.service.ArticleServiceTest" time="0.016"/>
+  <testcase name="findByNameMagazineTest" classname="com.example.RESTAPIarticle.service.MagazineServiceTest" time="0.011"/>
+  <testcase name="saveMagazineTest" classname="com.example.RESTAPIarticle.service.MagazineServiceTest" time="0.019"/>
+  <testcase name="findByIdMagazineTest" classname="com.example.RESTAPIarticle.service.MagazineServiceTest" time="0.013"/>
 </testsuite>

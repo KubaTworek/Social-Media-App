@@ -56,7 +56,7 @@ public class MagazineServiceTest {
         magazineService.save(magazine);
 
         assertEquals("Times",magazineService.findById(1).getName());
-        assertEquals("Forbes",magazineService.findById(3).getName());
+        assertEquals("Forbes",magazineService.findById(2).getName());
     }
 
     @AfterEach
