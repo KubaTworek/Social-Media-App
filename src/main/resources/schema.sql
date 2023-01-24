@@ -1,31 +1,38 @@
-CREATE DATABASE IF NOT EXISTS `articlerest-db`;
-USE `articlerest-db`;
+-- tables
+-- Table: Author
+CREATE TABLE Author (
+                        Id integer NOT NULL CONSTRAINT Author_pk PRIMARY KEY,
+                        FirstName integer NOT NULL,
+                        LastName integer NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS `Author` (
-                          `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                          `first_name` varchar(20) NOT NULL,
-                          `last_name` varchar(20) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- Table: Content
+CREATE TABLE Content (
+                         Id integer NOT NULL CONSTRAINT Content_pk PRIMARY KEY,
+                         Title varchar(30) NOT NULL,
+                         Text text NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS `Magazine` (
-                            `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `name` varchar(20) NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- Table: Magazine
+CREATE TABLE Magazine (
+                          Id integer NOT NULL CONSTRAINT Magazine_pk PRIMARY KEY,
+                          Name varchar(40) NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS `Content` (
-                           `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                           `title` varchar(50) NOT NULL,
-                           `text` LONGTEXT NOT NULL
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- Table: Article
+CREATE TABLE Article (
+                         Id integer NOT NULL CONSTRAINT Article_pk PRIMARY KEY,
+                         Date date NOT NULL,
+                         Timestamp datetime NOT NULL,
+                         Author_Id integer NOT NULL,
+                         Magazine_Id integer NOT NULL,
+                         Content_Id integer NOT NULL,
+                         CONSTRAINT Article_Author FOREIGN KEY (Author_Id)
+                             REFERENCES Author (Id),
+                         CONSTRAINT Article_Magazine FOREIGN KEY (Magazine_Id)
+                             REFERENCES Magazine (Id),
+                         CONSTRAINT Article_Content FOREIGN KEY (Content_Id)
+                             REFERENCES Content (Id)
+);
 
-CREATE TABLE IF NOT EXISTS `Article` (
-                           `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                           `content_id` int NOT NULL,
-                           `date` date NOT NULL,
-                           `magazine_id` int NOT NULL,
-                           `author_id` int NOT NULL,
-                           `timestamp` BIGINT DEFAULT NULL,
-                           FOREIGN KEY(`content_id`) REFERENCES `Content`(`id`),
-                           FOREIGN KEY(`magazine_id`) REFERENCES `Magazine`(`id`),
-                           FOREIGN KEY(`author_id`) REFERENCES `Author`(`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+-- End of file.
