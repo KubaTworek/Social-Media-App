@@ -4,7 +4,6 @@ import com.example.RESTAPIarticle.entity.Article;
 import com.example.RESTAPIarticle.entity.ArticleContent;
 import com.example.RESTAPIarticle.entity.Author;
 import com.example.RESTAPIarticle.entity.Magazine;
-import com.example.RESTAPIarticle.service.ArticleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
