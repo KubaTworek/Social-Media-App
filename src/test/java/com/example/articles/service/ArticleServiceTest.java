@@ -1,9 +1,5 @@
 package com.example.articles.service;
 
-import com.example.articles.entity.Article;
-import com.example.articles.entity.ArticleContent;
-import com.example.articles.entity.Author;
-import com.example.articles.entity.Magazine;
 import com.example.articles.errors.ArticleNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

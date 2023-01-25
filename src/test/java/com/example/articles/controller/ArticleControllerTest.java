@@ -1,9 +1,5 @@
 package com.example.articles.controller;
 
-import com.example.articles.entity.Article;
-import com.example.articles.entity.ArticleContent;
-import com.example.articles.entity.Author;
-import com.example.articles.entity.Magazine;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
