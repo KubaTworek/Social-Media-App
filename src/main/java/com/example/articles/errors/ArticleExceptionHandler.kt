@@ -14,10 +14,10 @@ class ArticleExceptionHandler {
     @ExceptionHandler
     fun handleException(exc: ArticleNotFoundException): ResponseEntity<ArticleErrorResponse> {
         val error = ArticleErrorResponse(
-            HttpStatus.FORBIDDEN.value(),
+            HttpStatus.NOT_FOUND.value(),
             exc.message
         )
-        return ResponseEntity(error, HttpStatus.FORBIDDEN)
+        return ResponseEntity(error, HttpStatus.NOT_FOUND)
     }
 
     @ResponseBody

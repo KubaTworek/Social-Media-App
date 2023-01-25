@@ -1,6 +1,7 @@
 package com.example.articles.controller
 
 import com.example.articles.entity.Article
+import com.example.articles.errors.ArticleNotFoundException
 import com.example.articles.service.ArticleService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
@@ -18,8 +19,10 @@ class ArticleController(private val articleService: ArticleService) {
         .map(Article::toResponse)
         .toList()
 
-    @GetMapping("/{articleId}")
-    fun getArticleById(@PathVariable articleId: Int) = articleService.findById(articleId).toResponse()
+    @GetMapping("/id/{articleId}")
+    fun getArticleById(@PathVariable articleId: Int) = articleService.findById(articleId)
+        .orElseThrow { ArticleNotFoundException("Article id not found - $articleId") }
+        .toResponse()
 
     @GetMapping("/{keyword}")
     fun getArticlesByKeyword(@PathVariable keyword: String) = articleService.findAllByKeyword(keyword)
