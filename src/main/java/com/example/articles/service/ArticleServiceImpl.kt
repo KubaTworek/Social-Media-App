@@ -1,9 +1,19 @@
 package com.example.articles.service
 
+import com.example.articles.controller.ArticleRequest
 import com.example.articles.entity.Article
+import com.example.articles.entity.ArticleContent
+import com.example.articles.entity.Author
+import com.example.articles.entity.Magazine
 import com.example.articles.errors.ArticleNotFoundException
+import com.example.articles.factories.ArticleFactory
+import com.example.articles.factories.AuthorFactory
+import com.example.articles.factories.ContentFactory
+import com.example.articles.factories.MagazineFactory
 import com.example.articles.repository.ArticleRepository
+import com.example.articles.repository.AuthorRepository
 import com.example.articles.repository.ContentRepository
+import com.example.articles.repository.MagazineRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -13,7 +23,13 @@ import java.util.stream.Collectors
 @RequiredArgsConstructor
 class ArticleServiceImpl(
     private val articleRepository: ArticleRepository,
-    private val contentRepository: ContentRepository
+    private val authorRepository: AuthorRepository,
+    private val magazineRepository: MagazineRepository,
+    private val contentRepository: ContentRepository,
+    private val articleFactory: ArticleFactory,
+    private val authorFactory: AuthorFactory,
+    private val magazineFactory: MagazineFactory,
+    private val contentFactory: ContentFactory,
 ) : ArticleService {
 
     override fun findAllOrderByDateDesc(): List<Article> {
@@ -37,8 +53,14 @@ class ArticleServiceImpl(
             .collect(Collectors.toList())
     }
 
-    override fun save(theArticle: Article): Article {
-        return articleRepository.save(theArticle)
+    override fun save(theArticle: ArticleRequest): Article {
+        val author = authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
+            .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
+        val magazine = magazineRepository.findByName(theArticle.magazine)
+            .orElse(magazineFactory.createMagazine(theArticle.magazine))
+        val content = contentFactory.createContent(theArticle.title, theArticle.text)
+        val article = articleFactory.createArticle(theArticle, author, magazine, content)
+        return articleRepository.save(article)
     }
 
     override fun deleteById(theId: Int) {

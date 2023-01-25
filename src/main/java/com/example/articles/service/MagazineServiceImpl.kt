@@ -14,11 +14,10 @@ class MagazineServiceImpl(private val magazineRepository: MagazineRepository) : 
     }
 
     override fun save(theMagazine: Magazine) {
-        theMagazine.id = 0
         magazineRepository.save(theMagazine)
     }
 
     override fun findByName(theName: String): Magazine? {
-        return magazineRepository.findByName(theName)
+        return magazineRepository.findByName(theName).orElse(null)
     }
 }

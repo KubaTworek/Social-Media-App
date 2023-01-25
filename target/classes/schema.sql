@@ -23,7 +23,7 @@ CREATE TABLE Magazine (
 CREATE TABLE Article (
                          Id integer NOT NULL CONSTRAINT Article_pk PRIMARY KEY,
                          Date date NOT NULL,
-                         Timestamp datetime NOT NULL,
+                         Timestamp integer NOT NULL,
                          Author_Id integer NOT NULL,
                          Magazine_Id integer NOT NULL,
                          Content_Id integer NOT NULL,

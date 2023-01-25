@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 
 @ControllerAdvice
-class ArticleRestExceptionHandler {
+class ArticleExceptionHandler {
 
     @ExceptionHandler
     fun handleException(exc: ArticleNotFoundException): ResponseEntity<ArticleErrorResponse> {

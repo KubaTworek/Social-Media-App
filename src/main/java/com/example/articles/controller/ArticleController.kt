@@ -23,7 +23,7 @@ class ArticleController(private val articleService: ArticleService) {
 
     @PostMapping("/articles")
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveArticle(@RequestBody theArticle: Article) = articleService.save(theArticle)
+    fun saveArticle(@RequestBody theArticle: ArticleRequest) = articleService.save(theArticle)
 
     @DeleteMapping("/articles/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

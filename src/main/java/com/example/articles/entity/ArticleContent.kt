@@ -9,7 +9,7 @@ data class ArticleContent(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    val id : Int,
+    val id: Int,
 
     @Column(name = "title")
     val title: String,
@@ -18,7 +18,7 @@ data class ArticleContent(
     val text: String,
 
     @OneToOne(mappedBy = "content")
-    val article: Article,
+    val article: Article?,
 ) {
     constructor() : this(
         0,

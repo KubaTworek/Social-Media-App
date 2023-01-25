@@ -14,11 +14,10 @@ class AuthorServiceImpl(private val authorRepository: AuthorRepository) : Author
     }
 
     override fun save(theAuthor: Author) {
-        theAuthor.id = 0
         authorRepository.save(theAuthor)
     }
 
     override fun findByFirstNameAndLastName(firstName: String, lastName: String): Author? {
-        return authorRepository.findByFirstNameAndLastName(firstName, lastName)
+        return authorRepository.findByFirstNameAndLastName(firstName, lastName).orElse(null)
     }
 }
