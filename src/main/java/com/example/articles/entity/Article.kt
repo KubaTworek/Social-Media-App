@@ -1,11 +1,12 @@
 package com.example.articles.entity
 
+import com.example.articles.controller.ArticleResponse
 import org.hibernate.Hibernate
 import javax.persistence.*
 
 @Entity
 @Table(name = "Article")
-data class Article (
+data class Article(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
@@ -17,15 +18,15 @@ data class Article (
     @Column(name = "Timestamp")
     val timestamp: Long,
 
-    @ManyToOne(cascade = [CascadeType.MERGE])
+    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "Author_Id")
     var author: Author,
 
-    @ManyToOne(cascade = [CascadeType.MERGE])
+    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "Magazine_Id")
     var magazine: Magazine,
 
-    @OneToOne(cascade = [CascadeType.ALL, CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Content_Id")
     val content: ArticleContent,
 
@@ -39,6 +40,16 @@ data class Article (
         Magazine(),
         ArticleContent()
     )
+
+    fun toResponse(): ArticleResponse {
+        return ArticleResponse(
+            this.content.title,
+            this.content.text,
+            this.magazine.name,
+            this.author.firstName,
+            this.author.lastName
+        )
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

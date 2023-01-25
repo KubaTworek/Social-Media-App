@@ -2,9 +2,6 @@ package com.example.articles.service
 
 import com.example.articles.controller.ArticleRequest
 import com.example.articles.entity.Article
-import com.example.articles.entity.ArticleContent
-import com.example.articles.entity.Author
-import com.example.articles.entity.Magazine
 import com.example.articles.errors.ArticleNotFoundException
 import com.example.articles.factories.ArticleFactory
 import com.example.articles.factories.AuthorFactory
@@ -53,14 +50,16 @@ class ArticleServiceImpl(
             .collect(Collectors.toList())
     }
 
-    override fun save(theArticle: ArticleRequest): Article {
-        val author = authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
-            .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
+    override fun save(theArticle: ArticleRequest) {
+        val author =
+            authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
+                .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
         val magazine = magazineRepository.findByName(theArticle.magazine)
             .orElse(magazineFactory.createMagazine(theArticle.magazine))
         val content = contentFactory.createContent(theArticle.title, theArticle.text)
-        val article = articleFactory.createArticle(theArticle, author, magazine, content)
-        return articleRepository.save(article)
+        val article = articleFactory.createArticle(author, magazine, content)
+
+        articleRepository.save(article)
     }
 
     override fun deleteById(theId: Int) {

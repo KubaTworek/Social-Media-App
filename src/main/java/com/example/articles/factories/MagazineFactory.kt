@@ -1,9 +1,7 @@
 package com.example.articles.factories
 
-import com.example.articles.entity.Author
 import com.example.articles.entity.Magazine
 import org.springframework.stereotype.Component
-import java.util.*
 import java.util.Collections.emptyList
 
 @Component

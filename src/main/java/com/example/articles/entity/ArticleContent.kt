@@ -24,7 +24,7 @@ data class ArticleContent(
         0,
         "asd",
         "asd",
-        Article()
+        null
     )
 
     override fun equals(other: Any?): Boolean {
