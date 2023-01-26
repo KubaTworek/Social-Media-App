@@ -1,0 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    color: #222;
+    font-family: sans-serif;
+    padding-top: 2rem;
+    margin: 0;
+}
