@@ -2,6 +2,7 @@ package com.example.articles.entity
 
 import com.example.articles.controller.ArticleResponse
 import org.hibernate.Hibernate
+import java.sql.Timestamp
 import javax.persistence.*
 
 @Entity
@@ -16,7 +17,7 @@ data class Article(
     val date: String,
 
     @Column(name = "Timestamp")
-    val timestamp: Long,
+    val timestamp: String,
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "Author_Id")
@@ -35,7 +36,7 @@ data class Article(
     constructor() : this(
         0,
         "sad",
-        123412,
+        "200",
         Author(),
         Magazine(),
         ArticleContent()
@@ -43,6 +44,7 @@ data class Article(
 
     fun toResponse(): ArticleResponse {
         return ArticleResponse(
+            this.id,
             this.content.title,
             this.content.text,
             this.magazine.name,

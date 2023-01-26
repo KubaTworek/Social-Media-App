@@ -1,6 +1,7 @@
 package com.example.articles.controller
 
 data class ArticleResponse(
+    val id: Int,
     val title: String,
     val text: String,
     val magazine: String,

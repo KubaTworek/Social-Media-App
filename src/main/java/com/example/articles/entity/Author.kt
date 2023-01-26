@@ -12,10 +12,10 @@ data class Author(
     @Column(name = "id")
     val id: Int,
 
-    @Column(name = "first_name")
+    @Column(name = "firstname")
     val firstName: String,
 
-    @Column(name = "last_name")
+    @Column(name = "lastname")
     val lastName: String,
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL])

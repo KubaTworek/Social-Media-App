@@ -30,7 +30,7 @@ class ArticleFactory(
         return Article(
             0,
             getCurrentDate(),
-            System.currentTimeMillis(),
+            System.currentTimeMillis().toString(),
             author,
             magazine,
             content

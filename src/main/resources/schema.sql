@@ -2,15 +2,15 @@
 -- Table: Author
 CREATE TABLE Author (
                         Id integer NOT NULL CONSTRAINT Author_pk PRIMARY KEY,
-                        FirstName integer NOT NULL,
-                        LastName integer NOT NULL
+                        firstname varchar(40) NOT NULL,
+                        lastname varchar(40) NOT NULL
 );
 
 -- Table: Content
 CREATE TABLE Content (
                          Id integer NOT NULL CONSTRAINT Content_pk PRIMARY KEY,
                          Title varchar(30) NOT NULL,
-                         Text text NOT NULL
+                         Text varchar(255) NOT NULL
 );
 
 -- Table: Magazine
@@ -23,7 +23,7 @@ CREATE TABLE Magazine (
 CREATE TABLE Article (
                          Id integer NOT NULL CONSTRAINT Article_pk PRIMARY KEY,
                          Date date NOT NULL,
-                         Timestamp integer NOT NULL,
+                         Timestamp timestamp NOT NULL,
                          Author_Id integer NOT NULL,
                          Magazine_Id integer NOT NULL,
                          Content_Id integer NOT NULL,
