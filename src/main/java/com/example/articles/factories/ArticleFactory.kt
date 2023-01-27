@@ -2,9 +2,6 @@ package com.example.articles.factories
 
 import com.example.articles.controller.ArticleRequest
 import com.example.articles.entity.Article
-import com.example.articles.entity.ArticleContent
-import com.example.articles.entity.Author
-import com.example.articles.entity.Magazine
 import com.example.articles.repository.AuthorRepository
 import com.example.articles.repository.MagazineRepository
 import org.springframework.stereotype.Component
@@ -21,7 +18,8 @@ class ArticleFactory(
     private val contentFactory: ContentFactory,
 ) {
     fun createArticle(theArticle: ArticleRequest): Article {
-        val author = authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
+        val author =
+            authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
                 .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
         val magazine = magazineRepository.findByName(theArticle.magazine)
             .orElse(magazineFactory.createMagazine(theArticle.magazine))

@@ -1,8 +1,11 @@
 package com.example.articles.entity
 
+import com.example.articles.controller.ArticleResponse
+import com.example.articles.controller.AuthorResponse
 import org.hibernate.Hibernate
 import java.util.Collections.emptyList
 import javax.persistence.*
+import kotlin.streams.toList
 
 @Entity
 @Table(name = "Author")
@@ -27,6 +30,15 @@ data class Author(
         "asd",
         emptyList<Article>()
     )
+
+    fun toResponse(): AuthorResponse {
+        return AuthorResponse(
+            this.id,
+            this.firstName,
+            this.lastName,
+            this.articles.stream().map { it.toResponse() }.toList()
+        )
+    }
 
     fun add(tempArticle: Article) {
         articles.add(tempArticle)

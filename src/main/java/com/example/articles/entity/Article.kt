@@ -2,7 +2,6 @@ package com.example.articles.entity
 
 import com.example.articles.controller.ArticleResponse
 import org.hibernate.Hibernate
-import java.sql.Timestamp
 import javax.persistence.*
 
 @Entity

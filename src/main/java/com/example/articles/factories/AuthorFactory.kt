@@ -1,5 +1,6 @@
 package com.example.articles.factories
 
+import com.example.articles.controller.AuthorRequest
 import com.example.articles.entity.Author
 import org.springframework.stereotype.Component
 import java.util.Collections.emptyList
@@ -12,6 +13,16 @@ class AuthorFactory {
             0,
             firstName,
             lastName,
+            emptyList()
+        )
+    }
+
+    fun createAuthor(authorRequest: AuthorRequest): Author {
+
+        return Author(
+            0,
+            authorRequest.firstName,
+            authorRequest.lastName,
             emptyList()
         )
     }

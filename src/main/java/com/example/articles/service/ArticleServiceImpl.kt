@@ -2,7 +2,6 @@ package com.example.articles.service
 
 import com.example.articles.controller.ArticleRequest
 import com.example.articles.entity.Article
-import com.example.articles.errors.ArticleNotFoundException
 import com.example.articles.factories.ArticleFactory
 import com.example.articles.repository.ArticleRepository
 import lombok.RequiredArgsConstructor
