@@ -1,4 +1,4 @@
-package com.example.articles.controller
+package com.example.articles.controller.article
 
 import com.example.articles.entity.Article
 import com.example.articles.errors.ArticleNotFoundException

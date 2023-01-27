@@ -1,6 +1,6 @@
 package com.example.articles.factories
 
-import com.example.articles.controller.MagazineRequest
+import com.example.articles.controller.magazine.MagazineRequest
 import com.example.articles.entity.Magazine
 import org.springframework.stereotype.Component
 import java.util.Collections.emptyList

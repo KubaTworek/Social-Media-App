@@ -1,6 +1,6 @@
 package com.example.articles.factories
 
-import com.example.articles.controller.ArticleRequest
+import com.example.articles.controller.article.ArticleRequest
 import com.example.articles.entity.Article
 import com.example.articles.repository.AuthorRepository
 import com.example.articles.repository.MagazineRepository

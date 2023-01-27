@@ -12,8 +12,26 @@ import org.springframework.web.bind.annotation.ResponseBody
 class ArticleExceptionHandler {
 
     @ExceptionHandler
-    fun handleException(exc: ArticleNotFoundException): ResponseEntity<ArticleErrorResponse> {
-        val error = ArticleErrorResponse(
+    fun handleException(exc: ArticleNotFoundException): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            exc.message
+        )
+        return ResponseEntity(error, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler
+    fun handleException(exc: AuthorNotFoundException): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            exc.message
+        )
+        return ResponseEntity(error, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler
+    fun handleException(exc: MagazineNotFoundException): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
             HttpStatus.NOT_FOUND.value(),
             exc.message
         )
@@ -22,8 +40,8 @@ class ArticleExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(HttpMediaTypeNotSupportedException::class)
-    fun handleHttpMediaTypeNotAcceptableException(): ResponseEntity<ArticleErrorResponse> {
-        val error = ArticleErrorResponse(
+    fun handleHttpMediaTypeNotAcceptableException(): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
             HttpStatus.NOT_ACCEPTABLE.value(),
             "Acceptable content type:" + MediaType.APPLICATION_JSON_VALUE
         )

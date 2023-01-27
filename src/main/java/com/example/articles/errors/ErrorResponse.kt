@@ -1,6 +1,6 @@
 package com.example.articles.errors
 
-data class ArticleErrorResponse(
+data class ErrorResponse(
     val status: Int,
     val message: String?
 )

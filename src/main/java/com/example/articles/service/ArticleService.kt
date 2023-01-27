@@ -1,6 +1,6 @@
 package com.example.articles.service
 
-import com.example.articles.controller.ArticleRequest
+import com.example.articles.controller.article.ArticleRequest
 import com.example.articles.entity.Article
 import java.util.*
 

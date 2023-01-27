@@ -1,4 +1,4 @@
-package com.example.articles.controller
+package com.example.articles.controller.magazine
 
 data class MagazineRequest(
     val magazineName: String,

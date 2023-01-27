@@ -1,7 +1,7 @@
-package com.example.articles.controller
+package com.example.articles.controller.magazine
 
 import com.example.articles.entity.Magazine
-import com.example.articles.errors.ArticleNotFoundException
+import com.example.articles.errors.MagazineNotFoundException
 import com.example.articles.service.MagazineService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
@@ -24,7 +24,7 @@ class MagazineController(private val magazineService: MagazineService) {
     @CrossOrigin
     @GetMapping("/id/{magazineId}")
     fun getMagazineById(@PathVariable magazineId: Int) = magazineService.findById(magazineId)
-        .orElseThrow { ArticleNotFoundException("Magazine id not found - $magazineId") }
+        .orElseThrow { MagazineNotFoundException("Magazine id not found - $magazineId") }
         .toResponse()
 
     @CrossOrigin

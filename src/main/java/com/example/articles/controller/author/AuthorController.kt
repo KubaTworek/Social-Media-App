@@ -1,7 +1,7 @@
-package com.example.articles.controller
+package com.example.articles.controller.author
 
 import com.example.articles.entity.Author
-import com.example.articles.errors.ArticleNotFoundException
+import com.example.articles.errors.AuthorNotFoundException
 import com.example.articles.service.AuthorService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
@@ -24,7 +24,7 @@ class AuthorController(private val authorService: AuthorService) {
     @CrossOrigin
     @GetMapping("/id/{authorId}")
     fun getAuthorById(@PathVariable authorId: Int) = authorService.findById(authorId)
-        .orElseThrow { ArticleNotFoundException("Author id not found - $authorId") }
+        .orElseThrow { AuthorNotFoundException("Author id not found - $authorId") }
         .toResponse()
 
     @CrossOrigin

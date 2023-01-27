@@ -1,4 +1,4 @@
-package com.example.articles.controller
+package com.example.articles.controller.article
 
 data class ArticleResponse(
     val id: Int,

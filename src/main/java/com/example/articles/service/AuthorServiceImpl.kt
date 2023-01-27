@@ -1,6 +1,6 @@
 package com.example.articles.service
 
-import com.example.articles.controller.AuthorRequest
+import com.example.articles.controller.author.AuthorRequest
 import com.example.articles.entity.Author
 import com.example.articles.factories.AuthorFactory
 import com.example.articles.repository.AuthorRepository

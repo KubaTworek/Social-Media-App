@@ -1,6 +1,6 @@
 package com.example.articles.entity
 
-import com.example.articles.controller.MagazineResponse
+import com.example.articles.controller.magazine.MagazineResponse
 import org.hibernate.Hibernate
 import java.util.Collections.emptyList
 import javax.persistence.*

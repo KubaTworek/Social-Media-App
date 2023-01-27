@@ -1,6 +1,6 @@
 package com.example.articles.service
 
-import com.example.articles.controller.MagazineRequest
+import com.example.articles.controller.magazine.MagazineRequest
 import com.example.articles.entity.Magazine
 import java.util.*
 
