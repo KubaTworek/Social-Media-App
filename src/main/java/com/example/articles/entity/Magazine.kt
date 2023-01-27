@@ -1,8 +1,10 @@
 package com.example.articles.entity
 
+import com.example.articles.controller.MagazineResponse
 import org.hibernate.Hibernate
 import java.util.Collections.emptyList
 import javax.persistence.*
+import kotlin.streams.toList
 
 @Entity
 @Table(name = "Magazine")
@@ -23,6 +25,15 @@ data class Magazine(
         "asd",
         emptyList<Article>()
     )
+
+    fun toResponse(): MagazineResponse {
+        return MagazineResponse(
+            this.id,
+            this.name,
+            this.articles.stream().map { it.toResponse() }.toList()
+        )
+    }
+
 
     fun add(tempArticle: Article) {
         articles.add(tempArticle)
