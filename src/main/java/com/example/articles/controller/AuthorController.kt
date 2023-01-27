@@ -35,7 +35,7 @@ class AuthorController(private val authorService: AuthorService) {
         .toList()
 
     @CrossOrigin
-    @PostMapping("")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun saveAuthor(@RequestBody theAuthor: AuthorRequest) = authorService.save(theAuthor)
 

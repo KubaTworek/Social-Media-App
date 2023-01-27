@@ -1,6 +1,5 @@
 package com.example.articles.entity
 
-import com.example.articles.controller.ArticleResponse
 import com.example.articles.controller.AuthorResponse
 import org.hibernate.Hibernate
 import java.util.Collections.emptyList
