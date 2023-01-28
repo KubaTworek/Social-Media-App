@@ -4,7 +4,7 @@ import com.example.articles.controller.article.ArticleResponse
 
 data class AuthorResponse(
     val id: Int,
-    val fistName: String,
+    val firstName: String,
     val lastName: String,
     val articles: List<ArticleResponse>,
 )
