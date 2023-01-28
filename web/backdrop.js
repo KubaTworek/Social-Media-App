@@ -1,13 +1,14 @@
 import './article/article.js';
 import './article/articleForm.js';
 import './author/author.js';
+import './author/authorForm.js';
 
 class Backdrop extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
         this.setAttribute('opened', '')
-        this.articles = true;
+        this.articles = false;
         this.authors = false;
 
         this.shadowRoot.innerHTML = `
@@ -75,6 +76,11 @@ class Backdrop extends HTMLElement {
                     display: flex;
                     justify-content: center;
                 }
+                
+                author-post{
+                    display: flex;
+                    justify-content: center;
+                }
             </style>
             
             <div class="backdrop">
@@ -82,6 +88,7 @@ class Backdrop extends HTMLElement {
                     <button id="article-button">Articles</button><button id="author-button">Authors</button>
                 </div>
                     <article-form></article-form>
+                    <author-form></author-form>
                     <div class="search-bar"><input id="search-input" type="text"><button id="search-button">Search</button></div>
                     <div class="button-container"><button id="add-button">Add</button></div>
                     <div class="article-container">
@@ -95,22 +102,15 @@ class Backdrop extends HTMLElement {
                     </div>
             </div>
         `;
-        this.getArticles()
         const articleBtn = this.shadowRoot.getElementById('article-button')
         const authorBtn = this.shadowRoot.getElementById('author-button')
         const searchBtn = this.shadowRoot.getElementById('search-button')
         const addBtn = this.shadowRoot.getElementById('add-button')
-        const articleForm = this.shadowRoot.querySelector('article-form')
 
         articleBtn.addEventListener('click', this.articleOn.bind(this))
         authorBtn.addEventListener('click', this.authorOn.bind(this))
         searchBtn.addEventListener('click', this.getData.bind(this))
-        addBtn.addEventListener('click', () => {
-            if (!articleForm.isOpen) {
-                articleForm.open()
-                console.log(articleForm)
-            }
-        })
+        addBtn.addEventListener('click', this.postData.bind(this))
     }
 
 
@@ -141,6 +141,20 @@ class Backdrop extends HTMLElement {
         if(this.authors === true){
             this.getAuthors()
         }
+    }
+
+    postData(){
+        const articleForm = this.shadowRoot.querySelector('article-form')
+        const authorForm = this.shadowRoot.querySelector('author-form')
+        if (!articleForm.isOpen && !authorForm.isOpen) {
+            if(this.articles === true) {
+                articleForm.open()
+            }
+            if(this.authors === true){
+                authorForm.open()
+            }
+        }
+
     }
 
     async getArticles() {

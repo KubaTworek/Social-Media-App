@@ -29,7 +29,7 @@ export class Author extends HTMLElement {
             </style>
 
             <div class="author-card">
-                <p>Author: ${author.fistName} ${author.lastName}</p>
+                <p>Author: ${author.firstName} ${author.lastName}</p>
                 <ul class="articles"></ul>
                 <p id="idPara">${author.id}</p>
                 <button id="delete-button">Delete</button>

@@ -1,4 +1,4 @@
-export class ArticleForm extends HTMLElement {
+export class AuthorForm extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
@@ -72,15 +72,12 @@ export class ArticleForm extends HTMLElement {
         <div id="backdrop"></div>
         <div id="modal">
             <header>
-                <h2 id="title">Article</h2>
+                <h2 id="title">Author</h2>
             </header>
             <section id="main">
                 <form id="form">
-                    <input name="title" type="text">
-                    <input name="text" type="text">
-                    <input name="magazine" type="text">
-                    <input name="author_firstName" type="text">
-                    <input name="author_lastName" type="text">
+                    <input name="firstName" type="text">
+                    <input name="lastName" type="text">
                     <button type="submit">Add</button>
                 </form>
             </section>
@@ -98,28 +95,26 @@ export class ArticleForm extends HTMLElement {
         form.addEventListener('submit', (e) => {
             e.preventDefault()
 
-            const preArticle = new FormData(form)
-            let articleArr = []
-            for (let [k, v] of preArticle.entries()) {
-                articleArr.push(v);
+            const preAuthor = new FormData(form)
+            let authorArr = []
+            for (let [k, v] of preAuthor.entries()) {
+                console.log(k, v)
+                authorArr.push(v);
             }
 
-            fetch('http://localhost:8887/articles', {
+            fetch('http://localhost:8887/authors', {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    title: articleArr[0],
-                    text: articleArr[1],
-                    magazine: articleArr[2],
-                    author_firstName: articleArr[3],
-                    author_lastName: articleArr[4]
+                    firstName: authorArr[0],
+                    lastName: authorArr[1]
                 })
             }).then(r => r.json())
                 .then(data => console.log(data))
                 .catch(err => console.log(err))
-            this.hide()
+            this.hide();
         })
     }
 
@@ -142,4 +137,4 @@ export class ArticleForm extends HTMLElement {
     }
 }
 
-customElements.define('article-form', ArticleForm);
+customElements.define('author-form', AuthorForm);
