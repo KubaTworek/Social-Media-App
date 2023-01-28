@@ -3,6 +3,7 @@ import './article/articleForm.js';
 import './author/author.js';
 import './author/authorForm.js';
 import './magazine/magazine.js';
+import './magazine/magazineForm.js';
 
 class Backdrop extends HTMLElement {
     constructor() {
@@ -102,6 +103,7 @@ class Backdrop extends HTMLElement {
                 </div>
                     <article-form></article-form>
                     <author-form></author-form>
+                    <magazine-form></magazine-form>
                     <div class="search-bar"><input id="search-input" type="text"><button id="search-button">Search</button></div>
                     <div class="button-container"><button id="add-button">Add</button></div>
                     <div class="article-container">
@@ -195,15 +197,18 @@ class Backdrop extends HTMLElement {
     postData(){
         const articleForm = this.shadowRoot.querySelector('article-form')
         const authorForm = this.shadowRoot.querySelector('author-form')
-        if (!articleForm.isOpen && !authorForm.isOpen) {
+        const magazineForm = this.shadowRoot.querySelector('magazine-form')
+        if (!articleForm.isOpen && !authorForm.isOpen && !magazineForm.isOpen) {
             if(this.articles === true) {
                 articleForm.open()
             }
             if(this.authors === true){
                 authorForm.open()
             }
+            if(this.magazines === true){
+                magazineForm.open()
+            }
         }
-
     }
 
     async getArticles() {
