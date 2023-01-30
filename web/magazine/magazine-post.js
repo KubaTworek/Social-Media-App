@@ -1,4 +1,4 @@
-export class Magazine extends HTMLElement {
+export class MagazinePost extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
@@ -21,48 +21,47 @@ export class Magazine extends HTMLElement {
                     font-size: 1.5rem;
                 }
                 
-                #idPara {
+                #idMagazine {
                     display: none;
-                }
-                
+                }                
             </style>
 
             <div class="magazine-card">
                 <p>Magazine: ${magazine.name}</p>
                 <ul class="articles"></ul>
-                <p id="idPara">${magazine.id}</p>
+                <p id="idMagazine">${magazine.id}</p>
                 <button id="delete-button">Delete</button>
             </div>
         `
-        const deleteBtn = this.shadowRoot.querySelector('#delete-button');
-        const articlesEl = this.shadowRoot.querySelector('.articles');
-        deleteBtn.addEventListener('click', this.delete.bind(this, magazine.id));
 
-        const articles = magazine.articles
+        this.idMagazine = this.shadowRoot.getElementById('idMagazine');
+        this.articlesList = this.shadowRoot.querySelector('.articles');
+        this.renderArticles(magazine.articles)
+
+        const deleteBtn = this.shadowRoot.getElementById('delete-button');
+        deleteBtn.addEventListener('click', this.delete.bind(this));
+    }
+
+    delete() {
+        fetch('http://localhost:8887/magazines/' + this.idMagazine.innerHTML, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).catch(err => console.log(err))
+        this.remove()
+    }
+
+    renderArticles(articles) {
         articles.forEach(article => {
                 const li = document.createElement('li')
                 const el = document.createElement('p')
                 el.innerText = article.title
                 li.appendChild(el)
-                articlesEl.appendChild(li)
+                this.articlesList.appendChild(li)
             }
         )
-
-    }
-
-    delete() {
-        const idParaEl = this.shadowRoot.querySelector('#idPara');
-
-        fetch('http://localhost:8887/magazines/' + idParaEl.innerHTML, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(r => r.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
-        this.remove()
     }
 }
 
-customElements.define('magazine-post', Magazine)
+customElements.define('magazine-post', MagazinePost)

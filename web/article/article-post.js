@@ -1,4 +1,4 @@
-export class Article extends HTMLElement {
+export class ArticlePost extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
@@ -7,7 +7,6 @@ export class Article extends HTMLElement {
     set article(article) {
         this.shadowRoot.innerHTML = `
             <style>
-
                 .article-card {
                     width: 60%;
                     display: block;
@@ -22,10 +21,9 @@ export class Article extends HTMLElement {
                     font-size: 1.5rem;
                 }
                 
-                #idPara {
+                #idArticle {
                     display: none;
-                }
-                
+                }             
             </style>
 
             <div class="article-card">
@@ -33,18 +31,18 @@ export class Article extends HTMLElement {
                 <p>${article.text}</p>
                 <p>Magazine: ${article.magazine}</p>
                 <p>Author: ${article.author_firstName} ${article.author_lastName}</p>
-                <p id="idPara">${article.id}</p>
+                <p id="idArticle">${article.id}</p>
                 <button id="delete-button">Delete</button>
             </div>
         `
-        const deleteBtn = this.shadowRoot.querySelector('#delete-button');
-        deleteBtn.addEventListener('click', this.delete.bind(this, article.id));
+
+        this.idArticle = this.shadowRoot.getElementById('idArticle');
+        const deleteBtn = this.shadowRoot.getElementById('delete-button');
+        deleteBtn.addEventListener('click', this.delete.bind(this));
     }
 
     delete() {
-        const idParaEl = this.shadowRoot.querySelector('#idPara');
-
-        fetch('http://localhost:8887/articles/' + idParaEl.innerHTML, {
+        fetch('http://localhost:8887/articles/' + this.idArticle.innerHTML, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -56,4 +54,4 @@ export class Article extends HTMLElement {
     }
 }
 
-customElements.define('article-post', Article)
+customElements.define('article-post', ArticlePost)

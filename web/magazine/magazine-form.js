@@ -2,8 +2,59 @@ export class MagazineForm extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
-        this.isOpen = false
-        this.shadowRoot.innerHTML = `
+        this.shadowRoot.innerHTML = this.render();
+    }
+
+    connectedCallback() {
+        const backdrop = this.shadowRoot.getElementById('backdrop');
+        const cancelButton = this.shadowRoot.getElementById('cancel-button');
+        const form = this.shadowRoot.getElementById('form-container');
+
+        backdrop.addEventListener('click', this._cancel.bind(this));
+        cancelButton.addEventListener('click', this._cancel.bind(this));
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const preMagazine = new FormData(form)
+            let magazineArr = []
+            for (let [k, v] of preMagazine.entries()) {
+                magazineArr.push(v);
+            }
+            this.postData(magazineArr)
+        })
+    }
+
+    open() {
+        this.setAttribute('opened', '');
+    }
+
+    hide() {
+        if (this.hasAttribute('opened')) {
+            this.removeAttribute('opened');
+        }
+    }
+
+    _cancel(event) {
+        this.hide();
+        const cancelEvent = new Event('cancel', {bubbles: true, composed: true});
+        event.target.dispatchEvent(cancelEvent);
+    }
+
+    postData(arr){
+        fetch('http://localhost:8887/magazines', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                magazineName: arr[0],
+                test: 'test'
+            })
+        }).catch(err => console.log(err))
+        this.hide();
+    }
+
+    render() {
+        return `
         <style>
             #backdrop {
                 position: fixed;
@@ -18,16 +69,16 @@ export class MagazineForm extends HTMLElement {
             }
 
             :host([opened]) #backdrop,
-            :host([opened]) #modal {
+            :host([opened]) #background {
                 opacity: 1;
                 pointer-events: all;
             }
 
-            :host([opened]) #modal {
+            :host([opened]) #background {
                 top: 15vh;
             }
 
-            #modal {
+            #background {
                 position: fixed;
                 top: 10vh;
                 left: 25%;
@@ -54,84 +105,38 @@ export class MagazineForm extends HTMLElement {
                 margin: 0;
             }
 
-            #main {
+            #content {
                 padding: 1rem;
             }
 
-            #actions {
+            #buttons-container {
                 border-top: 1px solid #ccc;
                 padding: 1rem;
                 display: flex;
                 justify-content: flex-end;
             }
 
-            #actions button {
+            #buttons-container button {
                 margin: 0 0.25rem;
             }
         </style>
+        
         <div id="backdrop"></div>
-        <div id="modal">
+        <div id="background">
             <header>
                 <h2 id="title">Magazine</h2>
             </header>
-            <section id="main">
-                <form id="form">
+            <section id="content">
+                <form id="form-container">
                     <input name="name" type="text">
                     <button type="submit">Add</button>
                 </form>
             </section>
-            <section id="actions">
-                <button id="cancel-btn">Cancel</button>
+            <section id="buttons-container">
+                <button id="cancel-button">Cancel</button>
             </section>
         </div>
     `;
-        const backdrop = this.shadowRoot.querySelector('#backdrop');
-        const cancelButton = this.shadowRoot.querySelector('#cancel-btn');
-        const form = this.shadowRoot.querySelector('#form');
-
-        backdrop.addEventListener('click', this._cancel.bind(this));
-        cancelButton.addEventListener('click', this._cancel.bind(this));
-        form.addEventListener('submit', (e) => {
-            e.preventDefault()
-
-            const preMagazine = new FormData(form)
-            let magazineArr = []
-            for (let [k, v] of preMagazine.entries()) {
-                magazineArr.push(v);
-            }
-
-            fetch('http://localhost:8887/magazines', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    magazineName: magazineArr[0],
-                    test: 'test'
-                })
-            }).then(r => r.json())
-                .then(data => console.log(data))
-                .catch(err => console.log(err))
-            this.hide();
-        })
-    }
-
-    open() {
-        this.setAttribute('opened', '');
-        this.isOpen = true;
-    }
-
-    hide() {
-        if (this.hasAttribute('opened')) {
-            this.removeAttribute('opened');
-        }
-        this.isOpen = false;
-    }
-
-    _cancel(event) {
-        this.hide();
-        const cancelEvent = new Event('cancel', {bubbles: true, composed: true});
-        event.target.dispatchEvent(cancelEvent);
     }
 }
 
