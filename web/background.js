@@ -14,6 +14,7 @@ class Background extends HTMLElement {
     }
 
     connectedCallback() {
+        new Http()
         this.shadowRoot.innerHTML = this.render();
 
         this.data = 'articles';
@@ -87,8 +88,6 @@ class Background extends HTMLElement {
     }
 
     async getArticles() {
-        new Http()
-
         Http.instance.doGet("articles/" + this.input.value).then(r => {
             r.forEach(article => {
                     const li = document.createElement('li')
@@ -102,8 +101,6 @@ class Background extends HTMLElement {
     }
 
     async getAuthors() {
-        new Http()
-
         Http.instance.doGet("authors/" + this.input.value).then(r => {
             r.forEach(author => {
                     const li = document.createElement('li')
@@ -117,8 +114,6 @@ class Background extends HTMLElement {
     }
 
     async getMagazines() {
-        new Http()
-
         Http.instance.doGet("magazines/" + this.input.value).then(r => {
             r.forEach(magazine => {
                     const li = document.createElement('li')

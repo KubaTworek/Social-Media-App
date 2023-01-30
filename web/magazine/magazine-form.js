@@ -44,7 +44,7 @@ export class MagazineForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(data){
+    postData(data) {
         Http.instance.doPost('magazines/', JSON.stringify(data))
             .catch(err => console.log(err))
         this.hide();

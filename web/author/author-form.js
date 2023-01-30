@@ -45,7 +45,7 @@ export class AuthorForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(data){
+    postData(data) {
         Http.instance.doPost('authors/', JSON.stringify(data))
             .catch(err => console.log(err))
         this.hide();

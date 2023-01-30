@@ -2,7 +2,7 @@ import {config} from "../config.js"
 
 export class Http {
     constructor() {
-        if(!Http.inst) {
+        if (!Http.inst) {
             Http.inst = this
         } else {
             return Http.inst
@@ -51,4 +51,5 @@ export class Http {
         }).catch(err => console.log(err));
     }
 }
+
 Http.inst = null;

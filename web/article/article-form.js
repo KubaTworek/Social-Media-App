@@ -47,7 +47,7 @@ export class ArticleForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(data){
+    postData(data) {
         Http.instance.doPost('articles/', JSON.stringify(data))
             .catch(err => console.log(err))
         this.hide()
