@@ -1,7 +1,7 @@
 package com.example.articles.service
 
 import com.example.articles.controller.article.ArticleRequest
-import com.example.articles.entity.Article
+import com.example.articles.entity.ArticlePost
 import com.example.articles.factories.ArticleFactory
 import com.example.articles.repository.ArticleRepository
 import lombok.RequiredArgsConstructor
@@ -17,18 +17,18 @@ class ArticleServiceImpl(
     private val articleFactory: ArticleFactory,
 ) : ArticleService {
 
-    override fun findAllOrderByDateDesc(): List<Article> {
+    override fun findAllOrderByDateDesc(): List<ArticlePost> {
         return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
     }
 
-    override fun findById(theId: Int): Optional<Article> {
+    override fun findById(theId: Int): Optional<ArticlePost> {
         return articleRepository.findById(theId)
     }
 
-    override fun findAllByKeyword(theKeyword: String): List<Article> {
-        val articles: List<Article> = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
+    override fun findAllByKeyword(theKeyword: String): List<ArticlePost> {
+        val articles: List<ArticlePost> = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
         return articles.stream()
-            .filter { article: Article ->
+            .filter { article: ArticlePost ->
                 article.content.title.contains(theKeyword) || article.content.text.contains(theKeyword)
             }
             .toList()

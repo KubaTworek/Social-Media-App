@@ -1,6 +1,6 @@
 package com.example.articles.controller.article
 
-import com.example.articles.entity.Article
+import com.example.articles.entity.ArticlePost
 import com.example.articles.errors.ArticleNotFoundException
 import com.example.articles.service.ArticleService
 import lombok.RequiredArgsConstructor
@@ -18,20 +18,20 @@ class ArticleController(private val articleService: ArticleService) {
     @GetMapping
     fun articlesOrderByDateDesc() = articleService.findAllOrderByDateDesc()
         .stream()
-        .map(Article::toResponse)
+        .map(ArticlePost::toResponse)
         .toList()
 
     @CrossOrigin
     @GetMapping("/id/{articleId}")
     fun getArticleById(@PathVariable articleId: Int) = articleService.findById(articleId)
-        .orElseThrow { ArticleNotFoundException("Article id not found - $articleId") }
+        .orElseThrow { ArticleNotFoundException("ArticlePost id not found - $articleId") }
         .toResponse()
 
     @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getArticlesByKeyword(@PathVariable keyword: String) = articleService.findAllByKeyword(keyword)
         .stream()
-        .map(Article::toResponse)
+        .map(ArticlePost::toResponse)
         .toList()
 
     @CrossOrigin

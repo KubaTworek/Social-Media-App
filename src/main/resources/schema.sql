@@ -1,6 +1,6 @@
 -- tables
--- Table: Author
-CREATE TABLE Author (
+-- Table: AuthorPost
+CREATE TABLE AuthorPost (
                         Id integer NOT NULL CONSTRAINT Author_pk PRIMARY KEY,
                         firstname varchar(40) NOT NULL,
                         lastname varchar(40) NOT NULL
@@ -13,14 +13,14 @@ CREATE TABLE Content (
                          Text varchar(255) NOT NULL
 );
 
--- Table: Magazine
-CREATE TABLE Magazine (
+-- Table: MagazinePost
+CREATE TABLE MagazinePost (
                           Id integer NOT NULL CONSTRAINT Magazine_pk PRIMARY KEY,
                           Name varchar(40) NOT NULL
 );
 
--- Table: Article
-CREATE TABLE Article (
+-- Table: ArticlePost
+CREATE TABLE ArticlePost (
                          Id integer NOT NULL CONSTRAINT Article_pk PRIMARY KEY,
                          Date date NOT NULL,
                          Timestamp timestamp NOT NULL,
@@ -28,9 +28,9 @@ CREATE TABLE Article (
                          Magazine_Id integer NOT NULL,
                          Content_Id integer NOT NULL,
                          CONSTRAINT Article_Author FOREIGN KEY (Author_Id)
-                             REFERENCES Author (Id),
+                             REFERENCES AuthorPost (Id),
                          CONSTRAINT Article_Magazine FOREIGN KEY (Magazine_Id)
-                             REFERENCES Magazine (Id),
+                             REFERENCES MagazinePost (Id),
                          CONSTRAINT Article_Content FOREIGN KEY (Content_Id)
                              REFERENCES Content (Id)
 );

@@ -76,7 +76,7 @@ Content-Type: application/json
 
 When succeed 201 Status code and newly created article object are returned.
 
-# Magazine and Author
+# MagazinePost and AuthorPost
 
 If we did not type any magazine or author, we will get error and 400 Status Code.
 If we type only id, we will choose object from database with that id, if there are not object with that id, we will get error and 400 Status code.

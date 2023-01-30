@@ -5,8 +5,8 @@ import org.hibernate.Hibernate
 import javax.persistence.*
 
 @Entity
-@Table(name = "Article")
-data class Article(
+@Table(name = "ArticlePost")
+data class ArticlePost(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
@@ -20,11 +20,11 @@ data class Article(
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "Author_Id")
-    var author: Author,
+    var author: AuthorPost,
 
     @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinColumn(name = "Magazine_Id")
-    var magazine: Magazine,
+    var magazine: MagazinePost,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Content_Id")
@@ -36,8 +36,8 @@ data class Article(
         0,
         "sad",
         "200",
-        Author(),
-        Magazine(),
+        AuthorPost(),
+        MagazinePost(),
         ArticleContent()
     )
 
@@ -55,7 +55,7 @@ data class Article(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Article
+        other as ArticlePost
 
         return id == other.id
     }

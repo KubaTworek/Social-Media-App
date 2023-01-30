@@ -7,8 +7,8 @@ import javax.persistence.*
 import kotlin.streams.toList
 
 @Entity
-@Table(name = "Author")
-data class Author(
+@Table(name = "AuthorPost")
+data class AuthorPost(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -21,13 +21,13 @@ data class Author(
     val lastName: String,
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL])
-    val articles: MutableList<Article>
+    val articles: MutableList<ArticlePost>
 ) {
     constructor() : this(
         0,
         "asd",
         "asd",
-        emptyList<Article>()
+        emptyList<ArticlePost>()
     )
 
     fun toResponse(): AuthorResponse {
@@ -39,7 +39,7 @@ data class Author(
         )
     }
 
-    fun add(tempArticle: Article) {
+    fun add(tempArticle: ArticlePost) {
         articles.add(tempArticle)
         tempArticle.author = this
     }
@@ -47,7 +47,7 @@ data class Author(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Author
+        other as AuthorPost
 
         return id == other.id
     }

@@ -1,7 +1,7 @@
 package com.example.articles.factories
 
 import com.example.articles.controller.article.ArticleRequest
-import com.example.articles.entity.Article
+import com.example.articles.entity.ArticlePost
 import com.example.articles.repository.AuthorRepository
 import com.example.articles.repository.MagazineRepository
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ class ArticleFactory(
     private val magazineFactory: MagazineFactory,
     private val contentFactory: ContentFactory,
 ) {
-    fun createArticle(theArticle: ArticleRequest): Article {
+    fun createArticle(theArticle: ArticleRequest): ArticlePost {
         val author =
             authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
                 .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
@@ -25,7 +25,7 @@ class ArticleFactory(
             .orElse(magazineFactory.createMagazine(theArticle.magazine))
         val content = contentFactory.createContent(theArticle.title, theArticle.text)
 
-        return Article(
+        return ArticlePost(
             0,
             getCurrentDate(),
             System.currentTimeMillis().toString(),
