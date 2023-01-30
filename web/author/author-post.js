@@ -1,3 +1,5 @@
+import {Http} from "../http/http.js";
+
 export class AuthorPost extends HTMLElement {
     constructor() {
         super();
@@ -34,7 +36,7 @@ export class AuthorPost extends HTMLElement {
             </div>
         `
 
-        this.idParaEl = this.shadowRoot.getElementById('idAuthor');
+        this.idAuthor = this.shadowRoot.getElementById('idAuthor');
         this.articlesList = this.shadowRoot.querySelector('.articles');
         this.renderArticles(author.articles)
 
@@ -43,12 +45,8 @@ export class AuthorPost extends HTMLElement {
     }
 
     delete() {
-        fetch('http://localhost:8887/authors/' + this.idParaEl.innerHTML, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).catch(err => console.log(err))
+        Http.instance.doDelete("authors/" + this.idAuthor.innerHTML)
+            .catch(err => console.log(err))
         this.remove()
     }
 

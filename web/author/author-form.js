@@ -1,3 +1,5 @@
+import {Http} from "../http/http.js";
+
 export class AuthorForm extends HTMLElement {
     constructor() {
         super();
@@ -15,11 +17,15 @@ export class AuthorForm extends HTMLElement {
         form.addEventListener('submit', (e) => {
             e.preventDefault()
             const preAuthor = new FormData(form)
-            let authorArr = []
-            for (let [k, v] of preAuthor.entries()) {
-                authorArr.push(v);
+            let data = {
+                'firstName': '',
+                'lastName': '',
+                'magazine': ''
             }
-            this.postData(authorArr)
+            for (let [k, v] of preAuthor.entries()) {
+                data[k] = v
+            }
+            this.postData(data)
         })
     }
 
@@ -39,17 +45,9 @@ export class AuthorForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(arr){
-        fetch('http://localhost:8887/authors', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                firstName: arr[0],
-                lastName: arr[1]
-            })
-        }).catch(err => console.log(err))
+    postData(data){
+        Http.instance.doPost('authors/', JSON.stringify(data))
+            .catch(err => console.log(err))
         this.hide();
     }
 

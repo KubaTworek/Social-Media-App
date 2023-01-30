@@ -1,3 +1,5 @@
+import {Http} from "../http/http.js";
+
 export class MagazinePost extends HTMLElement {
     constructor() {
         super();
@@ -43,12 +45,8 @@ export class MagazinePost extends HTMLElement {
     }
 
     delete() {
-        fetch('http://localhost:8887/magazines/' + this.idMagazine.innerHTML, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).catch(err => console.log(err))
+        Http.instance.doDelete("magazines/" + this.idMagazine.innerHTML)
+            .catch(err => console.log(err))
         this.remove()
     }
 

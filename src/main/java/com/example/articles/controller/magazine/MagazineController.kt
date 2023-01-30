@@ -9,7 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import kotlin.streams.toList
 
-@RequestMapping("/magazines")
+@RequestMapping("/api/magazines")
 @RestController
 @RequiredArgsConstructor
 class MagazineController(private val magazineService: MagazineService) {

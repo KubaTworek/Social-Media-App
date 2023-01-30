@@ -1,3 +1,5 @@
+import {Http} from "../http/http.js";
+
 export class MagazineForm extends HTMLElement {
     constructor() {
         super();
@@ -15,11 +17,14 @@ export class MagazineForm extends HTMLElement {
         form.addEventListener('submit', (e) => {
             e.preventDefault()
             const preMagazine = new FormData(form)
-            let magazineArr = []
-            for (let [k, v] of preMagazine.entries()) {
-                magazineArr.push(v);
+            let data = {
+                'magazineName': '',
+                'test': ''
             }
-            this.postData(magazineArr)
+            for (let [k, v] of preMagazine.entries()) {
+                data[k] = v
+            }
+            this.postData(data)
         })
     }
 
@@ -39,17 +44,9 @@ export class MagazineForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(arr){
-        fetch('http://localhost:8887/magazines', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                magazineName: arr[0],
-                test: 'test'
-            })
-        }).catch(err => console.log(err))
+    postData(data){
+        Http.instance.doPost('magazines/', JSON.stringify(data))
+            .catch(err => console.log(err))
         this.hide();
     }
 

@@ -9,7 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import kotlin.streams.toList
 
-@RequestMapping("/authors")
+@RequestMapping("/api/authors")
 @RestController
 @RequiredArgsConstructor
 class AuthorController(private val authorService: AuthorService) {

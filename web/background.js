@@ -4,6 +4,7 @@ import {AuthorPost} from './author/author-post.js';
 import {AuthorForm} from './author/author-form.js';
 import {MagazinePost} from './magazine/magazine-post.js';
 import {MagazineForm} from './magazine/magazine-form.js';
+import {Http} from './http/http.js';
 
 class Background extends HTMLElement {
     constructor() {
@@ -86,54 +87,48 @@ class Background extends HTMLElement {
     }
 
     async getArticles() {
-        const url = "http://localhost:8887/articles/" + this.input.value
+        new Http()
 
-        const response = await fetch(url)
-            .then(r => r.json())
-            .catch(err => console.log(err))
-
-        response.forEach(article => {
-                const li = document.createElement('li')
-                const el = new ArticlePost()
-                el.article = article
-                li.appendChild(el)
-                this.dataList.appendChild(li)
-            }
-        )
+        Http.instance.doGet("articles/" + this.input.value).then(r => {
+            r.forEach(article => {
+                    const li = document.createElement('li')
+                    const el = new ArticlePost()
+                    el.article = article
+                    li.appendChild(el)
+                    this.dataList.appendChild(li)
+                }
+            )
+        })
     }
 
     async getAuthors() {
-        const url = "http://localhost:8887/authors/" + this.input.value
+        new Http()
 
-        const response = await fetch(url)
-            .then(r => r.json())
-            .catch(err => console.log(err))
-
-        response.forEach(author => {
-                const li = document.createElement('li')
-                const el = new AuthorPost()
-                el.author = author
-                li.appendChild(el)
-                this.dataList.appendChild(li)
-            }
-        )
+        Http.instance.doGet("authors/" + this.input.value).then(r => {
+            r.forEach(author => {
+                    const li = document.createElement('li')
+                    const el = new AuthorPost()
+                    el.author = author
+                    li.appendChild(el)
+                    this.dataList.appendChild(li)
+                }
+            )
+        })
     }
 
     async getMagazines() {
-        const url = "http://localhost:8887/magazines/" + this.input.value
+        new Http()
 
-        const response = await fetch(url)
-            .then(r => r.json())
-            .catch(err => console.log(err))
-
-        response.forEach(magazine => {
-                const li = document.createElement('li')
-                const el = new MagazinePost()
-                el.magazine = magazine
-                li.appendChild(el)
-                this.dataList.appendChild(li)
-            }
-        )
+        Http.instance.doGet("magazines/" + this.input.value).then(r => {
+            r.forEach(magazine => {
+                    const li = document.createElement('li')
+                    const el = new MagazinePost()
+                    el.magazine = magazine
+                    li.appendChild(el)
+                    this.dataList.appendChild(li)
+                }
+            )
+        })
     }
 
     render() {
