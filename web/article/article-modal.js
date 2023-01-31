@@ -1,12 +1,9 @@
-import {ArticlePost} from "./article/article-post.js";
-import {ArticleForm} from './article/article-form.js';
-import {AuthorPost} from './author/author-post.js';
-import {AuthorForm} from './author/author-form.js';
-import {MagazinePost} from './magazine/magazine-post.js';
-import {MagazineForm} from './magazine/magazine-form.js';
-import {Http} from './http/http.js';
+import {ArticlePost} from "./article-post.js";
+import {ArticleForm} from './article-form.js';
+import {Http} from '../http/http.js';
+import {RouterHandler} from "../router/router-handler.js";
 
-class Background extends HTMLElement {
+export class ArticleModal extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
@@ -14,10 +11,8 @@ class Background extends HTMLElement {
     }
 
     connectedCallback() {
-        new Http()
         this.shadowRoot.innerHTML = this.render();
 
-        this.data = 'articles';
         this.background = this.shadowRoot.getElementById('background')
         this.dataList = this.shadowRoot.getElementById('data-list')
         this.input = this.shadowRoot.getElementById('search-input')
@@ -30,16 +25,13 @@ class Background extends HTMLElement {
         const addBtn = this.shadowRoot.getElementById('add-button')
 
         articleBtn.addEventListener('click', () => {
-            this.data = 'articles'
-            this.getData()
+            RouterHandler.getInstance.router.navigate('/articles');
         })
         authorBtn.addEventListener('click', () => {
-            this.data = 'authors'
-            this.getData()
+            RouterHandler.getInstance.router.navigate('/authors');
         })
         magazineBtn.addEventListener('click', () => {
-            this.data = 'magazines'
-            this.getData()
+            RouterHandler.getInstance.router.navigate('/magazines');
         })
         searchBtn.addEventListener('click', this.getData.bind(this))
         addBtn.addEventListener('click', this.postData.bind(this))
@@ -47,44 +39,14 @@ class Background extends HTMLElement {
 
     getData() {
         this.dataList.innerHTML = ""
-        switch (this.data) {
-            case 'articles':
-                this.getArticles()
-                    .catch(err => console.log(err))
-                break;
-            case 'authors':
-                this.getAuthors()
-                    .catch(err => console.log(err))
-                break;
-            case 'magazines':
-                this.getMagazines()
-                    .catch(err => console.log(err))
-                break;
-            default:
-                console.log('Wrong data')
-        }
+        this.getArticles()
+            .catch(err => console.log(err))
     }
 
     postData() {
-        switch (this.data) {
-            case 'articles':
-                const articleForm = new ArticleForm()
-                this.background.appendChild(articleForm)
-                articleForm.open()
-                break;
-            case 'authors':
-                const authorForm = new AuthorForm()
-                this.background.appendChild(authorForm)
-                authorForm.open()
-                break;
-            case 'magazines':
-                const magazineForm = new MagazineForm()
-                this.background.appendChild(magazineForm)
-                magazineForm.open()
-                break;
-            default:
-                console.log('Wrong data')
-        }
+        const articleForm = new ArticleForm()
+        this.background.appendChild(articleForm)
+        articleForm.open()
     }
 
     async getArticles() {
@@ -93,32 +55,6 @@ class Background extends HTMLElement {
                     const li = document.createElement('li')
                     const el = new ArticlePost()
                     el.article = article
-                    li.appendChild(el)
-                    this.dataList.appendChild(li)
-                }
-            )
-        })
-    }
-
-    async getAuthors() {
-        Http.instance.doGet("authors/" + this.input.value).then(r => {
-            r.forEach(author => {
-                    const li = document.createElement('li')
-                    const el = new AuthorPost()
-                    el.author = author
-                    li.appendChild(el)
-                    this.dataList.appendChild(li)
-                }
-            )
-        })
-    }
-
-    async getMagazines() {
-        Http.instance.doGet("magazines/" + this.input.value).then(r => {
-            r.forEach(magazine => {
-                    const li = document.createElement('li')
-                    const el = new MagazinePost()
-                    el.magazine = magazine
                     li.appendChild(el)
                     this.dataList.appendChild(li)
                 }
@@ -178,33 +114,11 @@ class Background extends HTMLElement {
                     padding: 0;
                 }
                 
-                .authors {
-                    width: 100%;
-                    list-style-type: none;
-                    padding: 0;
-                }
-                
-                .magazines {
-                    width: 100%;
-                    list-style-type: none;
-                    padding: 0;
-                }
-                
                 li {
                     width: 100%;
                 }
                 
                 article-post{
-                    display: flex;
-                    justify-content: center;
-                }
-                
-                author-post{
-                    display: flex;
-                    justify-content: center;
-                }
-                
-                magazine-post{
                     display: flex;
                     justify-content: center;
                 }
@@ -226,4 +140,4 @@ class Background extends HTMLElement {
     }
 }
 
-customElements.define('backdrop-comp', Background)
+customElements.define('article-modal', ArticleModal)

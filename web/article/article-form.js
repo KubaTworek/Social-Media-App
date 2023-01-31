@@ -50,7 +50,7 @@ export class ArticleForm extends HTMLElement {
     postData(data) {
         Http.instance.doPost('articles/', JSON.stringify(data))
             .catch(err => console.log(err))
-        this.hide()
+        location.reload()
     }
 
     render() {

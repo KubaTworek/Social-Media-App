@@ -48,7 +48,7 @@ export class AuthorForm extends HTMLElement {
     postData(data) {
         Http.instance.doPost('authors/', JSON.stringify(data))
             .catch(err => console.log(err))
-        this.hide();
+        location.reload()
     }
 
     render() {

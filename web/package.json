@@ -1,0 +1,11 @@
+{
+  "name": "REST-API-Articles",
+  "version": "1.0.0",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "navigo": "^4.7.1"
+  },
+  "scripts": {
+    "start": "http-server -c-1 -p 8881"
+  }
+}

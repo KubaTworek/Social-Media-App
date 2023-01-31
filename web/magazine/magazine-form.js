@@ -47,7 +47,7 @@ export class MagazineForm extends HTMLElement {
     postData(data) {
         Http.instance.doPost('magazines/', JSON.stringify(data))
             .catch(err => console.log(err))
-        this.hide();
+        location.reload()
     }
 
     render() {
