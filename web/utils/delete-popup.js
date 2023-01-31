@@ -1,31 +1,19 @@
 import {Http} from "../http/http.js";
 
-export class MagazineForm extends HTMLElement {
-    constructor() {
+export class DeletePopup extends HTMLElement {
+    constructor(text, url) {
         super();
         this.attachShadow({mode: 'open'})
-        this.shadowRoot.innerHTML = this.render();
+        this.shadowRoot.innerHTML = this.render(text)
+        this.url = url
     }
 
     connectedCallback() {
-        const backdrop = this.shadowRoot.getElementById('backdrop');
         const cancelButton = this.shadowRoot.getElementById('cancel-button');
-        const form = this.shadowRoot.getElementById('form-container');
+        const confirmButton = this.shadowRoot.getElementById('confirm-button');
 
-        backdrop.addEventListener('click', this._cancel.bind(this));
         cancelButton.addEventListener('click', this._cancel.bind(this));
-        form.addEventListener('submit', (e) => {
-            e.preventDefault()
-            const preMagazine = new FormData(form)
-            let data = {
-                'magazineName': '',
-                'test': ''
-            }
-            for (let [k, v] of preMagazine.entries()) {
-                data[k] = v
-            }
-            this.postData(data)
-        })
+        confirmButton.addEventListener('click', this._delete.bind(this));
     }
 
     open() {
@@ -44,13 +32,14 @@ export class MagazineForm extends HTMLElement {
         event.target.dispatchEvent(cancelEvent);
     }
 
-    postData(data) {
-        Http.instance.doPost('magazines/', JSON.stringify(data))
+    _delete() {
+        this.hide();
+        Http.instance.doDelete(this.url)
             .then(() => location.reload())
             .catch(err => console.log(err))
     }
 
-    render() {
+    render(text) {
         return `
         <style>
             #backdrop {
@@ -120,21 +109,16 @@ export class MagazineForm extends HTMLElement {
         
         <div id="backdrop"></div>
         <div id="background">
-            <header>
-                <h2 id="title">Magazine</h2>
-            </header>
             <section id="content">
-                <form id="form-container">
-                    <input name="name" type="text">
-                    <button type="submit">Add</button>
-                </form>
+            <p>${text}</p>
             </section>
             <section id="buttons-container">
                 <button id="cancel-button">Cancel</button>
+                <button id="confirm-button">Ok</button>
             </section>
         </div>
     `;
     }
 }
 
-customElements.define('magazine-form', MagazineForm);
+customElements.define('delete-popup', DeletePopup);

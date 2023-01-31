@@ -1,4 +1,5 @@
 import {Http} from "../http/http.js";
+import {DeletePopup} from "../utils/delete-popup.js";
 
 export class AuthorPost extends HTMLElement {
     constructor() {
@@ -36,6 +37,7 @@ export class AuthorPost extends HTMLElement {
             </div>
         `
 
+        this.authorCard = this.shadowRoot.querySelector('.author-card')
         this.idAuthor = this.shadowRoot.getElementById('idAuthor');
         this.articlesList = this.shadowRoot.querySelector('.articles');
         this.renderArticles(author.articles)
@@ -45,9 +47,9 @@ export class AuthorPost extends HTMLElement {
     }
 
     delete() {
-        Http.instance.doDelete("authors/" + this.idAuthor.innerHTML)
-            .catch(err => console.log(err))
-        this.remove()
+        const deletePopup = new DeletePopup("Would you like to delete Author", 'authors/' + this.idAuthor.innerHTML)
+        this.authorCard.appendChild(deletePopup)
+        deletePopup.open()
     }
 
     renderArticles(articles) {

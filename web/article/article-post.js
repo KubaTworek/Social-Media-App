@@ -1,4 +1,5 @@
 import {Http} from "../http/http.js";
+import {DeletePopup} from "../utils/delete-popup.js";
 
 export class ArticlePost extends HTMLElement {
     constructor() {
@@ -37,16 +38,16 @@ export class ArticlePost extends HTMLElement {
                 <button id="delete-button">Delete</button>
             </div>
         `
-
+        this.articleCard = this.shadowRoot.querySelector('.article-card')
         this.idArticle = this.shadowRoot.getElementById('idArticle');
         const deleteBtn = this.shadowRoot.getElementById('delete-button');
         deleteBtn.addEventListener('click', this.delete.bind(this));
     }
 
     delete() {
-        Http.instance.doDelete("articles/" + this.idArticle.innerHTML)
-            .catch(err => console.log(err))
-        this.remove()
+        const deletePopup = new DeletePopup("Would you like to delete Article", 'articles/' + this.idArticle.innerHTML)
+        this.articleCard.appendChild(deletePopup)
+        deletePopup.open()
     }
 }
 
