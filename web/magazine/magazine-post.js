@@ -1,4 +1,3 @@
-import {Http} from "../http/http.js";
 import {DeletePopup} from "../utils/delete-popup.js";
 
 export class MagazinePost extends HTMLElement {
@@ -42,12 +41,14 @@ export class MagazinePost extends HTMLElement {
         this.articlesList = this.shadowRoot.querySelector('.articles');
         this.renderArticles(magazine.articles)
 
-        const deleteBtn = this.shadowRoot.getElementById('delete-button');
-        deleteBtn.addEventListener('click', this.delete.bind(this));
+        this.shadowRoot.getElementById('delete-button')
+            .addEventListener('click', this.delete.bind(this));
     }
 
     delete() {
-        const deletePopup = new DeletePopup("Would you like to delete magazine", 'magazines/' + this.idMagazine.innerHTML)
+        const deletePopup = new DeletePopup(
+            "Would you like to delete magazine",
+            'magazines/' + this.idMagazine.innerHTML)
         this.magazineCard.appendChild(deletePopup)
         deletePopup.open()
     }

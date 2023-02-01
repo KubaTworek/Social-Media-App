@@ -1,31 +1,17 @@
 import {Http} from "../http/http.js";
 
 export class MagazineForm extends HTMLElement {
+    shadowRoot = this.attachShadow({mode: 'open'});
+
     constructor() {
         super();
-        this.attachShadow({mode: 'open'})
         this.shadowRoot.innerHTML = this.render();
     }
 
     connectedCallback() {
-        const backdrop = this.shadowRoot.getElementById('backdrop');
-        const cancelButton = this.shadowRoot.getElementById('cancel-button');
-        const form = this.shadowRoot.getElementById('form-container');
-
-        backdrop.addEventListener('click', this._cancel.bind(this));
-        cancelButton.addEventListener('click', this._cancel.bind(this));
-        form.addEventListener('submit', (e) => {
-            e.preventDefault()
-            const preMagazine = new FormData(form)
-            let data = {
-                'magazineName': '',
-                'test': ''
-            }
-            for (let [k, v] of preMagazine.entries()) {
-                data[k] = v
-            }
-            this.postData(data)
-        })
+        this.shadowRoot.addEventListener('click', this._handleBackdropClick);
+        this.shadowRoot.getElementById('cancel-button').addEventListener('click', this._cancel);
+        this.shadowRoot.getElementById('form-container').addEventListener('submit', this._submit);
     }
 
     open() {
@@ -33,22 +19,28 @@ export class MagazineForm extends HTMLElement {
     }
 
     hide() {
-        if (this.hasAttribute('opened')) {
-            this.removeAttribute('opened');
-        }
+        this.removeAttribute('opened');
     }
 
-    _cancel(event) {
+    _cancel = () => {
         this.hide();
-        const cancelEvent = new Event('cancel', {bubbles: true, composed: true});
-        event.target.dispatchEvent(cancelEvent);
-    }
+        this.dispatchEvent(new Event("cancel", {bubbles: true, composed: true}));
+    };
 
-    postData(data) {
-        Http.instance.doPost('magazines/', JSON.stringify(data))
+    _handleBackdropClick = (event) => {
+        if (event.target.id === "backdrop") {
+            this._cancel();
+        }
+    };
+
+    _submit = (event) => {
+        event.preventDefault();
+        const form = this.shadowRoot.getElementById("form-container");
+        const data = Object.fromEntries(new FormData(form));
+        Http.getInstance().doPost("magazines/", JSON.stringify(data))
             .then(() => location.reload())
-            .catch(err => console.log(err))
-    }
+            .catch((err) => console.error(err));
+    };
 
     render() {
         return `

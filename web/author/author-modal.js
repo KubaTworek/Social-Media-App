@@ -1,66 +1,67 @@
-
-import {AuthorPost} from './author-post.js';
-import {AuthorForm} from './author-form.js';
-import {Http} from '../http/http.js';
-import {RouterHandler} from "../router/router-handler.js";
+import { AuthorPost } from './author-post.js';
+import { AuthorForm } from './author-form.js';
+import { Http } from '../http/http.js';
+import { RouterHandler } from '../router/router-handler.js';
 
 export class AuthorModal extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({mode: 'open'})
-        this.setAttribute('opened', '')
+        this.attachShadow({ mode: 'open' });
+        this.setAttribute('opened', '');
     }
 
     connectedCallback() {
         this.shadowRoot.innerHTML = this.render();
 
-        this.background = this.shadowRoot.getElementById('background')
-        this.dataList = this.shadowRoot.getElementById('data-list')
-        this.input = this.shadowRoot.getElementById('search-input')
-        this.getData()
+        this.background = this.shadowRoot.getElementById('background');
+        this.dataList = this.shadowRoot.getElementById('data-list');
+        this.input = this.shadowRoot.getElementById('search-input');
+        this.getData();
 
-        const articleBtn = this.shadowRoot.getElementById('article-button')
-        const authorBtn = this.shadowRoot.getElementById('author-button')
-        const magazineBtn = this.shadowRoot.getElementById('magazine-button')
-        const searchBtn = this.shadowRoot.getElementById('search-button')
-        const addBtn = this.shadowRoot.getElementById('add-button')
+        this.shadowRoot.getElementById('article-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/articles'))
 
-        articleBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/articles');
-        })
-        authorBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/authors');
-        })
-        magazineBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/magazines');
-        })
-        searchBtn.addEventListener('click', this.getData.bind(this))
-        addBtn.addEventListener('click', this.postData.bind(this))
+        this.shadowRoot.getElementById('author-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/authors'))
+
+        this.shadowRoot.getElementById('magazine-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/magazines'))
+
+        this.shadowRoot.getElementById('search-button')
+            .addEventListener('click', this.getData.bind(this))
+        this.shadowRoot.getElementById('add-button')
+            .addEventListener('click', this.postData.bind(this))
     }
 
     getData() {
-        this.dataList.innerHTML = ""
-        this.getAuthors()
-            .catch(err => console.log(err))
+        this.dataList.innerHTML = '';
+        this.getAuthors().catch(err => console.log(err));
     }
 
     postData() {
-        const authorForm = new AuthorForm()
-        this.background.appendChild(authorForm)
-        authorForm.open()
+        const authorForm = new AuthorForm();
+        this.background.appendChild(authorForm);
+        authorForm.open();
     }
 
     async getAuthors() {
-        Http.instance.doGet("authors/" + this.input.value).then(r => {
-            r.forEach(author => {
-                    const li = document.createElement('li')
-                    const el = new AuthorPost()
-                    el.author = author
-                    li.appendChild(el)
-                    this.dataList.appendChild(li)
-                }
-            )
-        })
+        Http.getInstance()
+            .doGet(`authors/${this.input.value}`)
+            .then(authors => this.renderAuthors(authors))
+            .catch(err => console.log(err));
+    }
+
+    renderAuthors(authors) {
+        authors.forEach(author => {
+            const li = document.createElement('li');
+            const el = new AuthorPost();
+            el.author = author;
+            li.appendChild(el);
+            this.dataList.appendChild(li);
+        });
     }
 
     render() {

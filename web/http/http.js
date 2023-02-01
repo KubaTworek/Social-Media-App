@@ -1,55 +1,40 @@
-import {config} from "../config.js"
+import { config } from "../config.js";
 
 export class Http {
+    static instance = null;
+
     constructor() {
-        if (!Http.inst) {
-            Http.inst = this
-        } else {
-            return Http.inst
+        if (!Http.instance) {
+            Http.instance = this;
         }
+
+        return Http.instance;
     }
 
-    static get instance() {
-        return Http.inst
+    static getInstance() {
+        return Http.instance || new Http();
     }
 
-    doGet(path) {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
+    headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+    };
 
-        return fetch(config.url + path, {
-            headers: headers
-        })
-            .then(r => r.json())
-            .catch(err => console.log(err));
-    }
+    doGet = (path) =>
+        fetch(`${config.url}${path}`, { headers: this.headers })
+            .then((r) => r.json())
+            .catch((err) => console.log(err));
 
-    doPost(path, body) {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
+    doPost = (path, body) =>
+        fetch(`${config.url}${path}`, {
+            headers: this.headers,
+            method: "POST",
+            body,
+        }).catch((err) => console.log(err));
 
-        return fetch(config.url + path, {
-            headers: headers,
-            method: 'POST',
-            body: body
-        }).catch(err => console.log(err));
-    }
-
-    doDelete(path) {
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        };
-
-        return fetch(config.url + path, {
-            headers: headers,
-            method: 'DELETE'
-        }).catch(err => console.log(err));
-    }
+    doDelete = (path) =>
+        fetch(`${config.url}${path}`, {
+            headers: this.headers,
+            method: "DELETE",
+        }).catch((err) => console.log(err));
 }
-
-Http.inst = null;

@@ -1,4 +1,3 @@
-import {Http} from "../http/http.js";
 import {DeletePopup} from "../utils/delete-popup.js";
 
 export class ArticlePost extends HTMLElement {
@@ -40,12 +39,14 @@ export class ArticlePost extends HTMLElement {
         `
         this.articleCard = this.shadowRoot.querySelector('.article-card')
         this.idArticle = this.shadowRoot.getElementById('idArticle');
-        const deleteBtn = this.shadowRoot.getElementById('delete-button');
-        deleteBtn.addEventListener('click', this.delete.bind(this));
+        this.shadowRoot.getElementById('delete-button')
+            .addEventListener('click', this.delete.bind(this));
     }
 
     delete() {
-        const deletePopup = new DeletePopup("Would you like to delete Article", 'articles/' + this.idArticle.innerHTML)
+        const deletePopup = new DeletePopup(
+            "Would you like to delete Article",
+            'articles/' + this.idArticle.innerHTML)
         this.articleCard.appendChild(deletePopup)
         deletePopup.open()
     }

@@ -13,34 +13,32 @@ export class MagazineModal extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = this.render();
 
-        this.background = this.shadowRoot.getElementById('background')
-        this.dataList = this.shadowRoot.getElementById('data-list')
-        this.input = this.shadowRoot.getElementById('search-input')
-        this.getData()
+        this.background = this.shadowRoot.getElementById('background');
+        this.dataList = this.shadowRoot.getElementById('data-list');
+        this.input = this.shadowRoot.getElementById('search-input');
+        this.getData();
 
-        const articleBtn = this.shadowRoot.getElementById('article-button')
-        const authorBtn = this.shadowRoot.getElementById('author-button')
-        const magazineBtn = this.shadowRoot.getElementById('magazine-button')
-        const searchBtn = this.shadowRoot.getElementById('search-button')
-        const addBtn = this.shadowRoot.getElementById('add-button')
+        this.shadowRoot.getElementById('article-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/articles'))
 
-        articleBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/articles');
-        })
-        authorBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/authors');
-        })
-        magazineBtn.addEventListener('click', () => {
-            RouterHandler.getInstance.router.navigate('/magazines');
-        })
-        searchBtn.addEventListener('click', this.getData.bind(this))
-        addBtn.addEventListener('click', this.postData.bind(this))
+        this.shadowRoot.getElementById('author-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/authors'))
+
+        this.shadowRoot.getElementById('magazine-button')
+            .addEventListener('click',
+                () => RouterHandler.getInstance().router.navigate('/magazines'))
+
+        this.shadowRoot.getElementById('search-button')
+            .addEventListener('click', this.getData.bind(this))
+        this.shadowRoot.getElementById('add-button')
+            .addEventListener('click', this.postData.bind(this))
     }
 
     getData() {
         this.dataList.innerHTML = ""
-        this.getMagazines()
-            .catch(err => console.log(err))
+        this.getMagazines().catch(err => console.log(err))
     }
 
     postData() {
@@ -50,15 +48,19 @@ export class MagazineModal extends HTMLElement {
     }
 
     async getMagazines() {
-        Http.instance.doGet("magazines/" + this.input.value).then(r => {
-            r.forEach(magazine => {
-                    const li = document.createElement('li')
-                    const el = new MagazinePost()
-                    el.magazine = magazine
-                    li.appendChild(el)
-                    this.dataList.appendChild(li)
-                }
-            )
+        Http.getInstance()
+            .doGet("magazines/" + this.input.value)
+            .then(magazines => this.renderMagazines(magazines))
+            .catch(err => console.log(err))
+    }
+
+    renderMagazines(magazines) {
+        magazines.forEach(magazine => {
+            const li = document.createElement('li')
+            const el = new MagazinePost()
+            el.magazine = magazine
+            li.appendChild(el)
+            this.dataList.appendChild(li)
         })
     }
 

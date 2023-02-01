@@ -3,40 +3,40 @@ import {Http} from "../http/http.js";
 export class DeletePopup extends HTMLElement {
     constructor(text, url) {
         super();
-        this.attachShadow({mode: 'open'})
-        this.shadowRoot.innerHTML = this.render(text)
-        this.url = url
+        this.attachShadow({ mode: "open" });
+        this.shadowRoot.innerHTML = this.render(text);
+        this.url = url;
     }
 
     connectedCallback() {
-        const cancelButton = this.shadowRoot.getElementById('cancel-button');
-        const confirmButton = this.shadowRoot.getElementById('confirm-button');
-
-        cancelButton.addEventListener('click', this._cancel.bind(this));
-        confirmButton.addEventListener('click', this._delete.bind(this));
+        this.shadowRoot.getElementById("cancel-button")
+            .addEventListener("click", this.cancel.bind(this));
+        this.shadowRoot.getElementById("confirm-button")
+            .addEventListener("click", this.delete.bind(this));
     }
 
     open() {
-        this.setAttribute('opened', '');
+        this.setAttribute("opened", "");
     }
 
     hide() {
-        if (this.hasAttribute('opened')) {
-            this.removeAttribute('opened');
-        }
+        this.removeAttribute("opened");
     }
 
-    _cancel(event) {
+    cancel(event) {
         this.hide();
-        const cancelEvent = new Event('cancel', {bubbles: true, composed: true});
+        const cancelEvent = new Event("cancel", { bubbles: true, composed: true });
         event.target.dispatchEvent(cancelEvent);
     }
 
-    _delete() {
+    async delete() {
         this.hide();
-        Http.instance.doDelete(this.url)
-            .then(() => location.reload())
-            .catch(err => console.log(err))
+        try {
+            await Http.getInstance().doDelete(this.url);
+            location.reload();
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     render(text) {
