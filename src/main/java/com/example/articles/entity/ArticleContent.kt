@@ -18,7 +18,7 @@ data class ArticleContent(
     val text: String,
 
     @OneToOne(mappedBy = "content")
-    val article: ArticlePost?,
+    val article: Article?,
 ) {
     constructor() : this(
         0,

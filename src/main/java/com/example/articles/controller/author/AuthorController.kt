@@ -1,6 +1,6 @@
 package com.example.articles.controller.author
 
-import com.example.articles.entity.AuthorPost
+import com.example.articles.entity.Author
 import com.example.articles.errors.AuthorNotFoundException
 import com.example.articles.service.AuthorService
 import lombok.RequiredArgsConstructor
@@ -18,7 +18,7 @@ class AuthorController(private val authorService: AuthorService) {
     @GetMapping
     fun getAllAuthors() = authorService.findAllAuthors()
         .stream()
-        .map(AuthorPost::toResponse)
+        .map(Author::toResponse)
         .toList()
 
     @CrossOrigin
@@ -31,7 +31,7 @@ class AuthorController(private val authorService: AuthorService) {
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAuthorsByKeyword(@PathVariable keyword: String) = authorService.findAllByKeyword(keyword)
         .stream()
-        .map(AuthorPost::toResponse)
+        .map(Author::toResponse)
         .toList()
 
     @CrossOrigin

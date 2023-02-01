@@ -1,7 +1,7 @@
 package com.example.articles.service
 
 import com.example.articles.controller.magazine.MagazineRequest
-import com.example.articles.entity.MagazinePost
+import com.example.articles.entity.Magazine
 import com.example.articles.factories.MagazineFactory
 import com.example.articles.repository.MagazineRepository
 import lombok.RequiredArgsConstructor
@@ -15,20 +15,18 @@ class MagazineServiceImpl(
     private val magazineRepository: MagazineRepository,
     private val magazineFactory: MagazineFactory
 ) : MagazineService {
-    override fun findAllMagazines(): List<MagazinePost> {
+    override fun findAllMagazines(): List<Magazine> {
         return magazineRepository.findAll()
     }
 
-    override fun findById(theId: Int): Optional<MagazinePost> {
+    override fun findById(theId: Int): Optional<Magazine> {
         return magazineRepository.findById(theId)
     }
 
-    override fun findAllByKeyword(theKeyword: String): List<MagazinePost> {
-        val magazines: List<MagazinePost> = magazineRepository.findAll()
+    override fun findAllByKeyword(theKeyword: String): List<Magazine> {
+        val magazines: List<Magazine> = magazineRepository.findAll()
         return magazines.stream()
-            .filter { magazines: MagazinePost ->
-                magazines.name.contains(theKeyword)
-            }
+            .filter { it.name.contains(theKeyword) }
             .toList()
     }
 

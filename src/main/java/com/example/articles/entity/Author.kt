@@ -8,7 +8,7 @@ import kotlin.streams.toList
 
 @Entity
 @Table(name = "AuthorPost")
-data class AuthorPost(
+data class Author(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -21,13 +21,13 @@ data class AuthorPost(
     val lastName: String,
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL])
-    val articles: MutableList<ArticlePost>
+    val articles: MutableList<Article>
 ) {
     constructor() : this(
         0,
         "asd",
         "asd",
-        emptyList<ArticlePost>()
+        emptyList<Article>()
     )
 
     fun toResponse(): AuthorResponse {
@@ -39,7 +39,7 @@ data class AuthorPost(
         )
     }
 
-    fun add(tempArticle: ArticlePost) {
+    fun add(tempArticle: Article) {
         articles.add(tempArticle)
         tempArticle.author = this
     }
@@ -47,7 +47,7 @@ data class AuthorPost(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as AuthorPost
+        other as Author
 
         return id == other.id
     }

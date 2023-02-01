@@ -1,13 +1,13 @@
 package com.example.articles.service
 
 import com.example.articles.controller.article.ArticleRequest
-import com.example.articles.entity.ArticlePost
+import com.example.articles.entity.Article
 import java.util.*
 
 interface ArticleService {
-    fun findAllOrderByDateDesc(): List<ArticlePost>
-    fun findById(theId: Int): Optional<ArticlePost>
-    fun findAllByKeyword(theKeyword: String): List<ArticlePost>
+    fun findAllOrderByDateDesc(): List<Article>
+    fun findById(theId: Int): Optional<Article>
+    fun findAllByKeyword(theKeyword: String): List<Article>
     fun save(theArticle: ArticleRequest)
     fun deleteById(theId: Int)
 }

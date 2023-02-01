@@ -1,14 +1,13 @@
 package com.example.articles.service
 
 import com.example.articles.controller.article.ArticleRequest
-import com.example.articles.entity.ArticlePost
+import com.example.articles.entity.Article
 import com.example.articles.factories.ArticleFactory
 import com.example.articles.repository.ArticleRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.util.*
-import kotlin.streams.toList
 
 @Service
 @RequiredArgsConstructor
@@ -17,22 +16,18 @@ class ArticleServiceImpl(
     private val articleFactory: ArticleFactory,
 ) : ArticleService {
 
-    override fun findAllOrderByDateDesc(): List<ArticlePost> {
+    override fun findAllOrderByDateDesc(): List<Article> {
         return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
     }
 
-    override fun findById(theId: Int): Optional<ArticlePost> {
+    override fun findById(theId: Int): Optional<Article> {
         return articleRepository.findById(theId)
     }
 
-    override fun findAllByKeyword(theKeyword: String): List<ArticlePost> {
-        val articles: List<ArticlePost> = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
-        return articles.stream()
-            .filter { article: ArticlePost ->
-                article.content.title.contains(theKeyword) || article.content.text.contains(theKeyword)
-            }
-            .toList()
-    }
+
+    override fun findAllByKeyword(theKeyword: String) =
+        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
+            .filter { it.content.title.contains(theKeyword) || it.content.text.contains(theKeyword) }
 
     override fun save(theArticle: ArticleRequest) {
         val article = articleFactory.createArticle(theArticle)

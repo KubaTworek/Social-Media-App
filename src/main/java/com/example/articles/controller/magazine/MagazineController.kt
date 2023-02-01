@@ -1,6 +1,6 @@
 package com.example.articles.controller.magazine
 
-import com.example.articles.entity.MagazinePost
+import com.example.articles.entity.Magazine
 import com.example.articles.errors.MagazineNotFoundException
 import com.example.articles.service.MagazineService
 import lombok.RequiredArgsConstructor
@@ -18,7 +18,7 @@ class MagazineController(private val magazineService: MagazineService) {
     @GetMapping
     fun getAllMagazines() = magazineService.findAllMagazines()
         .stream()
-        .map(MagazinePost::toResponse)
+        .map(Magazine::toResponse)
         .toList()
 
     @CrossOrigin
@@ -31,7 +31,7 @@ class MagazineController(private val magazineService: MagazineService) {
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getMagazinesByKeyword(@PathVariable keyword: String) = magazineService.findAllByKeyword(keyword)
         .stream()
-        .map(MagazinePost::toResponse)
+        .map(Magazine::toResponse)
         .toList()
 
     @CrossOrigin

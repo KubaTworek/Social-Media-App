@@ -1,7 +1,10 @@
 package com.example.articles.factories
 
 import com.example.articles.controller.article.ArticleRequest
-import com.example.articles.entity.ArticlePost
+import com.example.articles.entity.Article
+import com.example.articles.entity.Author
+import com.example.articles.entity.Magazine
+
 import com.example.articles.repository.AuthorRepository
 import com.example.articles.repository.MagazineRepository
 import org.springframework.stereotype.Component
@@ -17,15 +20,14 @@ class ArticleFactory(
     private val magazineFactory: MagazineFactory,
     private val contentFactory: ContentFactory,
 ) {
-    fun createArticle(theArticle: ArticleRequest): ArticlePost {
-        val author =
-            authorRepository.findByFirstNameAndLastName(theArticle.author_firstName, theArticle.author_lastName)
-                .orElse(authorFactory.createAuthor(theArticle.author_firstName, theArticle.author_lastName))
-        val magazine = magazineRepository.findByName(theArticle.magazine)
-            .orElse(magazineFactory.createMagazine(theArticle.magazine))
-        val content = contentFactory.createContent(theArticle.title, theArticle.text)
+    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
 
-        return ArticlePost(
+    fun createArticle(request: ArticleRequest): Article {
+        val author = getOrCreateAuthor(request)
+        val magazine = getOrCreateMagazine(request)
+        val content = contentFactory.createContent(request.title, request.text)
+
+        return Article(
             0,
             getCurrentDate(),
             System.currentTimeMillis().toString(),
@@ -35,10 +37,17 @@ class ArticleFactory(
         )
     }
 
-    private fun getCurrentDate(): String {
-        val dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss")
-        val now = LocalDateTime.now()
+    private fun getOrCreateAuthor(request: ArticleRequest): Author {
+        return authorRepository.findByFirstNameAndLastName(request.author_firstName, request.author_lastName)
+            .orElse(authorFactory.createAuthor(request.author_firstName, request.author_lastName))
+    }
 
-        return dtf.format(now)
+    private fun getOrCreateMagazine(request: ArticleRequest): Magazine {
+        return magazineRepository.findByName(request.magazine)
+            .orElse(magazineFactory.createMagazine(request.magazine))
+    }
+
+    private fun getCurrentDate(): String {
+        return dateFormatter.format(LocalDateTime.now())
     }
 }
