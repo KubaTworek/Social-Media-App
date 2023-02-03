@@ -1,8 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.example.RESTAPIarticle.service.AuthorServiceTest
--------------------------------------------------------------------------------
-Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.468 s <<< FAILURE! - in com.example.RESTAPIarticle.service.AuthorServiceTest
-saveAuthorTest  Time elapsed: 0.032 s  <<< ERROR!
-java.lang.NullPointerException
-	at com.example.RESTAPIarticle.service.AuthorServiceTest.saveAuthorTest(AuthorServiceTest.java:62)
-
