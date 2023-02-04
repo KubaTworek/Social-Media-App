@@ -28,6 +28,13 @@ class AuthorController(private val authorService: AuthorService) {
         .toResponse()
 
     @CrossOrigin
+    @GetMapping("/name/{firstName}/{lastName}")
+    fun getAuthorByName(@PathVariable firstName: String, @PathVariable lastName: String) =
+        authorService.findByName(firstName, lastName)
+            .orElseThrow { AuthorNotFoundException("Author not found - $firstName $lastName") }
+            .toDTO()
+
+    @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAuthorsByKeyword(@PathVariable keyword: String) = authorService.findAllByKeyword(keyword)
         .stream()

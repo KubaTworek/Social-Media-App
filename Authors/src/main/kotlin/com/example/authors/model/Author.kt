@@ -25,7 +25,7 @@ data class Author(
         0,
         "asd",
         "asd",
-        emptyList<Article>() as MutableList<Article>
+        mutableListOf()
     )
 
     fun toResponse(): AuthorResponse {
@@ -34,6 +34,14 @@ data class Author(
             this.firstName,
             this.lastName,
             this.articles.stream().map { it.toResponse() }.toList()
+        )
+    }
+
+    fun toDTO(): AuthorDTO {
+        return AuthorDTO(
+            this.id,
+            this.firstName,
+            this.lastName
         )
     }
 

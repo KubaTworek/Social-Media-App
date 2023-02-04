@@ -19,11 +19,11 @@ data class Article(
     @Column(name = "Timestamp")
     val timestamp: String,
 
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToOne
     @JoinColumn(name = "Author_Id")
     var author: Author,
 
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    @ManyToOne
     @JoinColumn(name = "Magazine_Id")
     var magazine: Magazine,
 

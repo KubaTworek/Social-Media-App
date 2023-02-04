@@ -1,7 +1,7 @@
 package com.example.articles.service
 
-import com.example.articles.model.Article
 import com.example.articles.controller.ArticleRequest
+import com.example.articles.model.Article
 import java.util.*
 
 interface ArticleService {

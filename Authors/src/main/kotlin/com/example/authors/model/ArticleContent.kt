@@ -5,7 +5,7 @@ import org.hibernate.Hibernate
 
 @Entity
 @Table(name = "Content")
-data class ArticleContent (
+data class ArticleContent(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -27,6 +27,12 @@ class MagazineController(private val magazineService: MagazineService) {
         .toResponse()
 
     @CrossOrigin
+    @GetMapping("/name/{magazineName}")
+    fun getMagazineByName(@PathVariable magazineName: String) = magazineService.findByName(magazineName)
+        .orElseThrow { MagazineNotFoundException("Magazine not found - $magazineName") }
+        .toDTO()
+
+    @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getMagazinesByKeyword(@PathVariable keyword: String) = magazineService.findAllByKeyword(keyword)
         .stream()

@@ -1,8 +1,8 @@
 package com.example.magazines.service
 
 import com.example.magazines.controller.MagazineRequest
-import com.example.magazines.model.Magazine
 import com.example.magazines.factories.MagazineFactory
+import com.example.magazines.model.Magazine
 import com.example.magazines.repository.MagazineRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -22,6 +22,10 @@ class MagazineServiceImpl(
         return magazineRepository.findById(theId)
     }
 
+    override fun findByName(theName: String): Optional<Magazine> {
+        return magazineRepository.findByName(theName)
+    }
+
     override fun findAllByKeyword(theKeyword: String): List<Magazine> {
         val magazines: List<Magazine> = magazineRepository.findAll()
         return magazines.stream()
@@ -29,10 +33,10 @@ class MagazineServiceImpl(
             .toList()
     }
 
-    override fun save(theMagazine: MagazineRequest) {
+    override fun save(theMagazine: MagazineRequest): Magazine {
         val magazine = magazineFactory.createMagazine(theMagazine)
 
-        magazineRepository.save(magazine)
+        return magazineRepository.save(magazine)
     }
 
     override fun deleteById(theId: Int) {

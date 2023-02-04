@@ -1,8 +1,8 @@
 package com.example.authors.service
 
 import com.example.authors.controller.AuthorRequest
-import com.example.authors.model.Author
 import com.example.authors.factories.AuthorFactory
+import com.example.authors.model.Author
 import com.example.authors.repository.AuthorRepository
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
@@ -22,6 +22,10 @@ class AuthorServiceImpl(
         return authorRepository.findById(theId)
     }
 
+    override fun findByName(firstName: String, lastName: String): Optional<Author> {
+        return authorRepository.findFirstByFirstNameAndLastName(firstName, lastName)
+    }
+
     override fun findAllByKeyword(theKeyword: String): List<Author> {
         val authors: List<Author> = authorRepository.findAll()
         return authors.stream()
@@ -29,10 +33,10 @@ class AuthorServiceImpl(
             .toList()
     }
 
-    override fun save(theAuthor: AuthorRequest) {
+    override fun save(theAuthor: AuthorRequest): Author {
         val author = authorFactory.createAuthor(theAuthor)
 
-        authorRepository.save(author)
+        return authorRepository.save(author)
     }
 
     override fun deleteById(theId: Int) {

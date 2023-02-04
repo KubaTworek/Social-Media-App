@@ -21,7 +21,7 @@ data class Magazine(
     constructor() : this(
         0,
         "asd",
-        emptyList<Article>() as MutableList<Article>
+        mutableListOf()
     )
 
     fun add(tempArticle: Article) {

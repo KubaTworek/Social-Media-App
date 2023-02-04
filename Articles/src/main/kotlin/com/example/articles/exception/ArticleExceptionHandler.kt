@@ -1,6 +1,5 @@
 package com.example.articles.exception
 
-import com.example.articles.errors.ErrorResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

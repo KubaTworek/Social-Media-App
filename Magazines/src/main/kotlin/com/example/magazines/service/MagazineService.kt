@@ -7,7 +7,8 @@ import java.util.*
 interface MagazineService {
     fun findAllMagazines(): List<Magazine>
     fun findById(theId: Int): Optional<Magazine>
+    fun findByName(theName: String): Optional<Magazine>
     fun findAllByKeyword(theKeyword: String): List<Magazine>
-    fun save(theMagazine: MagazineRequest)
+    fun save(theMagazine: MagazineRequest): Magazine
     fun deleteById(theId: Int)
 }

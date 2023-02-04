@@ -3,8 +3,7 @@ package com.example.magazines.model
 import com.example.magazines.controller.MagazineResponse
 import jakarta.persistence.*
 import org.hibernate.Hibernate
-import java.util.Collections.emptyList
-import kotlin.streams.toList
+
 
 @Entity
 @Table(name = "MagazinePost")
@@ -23,7 +22,7 @@ data class Magazine(
     constructor() : this(
         0,
         "asd",
-        emptyList<Article>()
+        mutableListOf()
     )
 
     fun toResponse(): MagazineResponse {
@@ -31,6 +30,13 @@ data class Magazine(
             this.id,
             this.name,
             this.articles.stream().map { it.toResponse() }.toList()
+        )
+    }
+
+    fun toDTO(): MagazineDTO {
+        return MagazineDTO(
+            this.id,
+            this.name
         )
     }
 
