@@ -1,6 +1,7 @@
 import {ArticlePost} from "./article-post.js";
 import {ArticleForm} from './article-form.js';
 import {Http} from '../http/http.js';
+import { config } from "../config.js";
 import {RouterHandler} from "../router/router-handler.js";
 
 export class ArticleModal extends HTMLElement {
@@ -49,7 +50,7 @@ export class ArticleModal extends HTMLElement {
 
     async getArticles() {
         Http.getInstance()
-            .doGet(`articles/${this.input.value}`)
+            .doGet(config.articlesUrl + this.input.value)
             .then(articles => this.renderArticles(articles))
             .catch(err => console.log(err));
     }

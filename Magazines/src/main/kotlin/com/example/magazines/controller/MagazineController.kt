@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 class MagazineController(private val magazineService: MagazineService) {
 
     @CrossOrigin
-    @GetMapping
+    @GetMapping("/")
     fun getAllMagazines() = magazineService.findAllMagazines()
         .stream()
         .map(Magazine::toResponse)
@@ -40,7 +40,7 @@ class MagazineController(private val magazineService: MagazineService) {
         .toList()
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveMagazine(@RequestBody theMagazine: MagazineRequest) = magazineService.save(theMagazine)
 

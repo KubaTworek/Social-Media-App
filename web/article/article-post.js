@@ -1,4 +1,6 @@
 import {DeletePopup} from "../utils/delete-popup.js";
+import { config } from "../config.js";
+
 
 export class ArticlePost extends HTMLElement {
     constructor() {
@@ -46,7 +48,7 @@ export class ArticlePost extends HTMLElement {
     delete() {
         const deletePopup = new DeletePopup(
             "Would you like to delete Article",
-            'articles/' + this.idArticle.innerHTML)
+            config.articlesUrl + this.idArticle.innerHTML)
         this.articleCard.appendChild(deletePopup)
         deletePopup.open()
     }

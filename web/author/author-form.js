@@ -1,4 +1,5 @@
 import { Http } from "../http/http.js";
+import {config} from "../config.js";
 
 export class AuthorForm extends HTMLElement {
     shadowRoot = this.attachShadow({mode: "open"});
@@ -37,7 +38,7 @@ export class AuthorForm extends HTMLElement {
         event.preventDefault();
         const form = this.shadowRoot.getElementById("form-container");
         const data = Object.fromEntries(new FormData(form));
-        Http.getInstance().doPost("authors/", JSON.stringify(data))
+        Http.getInstance().doPost(config.authorsUrl, JSON.stringify(data))
             .then(() => location.reload())
             .catch((err) => console.error(err));
     };

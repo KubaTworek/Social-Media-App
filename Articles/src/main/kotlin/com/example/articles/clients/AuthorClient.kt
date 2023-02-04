@@ -16,6 +16,6 @@ interface AuthorClient {
     @GetMapping("/name/{firstName}/{lastName}")
     fun getAuthor(@PathVariable firstName: String, @PathVariable lastName: String): ResponseEntity<String>
 
-    @PostMapping
+    @PostMapping("/")
     fun saveAuthor(@RequestBody authorRequest: AuthorRequest): ResponseEntity<String>
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequiredArgsConstructor
 class ArticleController(private val articleService: ArticleService) {
     @CrossOrigin
-    @GetMapping
+    @GetMapping("/")
     fun articlesOrderByDateDesc() = articleService.findAllOrderByDateDesc()
         .stream()
         .map(Article::toResponse)
@@ -33,7 +33,7 @@ class ArticleController(private val articleService: ArticleService) {
         .toList()
 
     @CrossOrigin
-    @PostMapping("")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveArticle(@RequestBody theArticle: ArticleRequest) = articleService.save(theArticle)
 

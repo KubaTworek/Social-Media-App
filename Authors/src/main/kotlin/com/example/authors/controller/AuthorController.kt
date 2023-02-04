@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*
 class AuthorController(private val authorService: AuthorService) {
 
     @CrossOrigin
-    @GetMapping
+    @GetMapping("/")
     fun getAllAuthors() = authorService.findAllAuthors()
         .stream()
         .map(Author::toResponse)
@@ -42,7 +42,7 @@ class AuthorController(private val authorService: AuthorService) {
         .toList()
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveAuthor(@RequestBody theAuthor: AuthorRequest) = authorService.save(theAuthor)
 

@@ -2,6 +2,8 @@ import { AuthorPost } from './author-post.js';
 import { AuthorForm } from './author-form.js';
 import { Http } from '../http/http.js';
 import { RouterHandler } from '../router/router-handler.js';
+import { config } from "../config.js";
+
 
 export class AuthorModal extends HTMLElement {
     constructor() {
@@ -49,7 +51,7 @@ export class AuthorModal extends HTMLElement {
 
     async getAuthors() {
         Http.getInstance()
-            .doGet(`authors/${this.input.value}`)
+            .doGet(config.authorsUrl + this.input.value)
             .then(authors => this.renderAuthors(authors))
             .catch(err => console.log(err));
     }

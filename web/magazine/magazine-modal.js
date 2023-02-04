@@ -1,6 +1,7 @@
 import {MagazinePost} from './magazine-post.js';
 import {MagazineForm} from './magazine-form.js';
 import {Http} from '../http/http.js';
+import { config } from "../config.js";
 import {RouterHandler} from "../router/router-handler.js";
 
 export class MagazineModal extends HTMLElement {
@@ -49,7 +50,7 @@ export class MagazineModal extends HTMLElement {
 
     async getMagazines() {
         Http.getInstance()
-            .doGet("magazines/" + this.input.value)
+            .doGet(config.magazinesUrl + this.input.value)
             .then(magazines => this.renderMagazines(magazines))
             .catch(err => console.log(err))
     }

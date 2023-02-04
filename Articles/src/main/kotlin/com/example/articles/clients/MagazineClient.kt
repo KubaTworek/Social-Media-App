@@ -15,6 +15,6 @@ interface MagazineClient {
     @GetMapping("/name/{name}")
     fun getMagazine(@PathVariable name: String): ResponseEntity<String>
 
-    @PostMapping
+    @PostMapping("/")
     fun saveMagazine(@RequestBody magazineRequest: MagazineRequest): ResponseEntity<String>
 }

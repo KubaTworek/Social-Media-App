@@ -1,4 +1,5 @@
 import {Http} from "../http/http.js";
+import {config} from "../config.js";
 
 export class MagazineForm extends HTMLElement {
     shadowRoot = this.attachShadow({mode: 'open'});
@@ -37,7 +38,8 @@ export class MagazineForm extends HTMLElement {
         event.preventDefault();
         const form = this.shadowRoot.getElementById("form-container");
         const data = Object.fromEntries(new FormData(form));
-        Http.getInstance().doPost("magazines/", JSON.stringify(data))
+        console.log(JSON.stringify(data))
+        Http.getInstance().doPost(config.magazinesUrl, JSON.stringify(data))
             .then(() => location.reload())
             .catch((err) => console.error(err));
     };
@@ -97,6 +99,10 @@ export class MagazineForm extends HTMLElement {
             #content {
                 padding: 1rem;
             }
+            
+            input[name="test"] {
+                display: none;
+            }
 
             #buttons-container {
                 border-top: 1px solid #ccc;
@@ -117,7 +123,8 @@ export class MagazineForm extends HTMLElement {
             </header>
             <section id="content">
                 <form id="form-container">
-                    <input name="name" type="text">
+                    <input name="magazineName" type="text">
+                    <input name="test" type="text" value="test">
                     <button type="submit">Add</button>
                 </form>
             </section>

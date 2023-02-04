@@ -1,5 +1,3 @@
-import { config } from "../config.js";
-
 export class Http {
     static instance = null;
 
@@ -21,19 +19,19 @@ export class Http {
     };
 
     doGet = (path) =>
-        fetch(`${config.url}${path}`, { headers: this.headers })
+        fetch(`${path}`, { headers: this.headers })
             .then((r) => r.json())
             .catch((err) => console.log(err));
 
     doPost = (path, body) =>
-        fetch(`${config.url}${path}`, {
+        fetch(`${path}`, {
             headers: this.headers,
             method: "POST",
             body,
         }).catch((err) => console.log(err));
 
     doDelete = (path) =>
-        fetch(`${config.url}${path}`, {
+        fetch(`${path}`, {
             headers: this.headers,
             method: "DELETE",
         }).catch((err) => console.log(err));
