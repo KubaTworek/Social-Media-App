@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 
-@FeignClient(name = "magazines", url = "http://localhost:2113/api/magazines", fallback = MagazineClientFallback::class)
+@FeignClient(name = "magazines", url = "http://magazines:2113/api/magazines", fallback = MagazineClientFallback::class)
 @Qualifier("MagazineClient")
 interface MagazineClient {
     @GetMapping("/name/{name}")

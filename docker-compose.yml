@@ -1,0 +1,61 @@
+version: "3.8"
+
+services:
+
+  eureka:
+    image: eureka:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+
+  articles:
+    image: articles:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "2111:2111"
+    environment:
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka"
+    networks:
+      - my-network
+    depends_on:
+      - eureka
+
+  authors:
+    image: authors:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "2112:2112"
+    environment:
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka"
+    networks:
+      - my-network
+    depends_on:
+      - eureka
+      - articles
+
+  magazines:
+    image: magazines:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "2113:2113"
+    environment:
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka"
+    networks:
+      - my-network
+    depends_on:
+      - eureka
+      - articles
+
+  web:
+    image: web:latest
+    mem_limit: 700m
+    ports:
+      - "8881:8881"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge

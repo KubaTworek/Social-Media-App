@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Articles</artifactId>
+	<artifactId>articles</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Articles</name>
+	<name>articles</name>
 	<description>Article-microservice</description>
 	<properties>
 		<java.version>17</java.version>

@@ -1,4 +1,4 @@
-import Navigo from '/web/node_modules/navigo/src/index.js';
+import Navigo from '../node_modules/navigo/src/index.js';
 import { ArticleModal } from '../article/article-modal.js';
 import { AuthorModal } from '../author/author-modal.js';
 import { MagazineModal } from '../magazine/magazine-modal.js';
