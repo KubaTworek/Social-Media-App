@@ -1,4 +1,4 @@
-package com.example.articles.clients
+package com.example.magazines.client
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpStatus
@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 @Qualifier("AuthorClientFallback")
-class AuthorClientFallback : AuthorClient {
-    override fun getAuthor(authorId: Int): ResponseEntity<String> {
-        return ResponseEntity(HttpStatus.NOT_FOUND)
+class ArticleClientFallback : ArticleClient{
+    override fun getArticlesByMagazine(magazineId: Int): ResponseEntity<String> {
+        return ResponseEntity(HttpStatus.NO_CONTENT)
     }
 }

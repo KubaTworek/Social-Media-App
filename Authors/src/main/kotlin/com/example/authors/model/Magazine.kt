@@ -14,20 +14,11 @@ data class Magazine(
 
     @Column(name = "Name")
     val name: String,
-
-    @OneToMany(mappedBy = "magazine", cascade = [CascadeType.ALL])
-    val articles: MutableList<Article>
 ) {
     constructor() : this(
         0,
-        "asd",
-        mutableListOf()
+        ""
     )
-
-    fun add(tempArticle: Article) {
-        articles.add(tempArticle)
-        tempArticle.magazine = this
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

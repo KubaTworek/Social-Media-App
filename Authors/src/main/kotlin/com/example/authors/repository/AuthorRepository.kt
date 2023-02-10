@@ -7,6 +7,4 @@ import java.util.*
 
 
 @Repository
-interface AuthorRepository : JpaRepository<Author, Int> {
-    fun findFirstByFirstNameAndLastName(firstName: String, lastName: String): Optional<Author>
-}
+interface AuthorRepository : JpaRepository<Author, Int>

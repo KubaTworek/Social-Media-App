@@ -5,5 +5,5 @@ data class AuthorResponse(
     val id: Int,
     val firstName: String,
     val lastName: String,
-    val articles: List<ArticleResponse>,
+    val articles: List<String>,
 )

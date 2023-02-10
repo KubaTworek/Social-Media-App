@@ -1,6 +1,7 @@
 package com.example.authors.service
 
 import com.example.authors.controller.AuthorRequest
+import com.example.authors.controller.AuthorResponse
 import com.example.authors.factories.AuthorFactory
 import com.example.authors.model.Author
 import com.example.authors.repository.AuthorRepository
@@ -14,29 +15,37 @@ class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
     private val authorFactory: AuthorFactory
 ) : AuthorService {
-    override fun findAllAuthors(): List<Author> {
-        return authorRepository.findAll()
+    override fun findAllAuthors(): List<AuthorResponse> {
+        val authors = authorRepository.findAll()
+        val authorsResponseList = mutableListOf<AuthorResponse>()
+        for(author in authors){
+            val response = authorFactory.createResponse(author)
+            authorsResponseList.add(response)
+        }
+        return authorsResponseList
     }
 
     override fun findById(theId: Int): Optional<Author> {
         return authorRepository.findById(theId)
     }
 
-    override fun findByName(firstName: String, lastName: String): Optional<Author> {
-        return authorRepository.findFirstByFirstNameAndLastName(firstName, lastName)
-    }
-
-    override fun findAllByKeyword(theKeyword: String): List<Author> {
+    override fun findAllByKeyword(theKeyword: String): List<AuthorResponse> {
         val authors: List<Author> = authorRepository.findAll()
-        return authors.stream()
+            .stream()
             .filter { it.firstName.contains(theKeyword) || it.lastName.contains(theKeyword) }
             .toList()
+        val authorsResponseList = mutableListOf<AuthorResponse>()
+        for(author in authors){
+            val response = authorFactory.createResponse(author)
+            authorsResponseList.add(response)
+        }
+        return authorsResponseList
     }
 
-    override fun save(theAuthor: AuthorRequest): Author {
+    override fun save(theAuthor: AuthorRequest) {
         val author = authorFactory.createAuthor(theAuthor)
 
-        return authorRepository.save(author)
+        authorRepository.save(author)
     }
 
     override fun deleteById(theId: Int) {

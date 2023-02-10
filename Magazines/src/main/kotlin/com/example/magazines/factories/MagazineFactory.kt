@@ -1,25 +1,48 @@
 package com.example.magazines.factories
 
+import com.example.magazines.client.ArticleClient
 import com.example.magazines.controller.MagazineRequest
+import com.example.magazines.controller.MagazineResponse
+import com.example.magazines.model.Article
 import com.example.magazines.model.Magazine
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.objectweb.asm.TypeReference
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import java.util.Collections.emptyList
 
 @Component
-class MagazineFactory {
-    fun createMagazine(name: String): Magazine {
-        return Magazine(
-            0,
-            name,
-            emptyList()
-        )
-    }
-
+class MagazineFactory(
+    private val articleClient: ArticleClient
+) {
     fun createMagazine(magazineRequest: MagazineRequest): Magazine {
         return Magazine(
             0,
-            magazineRequest.magazineName,
-            emptyList()
+            magazineRequest.magazineName
         )
+    }
+
+    fun createResponse(theMagazine: Magazine): MagazineResponse {
+        val articles = deserializeArticles(getArticles(theMagazine.id))
+        val titles = articles.map{ it.content.title}.toList()
+
+        return MagazineResponse(
+            theMagazine.id,
+            theMagazine.name,
+            titles
+        )
+    }
+
+    private fun getArticles(magazineId: Int): ResponseEntity<String> {
+        return articleClient.getArticlesByMagazine(magazineId)
+    }
+
+    private fun deserializeArticles(response: ResponseEntity<String>): List<Article> {
+        val objectMapper = ObjectMapper()
+        return if(response.body == null){
+            kotlin.collections.emptyList()
+        } else {
+            objectMapper.readValue(response.body, objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java))
+        }
     }
 }

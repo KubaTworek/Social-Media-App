@@ -1,6 +1,5 @@
 package com.example.magazines.model
 
-import com.example.magazines.controller.MagazineResponse
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -16,35 +15,11 @@ data class Magazine(
     @Column(name = "Name")
     val name: String,
 
-    @OneToMany(mappedBy = "magazine", cascade = [CascadeType.ALL])
-    val articles: MutableList<Article>
 ) {
     constructor() : this(
         0,
-        "asd",
-        mutableListOf()
+        ""
     )
-
-    fun toResponse(): MagazineResponse {
-        return MagazineResponse(
-            this.id,
-            this.name,
-            this.articles.stream().map { it.toResponse() }.toList()
-        )
-    }
-
-    fun toDTO(): MagazineDTO {
-        return MagazineDTO(
-            this.id,
-            this.name
-        )
-    }
-
-
-    fun add(tempArticle: Article) {
-        articles.add(tempArticle)
-        tempArticle.magazine = this
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

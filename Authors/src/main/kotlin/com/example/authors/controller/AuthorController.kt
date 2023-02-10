@@ -17,29 +17,15 @@ class AuthorController(private val authorService: AuthorService) {
     @CrossOrigin
     @GetMapping("/")
     fun getAllAuthors() = authorService.findAllAuthors()
-        .stream()
-        .map(Author::toResponse)
-        .toList()
 
     @CrossOrigin
     @GetMapping("/id/{authorId}")
     fun getAuthorById(@PathVariable authorId: Int) = authorService.findById(authorId)
         .orElseThrow { AuthorNotFoundException("AuthorPost id not found - $authorId") }
-        .toResponse()
-
-    @CrossOrigin
-    @GetMapping("/name/{firstName}/{lastName}")
-    fun getAuthorByName(@PathVariable firstName: String, @PathVariable lastName: String) =
-        authorService.findByName(firstName, lastName)
-            .orElseThrow { AuthorNotFoundException("Author not found - $firstName $lastName") }
-            .toDTO()
 
     @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAuthorsByKeyword(@PathVariable keyword: String) = authorService.findAllByKeyword(keyword)
-        .stream()
-        .map(Author::toResponse)
-        .toList()
 
     @CrossOrigin
     @PostMapping("/")

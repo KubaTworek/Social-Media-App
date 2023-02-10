@@ -1,6 +1,5 @@
 package com.example.authors.model
 
-import com.example.authors.controller.ArticleResponse
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -19,13 +18,11 @@ data class Article(
     @Column(name = "Timestamp")
     val timestamp: String,
 
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinColumn(name = "Author_Id")
-    var author: Author,
+    @Column(name = "Author_Id")
+    var authorId: Int,
 
-    @ManyToOne(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
-    @JoinColumn(name = "Magazine_Id")
-    var magazine: Magazine,
+    @Column(name = "Magazine_Id")
+    var magazineId: Int,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Content_Id")
@@ -36,23 +33,12 @@ data class Article(
 
     constructor() : this(
         0,
-        "sad",
-        "200",
-        Author(),
-        Magazine(),
+        "",
+        "",
+        0,
+        0,
         ArticleContent()
     )
-
-    fun toResponse(): ArticleResponse {
-        return ArticleResponse(
-            this.id,
-            this.content.title,
-            this.content.text,
-            this.magazine.name,
-            this.author.firstName,
-            this.author.lastName
-        )
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -66,6 +52,6 @@ data class Article(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , date = $date , timestamp = $timestamp , author = $author , magazine = $magazine , content = $content )"
+        return this::class.simpleName + "(id = $id , date = $date , timestamp = $timestamp , authorId = $authorId , magazineId = $magazineId , content = $content )"
     }
 }
