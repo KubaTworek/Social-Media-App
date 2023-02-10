@@ -14,8 +14,8 @@ import java.util.*
 @FeignClient(name = "authors", url = "http://authors:2112/api/authors", fallback = AuthorClientFallback::class)
 @Qualifier("AuthorClient")
 interface AuthorClient {
-    @GetMapping("/name/{firstName}/{lastName}")
-    fun getAuthor(@PathVariable firstName: String, @PathVariable lastName: String): ResponseEntity<String>
+    @GetMapping("/id/{authorId}")
+    fun getAuthor(@PathVariable authorId: Int): ResponseEntity<String>
 
     @PostMapping("/")
     fun saveAuthor(@RequestBody authorRequest: AuthorRequest): ResponseEntity<String>

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody
 @FeignClient(name = "magazines", url = "http://magazines:2113/api/magazines", fallback = MagazineClientFallback::class)
 @Qualifier("MagazineClient")
 interface MagazineClient {
-    @GetMapping("/name/{name}")
-    fun getMagazine(@PathVariable name: String): ResponseEntity<String>
+    @GetMapping("/id/{authorId}")
+    fun getMagazine(@PathVariable authorId: Int): ResponseEntity<String>
 
     @PostMapping("/")
     fun saveMagazine(@RequestBody magazineRequest: MagazineRequest): ResponseEntity<String>

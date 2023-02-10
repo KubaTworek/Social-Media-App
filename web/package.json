@@ -6,6 +6,6 @@
     "navigo": "^4.7.1"
   },
   "scripts": {
-    "start": "http-server -c-1 -p 8881"
+    "start": "http-server -c-1 -p 8882"
   }
 }

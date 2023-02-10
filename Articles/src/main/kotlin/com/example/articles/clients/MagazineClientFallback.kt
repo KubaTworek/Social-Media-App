@@ -10,15 +10,8 @@ import org.springframework.stereotype.Service
 @Service
 @Qualifier("MagazineClientFallback")
 class MagazineClientFallback : MagazineClient {
-    override fun getMagazine(name: String): ResponseEntity<String> {
-        try {
-            return saveMagazine(MagazineRequest(name, "test"))
-        } catch (exc: FeignException) {
-            if (exc.status() == HttpStatus.NOT_FOUND.value()) {
-                return saveMagazine(MagazineRequest(name, "test"))
-            }
-            throw exc
-        }
+    override fun getMagazine(magazineId: Int): ResponseEntity<String> {
+        return ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     override fun saveMagazine(magazineRequest: MagazineRequest): ResponseEntity<String> {

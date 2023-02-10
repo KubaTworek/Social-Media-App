@@ -25,8 +25,8 @@ class ArticleFactory(
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
     fun createArticle(request: ArticleRequest): Article {
-        val author = deserializeAuthor(getOrCreateAuthor(request))
-        val magazine = deserializeMagazine(getOrCreateMagazine(request))
+        val author = deserializeAuthor(getAuthor(request))
+        val magazine = deserializeMagazine(getMagazine(request))
         val content = contentFactory.createContent(request.title, request.text)
 
         return Article(
@@ -39,20 +39,12 @@ class ArticleFactory(
         )
     }
 
-    private fun getOrCreateAuthor(request: ArticleRequest): ResponseEntity<String> {
-        return try {
-            authorClient.getAuthor(request.author_firstName, request.author_lastName)
-        } catch (ex: FeignException) {
-            authorClient.saveAuthor(AuthorRequest(request.author_firstName, request.author_lastName))
-        }
+    private fun getAuthor(request: ArticleRequest): ResponseEntity<String> {
+        return authorClient.getAuthor(request.authorId)
     }
 
-    private fun getOrCreateMagazine(request: ArticleRequest): ResponseEntity<String> {
-        return try {
-            magazineClient.getMagazine(request.magazine)
-        } catch (ex: FeignException) {
-            magazineClient.saveMagazine(MagazineRequest(request.magazine, "test"))
-        }
+    private fun getMagazine(request: ArticleRequest): ResponseEntity<String> {
+        return magazineClient.getMagazine(request.magazineId)
     }
 
     private fun getCurrentDate(): String {

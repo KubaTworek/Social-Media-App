@@ -10,15 +10,8 @@ import org.springframework.stereotype.Service
 @Service
 @Qualifier("AuthorClientFallback")
 class AuthorClientFallback : AuthorClient {
-    override fun getAuthor(firstName: String, lastName: String): ResponseEntity<String> {
-        try {
-            return getAuthor(firstName, lastName)
-        } catch (exc: FeignException) {
-            if (exc.status() == HttpStatus.NOT_FOUND.value()) {
-                return saveAuthor(AuthorRequest(firstName, lastName))
-            }
-            throw exc
-        }
+    override fun getAuthor(authorId: Int): ResponseEntity<String> {
+        return ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     override fun saveAuthor(authorRequest: AuthorRequest): ResponseEntity<String> {

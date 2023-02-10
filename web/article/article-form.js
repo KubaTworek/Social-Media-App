@@ -10,9 +10,12 @@ export class ArticleForm extends HTMLElement {
     }
 
     connectedCallback() {
+        this.magazineSelect = this.shadowRoot.getElementById("magazine-select");
+        this.authorSelect = this.shadowRoot.getElementById("author-select");
         this.shadowRoot.addEventListener("click", this._handleBackdropClick);
         this.shadowRoot.getElementById("cancel-button").addEventListener("click", this._cancel);
         this.shadowRoot.getElementById("form-container").addEventListener("submit", this._submit);
+        this.showOptions();
     }
 
     open() {
@@ -42,6 +45,43 @@ export class ArticleForm extends HTMLElement {
             .then(() => location.reload())
             .catch((err) => console.error(err));
     };
+
+    showOptions() {
+        this.getMagazines().catch(err => console.log(err));
+        this.getAuthors().catch(err => console.log(err));
+    }
+
+    async getMagazines() {
+        Http.getInstance()
+            .doGet(config.magazinesUrl)
+            .then(magazines => this.renderMagazines(magazines))
+            .catch(err => console.log(err));
+    }
+
+    renderMagazines(magazines) {
+        magazines.forEach(magazine => {
+            const option = document.createElement('option');
+            option.value = magazine.id;
+            option.innerHTML = magazine.name;
+            this.magazineSelect.appendChild(option);
+        });
+    }
+
+    async getAuthors() {
+        Http.getInstance()
+            .doGet(config.authorsUrl)
+            .then(authors => this.renderAuthors(authors))
+            .catch(err => console.log(err));
+    }
+
+    renderAuthors(authors) {
+        authors.forEach(author => {
+            const option = document.createElement('option');
+            option.value = author.id;
+            option.innerText = author.firstName + ' ' + author.lastName;
+            this.authorSelect.appendChild(option);
+        });
+    }
 
     render() {
         return `
@@ -121,9 +161,12 @@ export class ArticleForm extends HTMLElement {
                 <form id="form-container">
                     <input name="title" type="text">
                     <input name="text" type="text">
-                    <input name="magazine" type="text">
-                    <input name="author_firstName" type="text">
-                    <input name="author_lastName" type="text">
+                    <select name="magazineId" id="magazine-select">
+                        <option value ="">--Please choose a magazine--</option>
+                    </select>
+                    <select name="authorId" id="author-select">
+                        <option value ="">--Please choose an author--</option>
+                    </select>
                     <button type="submit">Add</button>
                 </form>
             </section>
