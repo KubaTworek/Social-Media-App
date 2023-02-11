@@ -4,9 +4,9 @@ import com.example.articles.clients.AuthorClient
 import com.example.articles.clients.MagazineClient
 import com.example.articles.controller.ArticleRequest
 import com.example.articles.controller.ArticleResponse
-import com.example.articles.model.Article
-import com.example.articles.model.Author
-import com.example.articles.model.Magazine
+import com.example.articles.model.dto.AuthorDTO
+import com.example.articles.model.dto.MagazineDTO
+import com.example.articles.model.entity.Article
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
@@ -19,9 +19,8 @@ class ArticleFactory(
     private val authorClient: AuthorClient,
     private val magazineClient: MagazineClient,
     private val contentFactory: ContentFactory,
+    private val objectMapper: ObjectMapper
 ) {
-    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-
     fun createArticle(request: ArticleRequest): Article {
         val content = contentFactory.createContent(request.title, request.text)
 
@@ -35,7 +34,7 @@ class ArticleFactory(
         )
     }
 
-    fun createResponse(theArticle: Article) : ArticleResponse{
+    fun createResponse(theArticle: Article): ArticleResponse {
         val author = deserializeAuthor(getAuthor(theArticle.authorId))
         val magazine = deserializeMagazine(getMagazine(theArticle.magazineId))
 
@@ -49,25 +48,20 @@ class ArticleFactory(
         )
     }
 
-    private fun getAuthor(authorId: Int): ResponseEntity<String> {
-        return authorClient.getAuthor(authorId)
-    }
+    private fun getAuthor(authorId: Int): ResponseEntity<String> =
+        authorClient.getAuthor(authorId)
 
-    private fun getMagazine(magazineId: Int): ResponseEntity<String> {
-        return magazineClient.getMagazine(magazineId)
-    }
+    private fun getMagazine(magazineId: Int): ResponseEntity<String> =
+        magazineClient.getMagazine(magazineId)
+
+    private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO =
+        objectMapper.readValue(response.body, AuthorDTO::class.java)
+
+    private fun deserializeMagazine(response: ResponseEntity<String>): MagazineDTO =
+        objectMapper.readValue(response.body, MagazineDTO::class.java)
 
     private fun getCurrentDate(): String {
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
         return dateFormatter.format(LocalDateTime.now())
-    }
-
-    private fun deserializeAuthor(response: ResponseEntity<String>): Author {
-        val objectMapper = ObjectMapper()
-        return objectMapper.readValue(response.body, Author::class.java)
-    }
-
-    private fun deserializeMagazine(response: ResponseEntity<String>): Magazine {
-        val objectMapper = ObjectMapper()
-        return objectMapper.readValue(response.body, Magazine::class.java)
     }
 }

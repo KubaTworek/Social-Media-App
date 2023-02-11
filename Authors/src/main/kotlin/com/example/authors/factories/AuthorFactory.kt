@@ -21,9 +21,9 @@ class AuthorFactory(
         )
     }
 
-    fun createResponse(theAuthor: Author): AuthorResponse{
+    fun createResponse(theAuthor: Author): AuthorResponse {
         val articles = deserializeArticles(getArticles(theAuthor.id))
-        val titles = articles.map{ it.content.title}.toList()
+        val titles = articles.map { it.content.title }.toList()
 
         return AuthorResponse(
             theAuthor.id,
@@ -39,10 +39,13 @@ class AuthorFactory(
 
     private fun deserializeArticles(response: ResponseEntity<String>): List<Article> {
         val objectMapper = ObjectMapper()
-        return if(response.body == null){
+        return if (response.body == null) {
             emptyList()
         } else {
-            objectMapper.readValue(response.body, objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java))
+            objectMapper.readValue(
+                response.body,
+                objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java)
+            )
         }
     }
 }

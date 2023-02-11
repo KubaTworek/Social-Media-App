@@ -1,5 +1,6 @@
-package com.example.articles.model
+package com.example.articles.model.entity
 
+import com.example.articles.model.dto.ArticleDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -19,10 +20,10 @@ data class Article(
     val timestamp: String,
 
     @Column(name = "Author_Id")
-    var authorId: Int,
+    val authorId: Int,
 
     @Column(name = "Magazine_Id")
-    var magazineId: Int,
+    val magazineId: Int,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Content_Id")
@@ -36,6 +37,15 @@ data class Article(
         0,
         0,
         ArticleContent()
+    )
+
+    fun toDTO(): ArticleDTO = ArticleDTO(
+        this.id,
+        this.date,
+        this.timestamp,
+        this.authorId,
+        this.magazineId,
+        this.content.toDTO()
     )
 
     override fun equals(other: Any?): Boolean {

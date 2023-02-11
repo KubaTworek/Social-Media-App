@@ -15,7 +15,7 @@ data class Magazine(
     @Column(name = "Name")
     val name: String,
 
-) {
+    ) {
     constructor() : this(
         0,
         ""

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 @Qualifier("AuthorClientFallback")
-class ArticleClientFallback : ArticleClient{
+class ArticleClientFallback : ArticleClient {
     override fun getArticlesByMagazine(magazineId: Int): ResponseEntity<String> {
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

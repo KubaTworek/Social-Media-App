@@ -1,7 +1,6 @@
 package com.example.authors.controller
 
 import com.example.authors.exception.AuthorNotFoundException
-import com.example.authors.model.Author
 import com.example.authors.service.AuthorService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus

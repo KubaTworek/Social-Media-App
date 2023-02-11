@@ -18,7 +18,7 @@ class AuthorServiceImpl(
     override fun findAllAuthors(): List<AuthorResponse> {
         val authors = authorRepository.findAll()
         val authorsResponseList = mutableListOf<AuthorResponse>()
-        for(author in authors){
+        for (author in authors) {
             val response = authorFactory.createResponse(author)
             authorsResponseList.add(response)
         }
@@ -35,7 +35,7 @@ class AuthorServiceImpl(
             .filter { it.firstName.contains(theKeyword) || it.lastName.contains(theKeyword) }
             .toList()
         val authorsResponseList = mutableListOf<AuthorResponse>()
-        for(author in authors){
+        for (author in authors) {
             val response = authorFactory.createResponse(author)
             authorsResponseList.add(response)
         }

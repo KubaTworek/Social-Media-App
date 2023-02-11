@@ -2,14 +2,13 @@ package com.example.articles.service
 
 import com.example.articles.controller.ArticleRequest
 import com.example.articles.controller.ArticleResponse
-import com.example.articles.model.Article
-import java.util.*
+import com.example.articles.model.dto.ArticleDTO
 
 interface ArticleService {
     fun findAllOrderByDateDesc(): List<ArticleResponse>
-    fun findById(theId: Int): Optional<ArticleResponse>
-    fun findAllByAuthorId(authorId: Int): List<Article>
-    fun findAllByMagazineId(magazineId: Int): List<Article>
+    fun findById(theId: Int): ArticleResponse
+    fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
+    fun findAllByMagazineId(magazineId: Int): List<ArticleDTO>
     fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun save(theArticle: ArticleRequest)
     fun deleteById(theId: Int)

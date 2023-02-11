@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 @Service
 @Qualifier("MagazineClientFallback")
 class MagazineClientFallback : MagazineClient {
-    override fun getMagazine(magazineId: Int): ResponseEntity<String> {
-        return ResponseEntity(HttpStatus.NOT_FOUND)
-    }
+    override fun getMagazine(magazineId: Int): ResponseEntity<String> =
+        ResponseEntity(HttpStatus.NOT_FOUND)
 }

@@ -1,7 +1,6 @@
 package com.example.articles.controller
 
-import com.example.articles.exception.ArticleNotFoundException
-import com.example.articles.model.Article
+import com.example.articles.model.dto.ArticleDTO
 import com.example.articles.service.ArticleService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
@@ -14,32 +13,38 @@ import org.springframework.web.bind.annotation.*
 class ArticleController(private val articleService: ArticleService) {
     @CrossOrigin
     @GetMapping("/")
-    fun articlesOrderByDateDesc() = articleService.findAllOrderByDateDesc()
+    fun articlesOrderByDateDesc(): List<ArticleResponse> =
+        articleService.findAllOrderByDateDesc()
 
     @CrossOrigin
     @GetMapping("/id/{articleId}")
-    fun getArticleById(@PathVariable articleId: Int) = articleService.findById(articleId)
-        .orElseThrow { ArticleNotFoundException("ArticlePost id not found - $articleId") }
+    fun getArticleById(@PathVariable articleId: Int): ArticleResponse =
+        articleService.findById(articleId)
 
     @CrossOrigin
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByAuthor(@PathVariable authorId: Int) = articleService.findAllByAuthorId(authorId)
+    fun getArticlesByAuthor(@PathVariable authorId: Int): List<ArticleDTO> =
+        articleService.findAllByAuthorId(authorId)
 
     @CrossOrigin
     @GetMapping("/magazine/{magazineId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByMagazine(@PathVariable magazineId: Int) = articleService.findAllByMagazineId(magazineId)
+    fun getArticlesByMagazine(@PathVariable magazineId: Int): List<ArticleDTO> =
+        articleService.findAllByMagazineId(magazineId)
 
     @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByKeyword(@PathVariable keyword: String) = articleService.findAllByKeyword(keyword)
+    fun getArticlesByKeyword(@PathVariable keyword: String): List<ArticleResponse> =
+        articleService.findAllByKeyword(keyword)
 
     @CrossOrigin
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveArticle(@RequestBody theArticle: ArticleRequest) = articleService.save(theArticle)
+    fun saveArticle(@RequestBody theArticle: ArticleRequest): Unit =
+        articleService.save(theArticle)
 
     @CrossOrigin
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteArticle(@PathVariable articleId: Int) = articleService.deleteById(articleId)
+    fun deleteArticle(@PathVariable articleId: Int): Unit =
+        articleService.deleteById(articleId)
 }

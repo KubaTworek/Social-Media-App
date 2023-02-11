@@ -1,16 +1,9 @@
--- tables
--- Table: AuthorPost
-
-
 -- Table: Content
 CREATE TABLE Content (
                          Id integer NOT NULL CONSTRAINT Content_pk PRIMARY KEY,
                          Title varchar(30) NOT NULL,
                          Text varchar(255) NOT NULL
 );
-
--- Table: MagazinePost
-
 
 -- Table: ArticlePost
 CREATE TABLE Article_Post (

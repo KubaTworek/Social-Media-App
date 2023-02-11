@@ -1,5 +1,6 @@
-package com.example.articles.model
+package com.example.articles.model.entity
 
+import com.example.articles.model.dto.ArticleContentDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -25,6 +26,12 @@ data class ArticleContent(
         "asd",
         "asd",
         null
+    )
+
+    fun toDTO() = ArticleContentDTO(
+        this.id,
+        this.title,
+        this.text
     )
 
     override fun equals(other: Any?): Boolean {

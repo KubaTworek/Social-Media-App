@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 @Service
 @Qualifier("AuthorClientFallback")
 class AuthorClientFallback : AuthorClient {
-    override fun getAuthor(authorId: Int): ResponseEntity<String> {
-        return ResponseEntity(HttpStatus.NOT_FOUND)
-    }
+    override fun getAuthor(authorId: Int): ResponseEntity<String> =
+        ResponseEntity(HttpStatus.NOT_FOUND)
 }

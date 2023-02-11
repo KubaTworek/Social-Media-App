@@ -6,10 +6,8 @@ import com.example.magazines.controller.MagazineResponse
 import com.example.magazines.model.Article
 import com.example.magazines.model.Magazine
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.objectweb.asm.TypeReference
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
-import java.util.Collections.emptyList
 
 @Component
 class MagazineFactory(
@@ -24,7 +22,7 @@ class MagazineFactory(
 
     fun createResponse(theMagazine: Magazine): MagazineResponse {
         val articles = deserializeArticles(getArticles(theMagazine.id))
-        val titles = articles.map{ it.content.title}.toList()
+        val titles = articles.map { it.content.title }.toList()
 
         return MagazineResponse(
             theMagazine.id,
@@ -39,10 +37,13 @@ class MagazineFactory(
 
     private fun deserializeArticles(response: ResponseEntity<String>): List<Article> {
         val objectMapper = ObjectMapper()
-        return if(response.body == null){
-            kotlin.collections.emptyList()
+        return if (response.body == null) {
+            emptyList()
         } else {
-            objectMapper.readValue(response.body, objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java))
+            objectMapper.readValue(
+                response.body,
+                objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java)
+            )
         }
     }
 }

@@ -18,7 +18,7 @@ class MagazineServiceImpl(
     override fun findAllMagazines(): List<MagazineResponse> {
         val magazines = magazineRepository.findAll()
         val magazinesResponseList = mutableListOf<MagazineResponse>()
-        for(magazine in magazines){
+        for (magazine in magazines) {
             val response = magazineFactory.createResponse(magazine)
             magazinesResponseList.add(response)
         }
@@ -34,7 +34,7 @@ class MagazineServiceImpl(
             .filter { it.name.contains(theKeyword) }
             .toList()
         val magazinesResponseList = mutableListOf<MagazineResponse>()
-        for(magazine in magazines){
+        for (magazine in magazines) {
             val response = magazineFactory.createResponse(magazine)
             magazinesResponseList.add(response)
         }
