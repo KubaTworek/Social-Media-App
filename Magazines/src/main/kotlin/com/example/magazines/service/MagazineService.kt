@@ -2,9 +2,7 @@ package com.example.magazines.service
 
 import com.example.magazines.controller.MagazineRequest
 import com.example.magazines.controller.MagazineResponse
-import com.example.magazines.model.Magazine
 import com.example.magazines.model.dto.MagazineDTO
-import java.util.*
 
 interface MagazineService {
     fun findAllMagazines(): List<MagazineResponse>

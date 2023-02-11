@@ -3,7 +3,6 @@ package com.example.magazines.service
 import com.example.magazines.controller.MagazineRequest
 import com.example.magazines.controller.MagazineResponse
 import com.example.magazines.factories.MagazineFactory
-import com.example.magazines.model.Magazine
 import com.example.magazines.model.dto.MagazineDTO
 import com.example.magazines.repository.MagazineRepository
 import lombok.RequiredArgsConstructor
@@ -25,7 +24,7 @@ class MagazineServiceImpl(
 
     override fun findById(theId: Int): MagazineDTO =
         magazineRepository.findByIdOrNull(theId)?.toDTO()
-        ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     override fun findAllByKeyword(theKeyword: String): List<MagazineResponse> =
         magazineRepository.findAll().stream()

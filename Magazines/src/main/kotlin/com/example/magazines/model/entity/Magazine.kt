@@ -1,4 +1,4 @@
-package com.example.magazines.model
+package com.example.magazines.model.entity
 
 import com.example.magazines.model.dto.MagazineDTO
 import jakarta.persistence.*

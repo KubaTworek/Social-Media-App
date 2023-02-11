@@ -1,6 +1,5 @@
 package com.example.magazines.controller
 
-import com.example.magazines.exception.MagazineNotFoundException
 import com.example.magazines.service.MagazineService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
