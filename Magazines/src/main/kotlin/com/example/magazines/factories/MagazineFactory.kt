@@ -3,8 +3,8 @@ package com.example.magazines.factories
 import com.example.magazines.client.ArticleClient
 import com.example.magazines.controller.MagazineRequest
 import com.example.magazines.controller.MagazineResponse
-import com.example.magazines.model.Article
 import com.example.magazines.model.Magazine
+import com.example.magazines.model.dto.ArticleDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
@@ -35,14 +35,14 @@ class MagazineFactory(
         return articleClient.getArticlesByMagazine(magazineId)
     }
 
-    private fun deserializeArticles(response: ResponseEntity<String>): List<Article> {
+    private fun deserializeArticles(response: ResponseEntity<String>): List<ArticleDTO> {
         val objectMapper = ObjectMapper()
         return if (response.body == null) {
             emptyList()
         } else {
             objectMapper.readValue(
                 response.body,
-                objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java)
+                objectMapper.typeFactory.constructCollectionType(List::class.java, ArticleDTO::class.java)
             )
         }
     }

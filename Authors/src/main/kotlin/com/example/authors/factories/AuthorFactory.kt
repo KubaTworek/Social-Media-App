@@ -3,8 +3,8 @@ package com.example.authors.factories
 import com.example.authors.client.ArticleClient
 import com.example.authors.controller.AuthorRequest
 import com.example.authors.controller.AuthorResponse
-import com.example.authors.model.Article
-import com.example.authors.model.Author
+import com.example.authors.model.dto.ArticleDTO
+import com.example.authors.model.entity.Author
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
@@ -37,14 +37,14 @@ class AuthorFactory(
         return articleClient.getArticlesByAuthor(authorId)
     }
 
-    private fun deserializeArticles(response: ResponseEntity<String>): List<Article> {
+    private fun deserializeArticles(response: ResponseEntity<String>): List<ArticleDTO> {
         val objectMapper = ObjectMapper()
         return if (response.body == null) {
             emptyList()
         } else {
             objectMapper.readValue(
                 response.body,
-                objectMapper.typeFactory.constructCollectionType(List::class.java, Article::class.java)
+                objectMapper.typeFactory.constructCollectionType(List::class.java, ArticleDTO::class.java)
             )
         }
     }

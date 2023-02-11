@@ -1,6 +1,5 @@
 package com.example.authors.controller
 
-import com.example.authors.exception.AuthorNotFoundException
 import com.example.authors.service.AuthorService
 import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
@@ -15,24 +14,28 @@ class AuthorController(private val authorService: AuthorService) {
 
     @CrossOrigin
     @GetMapping("/")
-    fun getAllAuthors() = authorService.findAllAuthors()
+    fun getAllAuthors() =
+        authorService.findAllAuthors()
 
     @CrossOrigin
     @GetMapping("/id/{authorId}")
-    fun getAuthorById(@PathVariable authorId: Int) = authorService.findById(authorId)
-        .orElseThrow { AuthorNotFoundException("AuthorPost id not found - $authorId") }
+    fun getAuthorById(@PathVariable authorId: Int) =
+        authorService.findById(authorId)
 
     @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getAuthorsByKeyword(@PathVariable keyword: String) = authorService.findAllByKeyword(keyword)
+    fun getAuthorsByKeyword(@PathVariable keyword: String) =
+        authorService.findAllByKeyword(keyword)
 
     @CrossOrigin
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveAuthor(@RequestBody theAuthor: AuthorRequest) = authorService.save(theAuthor)
+    fun saveAuthor(@RequestBody theAuthor: AuthorRequest) =
+        authorService.save(theAuthor)
 
     @CrossOrigin
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteAuthor(@PathVariable authorId: Int) = authorService.deleteById(authorId)
+    fun deleteAuthor(@PathVariable authorId: Int) =
+        authorService.deleteById(authorId)
 }

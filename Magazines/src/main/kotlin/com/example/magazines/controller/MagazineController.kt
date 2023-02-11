@@ -14,24 +14,28 @@ class MagazineController(private val magazineService: MagazineService) {
 
     @CrossOrigin
     @GetMapping("/")
-    fun getAllMagazines() = magazineService.findAllMagazines()
+    fun getAllMagazines() =
+        magazineService.findAllMagazines()
 
     @CrossOrigin
     @GetMapping("/id/{magazineId}")
-    fun getMagazineById(@PathVariable magazineId: Int) = magazineService.findById(magazineId)
-        .orElseThrow { MagazineNotFoundException("MagazinePost id not found - $magazineId") }
+    fun getMagazineById(@PathVariable magazineId: Int) =
+        magazineService.findById(magazineId)
 
     @CrossOrigin
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getMagazinesByKeyword(@PathVariable keyword: String) = magazineService.findAllByKeyword(keyword)
+    fun getMagazinesByKeyword(@PathVariable keyword: String) =
+        magazineService.findAllByKeyword(keyword)
 
     @CrossOrigin
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveMagazine(@RequestBody theMagazine: MagazineRequest) = magazineService.save(theMagazine)
+    fun saveMagazine(@RequestBody theMagazine: MagazineRequest) =
+        magazineService.save(theMagazine)
 
     @CrossOrigin
     @DeleteMapping("/{magazineId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteMagazine(@PathVariable magazineId: Int) = magazineService.deleteById(magazineId)
+    fun deleteMagazine(@PathVariable magazineId: Int) =
+        magazineService.deleteById(magazineId)
 }

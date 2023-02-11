@@ -1,5 +1,6 @@
 package com.example.magazines.model
 
+import com.example.magazines.model.dto.MagazineDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -19,6 +20,11 @@ data class Magazine(
     constructor() : this(
         0,
         ""
+    )
+
+    fun toDTO() = MagazineDTO(
+        this.id,
+        this.name
     )
 
     override fun equals(other: Any?): Boolean {

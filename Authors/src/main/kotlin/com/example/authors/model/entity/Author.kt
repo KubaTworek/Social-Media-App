@@ -1,5 +1,6 @@
-package com.example.magazines.model
+package com.example.authors.model.entity
 
+import com.example.authors.model.dto.AuthorDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 
@@ -16,12 +17,17 @@ data class Author(
 
     @Column(name = "lastname")
     val lastName: String,
-
-    ) {
+) {
     constructor() : this(
         0,
         "",
         ""
+    )
+
+    fun toDTO() = AuthorDTO(
+        this.id,
+        this.firstName,
+        this.lastName
     )
 
     override fun equals(other: Any?): Boolean {
