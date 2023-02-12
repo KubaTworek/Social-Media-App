@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 interface ArticleRepository : JpaRepository<Article, Int> {
     fun findAllByAuthorIdOrderByDate(authorId: Int): List<Article>
     fun findAllByMagazineIdOrderByDate(magazineId: Int): List<Article>
+    fun deleteAllByAuthorId(authorId: Int)
+    fun deleteAllByMagazineId(authorId: Int)
 }

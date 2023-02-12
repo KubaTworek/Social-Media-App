@@ -53,4 +53,12 @@ class ArticleServiceImpl(
 
     override fun deleteById(theId: Int) =
         articleRepository.deleteById(theId)
+
+    override fun deleteByAuthorId(authorId: Int) {
+        articleRepository.deleteAllByAuthorId(authorId)
+    }
+
+    override fun deleteByMagazineId(magazineId: Int) {
+        articleRepository.deleteAllByMagazineId(magazineId)
+    }
 }

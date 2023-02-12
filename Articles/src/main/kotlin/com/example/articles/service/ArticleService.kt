@@ -12,4 +12,6 @@ interface ArticleService {
     fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun save(theArticle: ArticleRequest)
     fun deleteById(theId: Int)
+    fun deleteByAuthorId(authorId: Int)
+    fun deleteByMagazineId(magazineId: Int)
 }

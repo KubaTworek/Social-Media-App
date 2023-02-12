@@ -47,4 +47,16 @@ class ArticleController(private val articleService: ArticleService) {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteArticle(@PathVariable articleId: Int): Unit =
         articleService.deleteById(articleId)
+
+    @CrossOrigin
+    @DeleteMapping("/authorId/{authorId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteArticlesByAuthorId(@PathVariable authorId: Int): Unit =
+        articleService.deleteByAuthorId(authorId)
+
+    @CrossOrigin
+    @DeleteMapping("/magazineId{magazineId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteArticlesByMagazineId(@PathVariable magazineId: Int): Unit =
+        articleService.deleteByMagazineId(magazineId)
 }
