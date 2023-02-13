@@ -58,7 +58,7 @@ export class MagazinePost extends HTMLElement {
         articles.forEach(article => {
                 const li = document.createElement('li')
                 const el = document.createElement('p')
-                el.innerText = article.title
+                el.innerText = article
                 li.appendChild(el)
                 this.articlesList.appendChild(li)
             }

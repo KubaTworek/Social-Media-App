@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class MagazineFactory(
-    private val articleClient: ArticleClient
+    private val articleClient: ArticleClient,
+    private val objectMapper: ObjectMapper
 ) {
     fun createMagazine(magazineRequest: MagazineRequest): Magazine {
         return Magazine(
@@ -21,23 +22,23 @@ class MagazineFactory(
     }
 
     fun createResponse(theMagazine: Magazine): MagazineResponse {
-        val articles = deserializeArticles(getArticles(theMagazine.id))
-        val titles = articles.map { it.content.title }.toList()
+        val articles = getArticles(theMagazine.id)
+        val articleTitles = articles.map { it.content.title }.toList()
 
         return MagazineResponse(
             theMagazine.id,
             theMagazine.name,
-            titles
+            articleTitles
         )
     }
 
-    private fun getArticles(magazineId: Int): ResponseEntity<String> {
-        return articleClient.getArticlesByMagazine(magazineId)
+    private fun getArticles(magazineId: Int): List<ArticleDTO> {
+        val response = articleClient.getArticlesByMagazine(magazineId)
+        return deserializeArticles(response)
     }
 
     private fun deserializeArticles(response: ResponseEntity<String>): List<ArticleDTO> {
-        val objectMapper = ObjectMapper()
-        return if (response.body == null) {
+        return if (response.body == "") {
             emptyList()
         } else {
             objectMapper.readValue(

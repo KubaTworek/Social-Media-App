@@ -1,5 +1,6 @@
 package com.example.magazines.service
 
+import com.example.magazines.client.ArticleClient
 import com.example.magazines.controller.MagazineRequest
 import com.example.magazines.controller.MagazineResponse
 import com.example.magazines.factories.MagazineFactory
@@ -15,22 +16,20 @@ import org.springframework.web.server.ResponseStatusException
 @RequiredArgsConstructor
 class MagazineServiceImpl(
     private val magazineRepository: MagazineRepository,
-    private val magazineFactory: MagazineFactory
+    private val magazineFactory: MagazineFactory,
+    private val articleClient: ArticleClient
 ) : MagazineService {
     override fun findAllMagazines(): List<MagazineResponse> =
         magazineRepository.findAll()
             .map { magazineFactory.createResponse(it) }
-
 
     override fun findById(theId: Int): MagazineDTO =
         magazineRepository.findByIdOrNull(theId)?.toDTO()
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     override fun findAllByKeyword(theKeyword: String): List<MagazineResponse> =
-        magazineRepository.findAll().stream()
-            .filter { it.name.contains(theKeyword) }
+        magazineRepository.findAllByNameContaining(theKeyword)
             .map { magazineFactory.createResponse(it) }
-            .toList()
 
     override fun save(theMagazine: MagazineRequest) {
         val magazine = magazineFactory.createMagazine(theMagazine)
@@ -38,6 +37,8 @@ class MagazineServiceImpl(
         magazineRepository.save(magazine)
     }
 
-    override fun deleteById(theId: Int): Unit =
+    override fun deleteById(theId: Int) {
         magazineRepository.deleteById(theId)
+        articleClient.deleteArticlesByMagazineId(theId)
+    }
 }

@@ -7,4 +7,6 @@ data class ArticleDTO(
     val authorId: Int,
     val magazineId: Int,
     val content: ArticleContentDTO
-)
+) {
+    constructor() : this(0, "", "", 0, 0, ArticleContentDTO())
+}

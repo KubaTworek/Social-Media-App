@@ -34,7 +34,7 @@ class MagazineController(private val magazineService: MagazineService) {
 
     @CrossOrigin
     @DeleteMapping("/{magazineId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     fun deleteMagazine(@PathVariable magazineId: Int) =
         magazineService.deleteById(magazineId)
 }
