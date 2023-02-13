@@ -1,6 +1,5 @@
 package com.example.authors.model.dto
 
-
 data class ArticleDTO(
     val id: Int,
     val date: String,
@@ -8,4 +7,6 @@ data class ArticleDTO(
     val authorId: Int,
     val magazineId: Int,
     val content: ArticleContentDTO
-)
+) {
+    constructor() : this(0, "", "", 0, 0, ArticleContentDTO())
+}

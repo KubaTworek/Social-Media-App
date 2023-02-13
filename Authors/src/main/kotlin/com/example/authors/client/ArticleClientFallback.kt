@@ -11,4 +11,8 @@ class ArticleClientFallback : ArticleClient {
     override fun getArticlesByAuthor(authorId: Int): ResponseEntity<String> {
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
+
+    override fun deleteArticlesByAuthorId(authorId: Int): ResponseEntity<String> {
+        return ResponseEntity(HttpStatus.NOT_FOUND)
+    }
 }

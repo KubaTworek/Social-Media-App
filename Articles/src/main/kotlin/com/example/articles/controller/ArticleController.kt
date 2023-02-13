@@ -44,19 +44,19 @@ class ArticleController(private val articleService: ArticleService) {
 
     @CrossOrigin
     @DeleteMapping("/{articleId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     fun deleteArticle(@PathVariable articleId: Int): Unit =
         articleService.deleteById(articleId)
 
     @CrossOrigin
     @DeleteMapping("/authorId/{authorId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     fun deleteArticlesByAuthorId(@PathVariable authorId: Int): Unit =
         articleService.deleteByAuthorId(authorId)
 
     @CrossOrigin
-    @DeleteMapping("/magazineId{magazineId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/magazineId/{magazineId}")
+    @ResponseStatus(HttpStatus.OK)
     fun deleteArticlesByMagazineId(@PathVariable magazineId: Int): Unit =
         articleService.deleteByMagazineId(magazineId)
 }

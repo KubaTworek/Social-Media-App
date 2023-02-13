@@ -35,7 +35,7 @@ class AuthorController(private val authorService: AuthorService) {
 
     @CrossOrigin
     @DeleteMapping("/{authorId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     fun deleteAuthor(@PathVariable authorId: Int) =
         authorService.deleteById(authorId)
 }

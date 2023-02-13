@@ -1,6 +1,7 @@
 package com.example.articles.repository
 
 import com.example.articles.model.entity.Article
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
@@ -8,6 +9,10 @@ import org.springframework.stereotype.Repository
 interface ArticleRepository : JpaRepository<Article, Int> {
     fun findAllByAuthorIdOrderByDate(authorId: Int): List<Article>
     fun findAllByMagazineIdOrderByDate(magazineId: Int): List<Article>
+
+    @Transactional
     fun deleteAllByAuthorId(authorId: Int)
+
+    @Transactional
     fun deleteAllByMagazineId(authorId: Int)
 }

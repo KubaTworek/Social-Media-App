@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class AuthorFactory(
-    private val articleClient: ArticleClient
+    private val articleClient: ArticleClient,
+    private val objectMapper: ObjectMapper
 ) {
     fun createAuthor(authorRequest: AuthorRequest): Author {
         return Author(
@@ -22,30 +23,26 @@ class AuthorFactory(
     }
 
     fun createResponse(theAuthor: Author): AuthorResponse {
-        val articles = deserializeArticles(getArticles(theAuthor.id))
-        val titles = articles.map { it.content.title }.toList()
+        val articles = getArticlesByAuthor(theAuthor.id)
+        val articleTitles = articles.map { it.content.title }.toList()
 
         return AuthorResponse(
             theAuthor.id,
             theAuthor.firstName,
             theAuthor.lastName,
-            titles
+            articleTitles
         )
     }
 
-    private fun getArticles(authorId: Int): ResponseEntity<String> {
-        return articleClient.getArticlesByAuthor(authorId)
+    private fun getArticlesByAuthor(authorId: Int): List<ArticleDTO> {
+        val response = articleClient.getArticlesByAuthor(authorId)
+        return deserializeArticles(response)
     }
 
     private fun deserializeArticles(response: ResponseEntity<String>): List<ArticleDTO> {
-        val objectMapper = ObjectMapper()
-        return if (response.body == null) {
-            emptyList()
-        } else {
-            objectMapper.readValue(
-                response.body,
-                objectMapper.typeFactory.constructCollectionType(List::class.java, ArticleDTO::class.java)
-            )
-        }
+        return objectMapper.readValue(
+            response.body,
+            objectMapper.typeFactory.constructCollectionType(List::class.java, ArticleDTO::class.java)
+        )
     }
 }

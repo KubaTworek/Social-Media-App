@@ -42,9 +42,11 @@ class ArticleServiceImpl(
 
     override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
-            .filter { it.content.title.contains(theKeyword) || it.content.text.contains(theKeyword) }
+            .filter {
+                it.content.title.contains(theKeyword, ignoreCase = true)
+                        || it.content.text.contains(theKeyword, ignoreCase = true)
+            }
             .map { articleFactory.createResponse(it) }
-
 
     override fun save(theArticle: ArticleRequest) {
         val article = articleFactory.createArticle(theArticle)

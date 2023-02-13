@@ -1,5 +1,6 @@
 package com.example.authors.service
 
+import com.example.authors.client.ArticleClient
 import com.example.authors.controller.AuthorRequest
 import com.example.authors.controller.AuthorResponse
 import com.example.authors.factories.AuthorFactory
@@ -15,7 +16,8 @@ import org.springframework.web.server.ResponseStatusException
 @RequiredArgsConstructor
 class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
-    private val authorFactory: AuthorFactory
+    private val authorFactory: AuthorFactory,
+    private val articleClient: ArticleClient
 ) : AuthorService {
     override fun findAllAuthors(): List<AuthorResponse> =
         authorRepository.findAll()
@@ -26,11 +28,8 @@ class AuthorServiceImpl(
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     override fun findAllByKeyword(theKeyword: String): List<AuthorResponse> =
-        authorRepository.findAll()
-            .stream()
-            .filter { it.firstName.contains(theKeyword) || it.lastName.contains(theKeyword) }
+        authorRepository.findAllByFirstNameContainingOrLastNameContaining(theKeyword, theKeyword)
             .map { authorFactory.createResponse(it) }
-            .toList()
 
     override fun save(theAuthor: AuthorRequest) {
         val author = authorFactory.createAuthor(theAuthor)
@@ -38,6 +37,8 @@ class AuthorServiceImpl(
         authorRepository.save(author)
     }
 
-    override fun deleteById(theId: Int): Unit =
+    override fun deleteById(theId: Int) {
         authorRepository.deleteById(theId)
+        articleClient.deleteArticlesByAuthorId(theId)
+    }
 }
