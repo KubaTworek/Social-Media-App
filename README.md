@@ -53,6 +53,15 @@ docker-compose up
 
 This API provides HTTP endpoint's and tools for the following:
 
+### Frontend
+url = http://localhost:8881/
+
+Articles Page = http://localhost:8881/#/articles
+
+Authors Page = http://localhost:8881/#/authors
+
+Magazines Page = http://localhost:8881/#/magazines
+
 ### Article
 port = 2111
 * Create an article: `POST/api/articles/`
