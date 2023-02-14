@@ -3,8 +3,8 @@ package com.example.magazines.factories
 import com.example.magazines.client.ArticleClient
 import com.example.magazines.controller.MagazineRequest
 import com.example.magazines.controller.MagazineResponse
-import com.example.magazines.model.entity.Magazine
 import com.example.magazines.model.dto.ArticleDTO
+import com.example.magazines.model.entity.Magazine
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component

@@ -1,6 +1,5 @@
 package com.example.magazines.repository
 
-import com.example.magazines.model.dto.MagazineDTO
 import com.example.magazines.model.entity.Magazine
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
