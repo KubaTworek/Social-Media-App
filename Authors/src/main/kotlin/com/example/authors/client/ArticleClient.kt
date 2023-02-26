@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 
-@FeignClient(name = "articles", url = "http://articles:2111/api/articles")
+@FeignClient(name = "articles", url = "http://articles:2111/api")
 @Qualifier("ArticleClient")
 interface ArticleClient {
     @GetMapping("/author/{authorId}")

@@ -48,6 +48,21 @@ services:
       - eureka
       - articles
 
+  gateway:
+    image: gateway:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "3000:3000"
+    environment:
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka"
+    networks:
+      - my-network
+    depends_on:
+      - eureka
+      - articles
+      - authors
+      - magazines 
+
   web:
     image: web:latest
     mem_limit: 700m

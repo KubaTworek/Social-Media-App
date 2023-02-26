@@ -1,5 +1,5 @@
 export const config = {
-    articlesUrl: 'http://localhost:2111/api/articles/',
-    authorsUrl: 'http://localhost:2112/api/authors/',
-    magazinesUrl: 'http://localhost:2113/api/magazines/'
+    articlesUrl: 'http://localhost:3000/articles/api/',
+    authorsUrl: 'http://localhost:3000/authors/api/',
+    magazinesUrl: 'http://localhost:3000/magazines/api/'
 }

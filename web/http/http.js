@@ -14,13 +14,14 @@ export class Http {
     }
 
     headers = {
-        Accept: "application/json",
+        "Accept": "application/json",
         "Content-Type": "application/json",
     };
 
     doGet = (path) =>
-        fetch(`${path}`, { headers: this.headers })
-            .then((r) => r.json())
+        fetch(`${path}`, {
+            headers: this.headers,
+        }).then((r) => r.json())
             .catch((err) => console.log(err));
 
     doPost = (path, body) =>
