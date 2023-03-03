@@ -1,15 +1,12 @@
 package com.example.authorization.config;
 
 import com.example.authorization.filter.*;
-import jakarta.servlet.http.*;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.*;
 import org.springframework.security.config.annotation.web.builders.*;
 import org.springframework.security.config.http.*;
-import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.*;
 import org.springframework.security.crypto.password.*;
-import org.springframework.security.provisioning.*;
 import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.www.*;
 import org.springframework.web.cors.*;
@@ -39,13 +36,12 @@ public class SecurityConfig {
                 .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/user-info").authenticated()
-                        .requestMatchers("/hello").authenticated()
-                        .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/api/user-info").authenticated()
+                        .requestMatchers("/api/hello").authenticated()
+                        .requestMatchers("/api/register", "/api/login").permitAll()
                 )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
-
     }
 
     @Bean

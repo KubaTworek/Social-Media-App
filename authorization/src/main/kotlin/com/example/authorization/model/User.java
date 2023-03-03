@@ -1,10 +1,7 @@
 package com.example.authorization.model;
 
-import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.*;
 
 @Getter
 @Setter
@@ -29,5 +26,4 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Authorities authorities;
-
 }

@@ -1,27 +1,21 @@
 package com.example.authorization.filter;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import javax.crypto.SecretKey;
-
 import com.example.authorization.constants.*;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.core.context.*;
+import org.springframework.web.filter.*;
 
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import javax.crypto.*;
+import java.io.*;
+import java.nio.charset.*;
 
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
-
 
     @Override
     public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -39,10 +33,10 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                         .getBody();
                 String username = String.valueOf(claims.get("username"));
                 String authorities = (String) claims.get("authorities");
-                Authentication auth = new UsernamePasswordAuthenticationToken(username,null,
+                Authentication auth = new UsernamePasswordAuthenticationToken(username, null,
                         AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
                 SecurityContextHolder.getContext().setAuthentication(auth);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 throw new BadCredentialsException("Invalid Token received!");
             }
 
@@ -50,7 +44,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-
-    @Override protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/user"); }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getServletPath().equals("/user");
+    }
 }

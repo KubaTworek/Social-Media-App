@@ -1,12 +1,11 @@
 package com.example.authorization.controller;
 
-import com.example.authorization.config.*;
 import com.example.authorization.constants.*;
 import com.example.authorization.model.*;
 import com.example.authorization.repository.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
-import org.springframework.beans.factory.annotation.*;
+import lombok.*;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
@@ -16,25 +15,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.*;
 import java.nio.charset.*;
-import java.security.*;
 import java.util.*;
 
+@RequestMapping("/api")
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthoritiesRepository authoritiesRepository;
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello";
-    }
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthoritiesRepository authoritiesRepository;
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody UserRequest userRequest) {
@@ -77,7 +67,7 @@ public class LoginController {
                 .getBody();
         String username = String.valueOf(claims.get("username"));
         String authorities = (String) claims.get("authorities");
-        return new UserResponse( username, authorities);
+        return new UserResponse(username, authorities);
     }
 
     private Authorities getAuthority(String authority) {
@@ -86,12 +76,11 @@ public class LoginController {
                         .orElse(null));
     }
 
-        private String populateAuthorities(Collection<? extends GrantedAuthority> collection) {
-            Set<String> authoritiesSet = new HashSet<>();
-            for (GrantedAuthority authority : collection) {
-                authoritiesSet.add(authority.getAuthority());
-            }
-            return String.join(",", authoritiesSet);
+    private String populateAuthorities(Collection<? extends GrantedAuthority> collection) {
+        Set<String> authoritiesSet = new HashSet<>();
+        for (GrantedAuthority authority : collection) {
+            authoritiesSet.add(authority.getAuthority());
         }
-
+        return String.join(",", authoritiesSet);
+    }
 }

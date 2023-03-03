@@ -1,8 +1,10 @@
 package com.example.authorization.filter;
 
-import java.io.IOException;
-import java.util.logging.Logger;
+import jakarta.servlet.Filter;
 import jakarta.servlet.*;
+
+import java.io.*;
+import java.util.logging.*;
 
 
 public class AuthoritiesLoggingAtFilter implements Filter {
@@ -16,5 +18,4 @@ public class AuthoritiesLoggingAtFilter implements Filter {
         LOG.info("Authentication Validation is in progress");
         chain.doFilter(request, response);
     }
-
 }

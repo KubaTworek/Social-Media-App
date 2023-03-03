@@ -1,11 +1,12 @@
 package com.example.authorization.filter;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
+import jakarta.servlet.Filter;
 import jakarta.servlet.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+
+import java.io.*;
+import java.util.logging.*;
 
 public class AuthoritiesLoggingAfterFilter implements Filter {
 
@@ -16,12 +17,10 @@ public class AuthoritiesLoggingAfterFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(null!=authentication) {
-            LOG.info("User "+authentication.getName()+" is successfully authenticated and "
-                    + "has the authorities "+authentication.getAuthorities().toString());
+        if (null != authentication) {
+            LOG.info("User " + authentication.getName() + " is successfully authenticated and "
+                    + "has the authorities " + authentication.getAuthorities().toString());
         }
-
         chain.doFilter(request, response);
     }
-
 }

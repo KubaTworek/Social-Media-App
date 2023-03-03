@@ -1,24 +1,18 @@
 package com.example.authorization.filter;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.example.authorization.constants.*;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.*;
 import jakarta.servlet.*;
-import javax.crypto.SecretKey;
-
 import jakarta.servlet.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
+import org.springframework.web.filter.*;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import javax.crypto.*;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
 
@@ -36,7 +30,6 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                     .signWith(key).compact();
             response.setHeader(SecurityConstants.JWT_HEADER, jwt);
         }
-
         chain.doFilter(request, response);
     }
 

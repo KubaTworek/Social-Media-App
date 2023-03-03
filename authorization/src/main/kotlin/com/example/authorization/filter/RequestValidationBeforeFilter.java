@@ -1,17 +1,15 @@
 package com.example.authorization.filter;
 
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-
 import jakarta.servlet.*;
-
 import jakarta.servlet.http.*;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.util.StringUtils;
+import org.springframework.security.authentication.*;
+import org.springframework.util.*;
+
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
+
+import static org.springframework.http.HttpHeaders.*;
 
 public class RequestValidationBeforeFilter implements Filter {
 
@@ -37,7 +35,7 @@ public class RequestValidationBeforeFilter implements Filter {
                         throw new BadCredentialsException("Invalid basic authentication token");
                     }
                     String email = token.substring(0, delim);
-                    if(email.toLowerCase().contains("test")) {
+                    if (email.toLowerCase().contains("test")) {
                         res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
@@ -56,5 +54,4 @@ public class RequestValidationBeforeFilter implements Filter {
     public Charset getCredentialsCharset() {
         return this.credentialsCharset;
     }
-
 }

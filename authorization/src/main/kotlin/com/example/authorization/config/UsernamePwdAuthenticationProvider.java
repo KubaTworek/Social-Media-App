@@ -5,7 +5,7 @@ import com.example.authorization.model.*;
 import com.example.authorization.repository.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
-import org.springframework.beans.factory.annotation.*;
+import lombok.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
@@ -17,13 +17,11 @@ import java.nio.charset.*;
 import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class UsernamePwdAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) {

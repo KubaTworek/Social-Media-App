@@ -33,7 +33,6 @@ services:
       - my-network
     depends_on:
       - eureka
-      - articles
 
   magazines:
     image: magazines:0.0.1-SNAPSHOT
@@ -46,7 +45,18 @@ services:
       - my-network
     depends_on:
       - eureka
-      - articles
+    
+  authorization:
+    image: authorization:0.0.1-SNAPSHOT
+    mem_limit: 700m
+    ports:
+      - "4000:4000"
+    environment:
+      EUREKA_SERVER_URL: "http://eureka:8761/eureka"
+    networks:
+      - my-network
+    depends_on:
+      - eureka
 
   gateway:
     image: gateway:0.0.1-SNAPSHOT
@@ -62,6 +72,7 @@ services:
       - articles
       - authors
       - magazines 
+      - authorization
 
   web:
     image: web:latest

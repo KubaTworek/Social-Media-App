@@ -1,5 +1,6 @@
 package com.example.authorization.model;
 
+import lombok.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
 import org.springframework.security.core.userdetails.*;
@@ -7,15 +8,11 @@ import org.springframework.security.core.userdetails.*;
 import java.io.*;
 import java.util.*;
 
+@RequiredArgsConstructor
 public class SecurityUser implements UserDetails {
     @Serial
     private static final long serialVersionUID = -6690946490872875352L;
-
     private final User user;
-
-    public SecurityUser(User user) {
-        this.user = user;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
