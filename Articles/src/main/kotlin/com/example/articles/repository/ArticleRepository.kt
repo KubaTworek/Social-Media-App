@@ -8,11 +8,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ArticleRepository : JpaRepository<Article, Int> {
     fun findAllByAuthorIdOrderByDate(authorId: Int): List<Article>
-    fun findAllByMagazineIdOrderByDate(magazineId: Int): List<Article>
 
     @Transactional
     fun deleteAllByAuthorId(authorId: Int)
-
-    @Transactional
-    fun deleteAllByMagazineId(authorId: Int)
 }

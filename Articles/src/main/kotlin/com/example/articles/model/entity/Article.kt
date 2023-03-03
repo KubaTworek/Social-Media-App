@@ -22,9 +22,6 @@ data class Article(
     @Column(name = "Author_Id")
     val authorId: Int,
 
-    @Column(name = "Magazine_Id")
-    val magazineId: Int,
-
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Content_Id")
     val content: ArticleContent,
@@ -35,7 +32,6 @@ data class Article(
         "",
         "",
         0,
-        0,
         ArticleContent()
     )
 
@@ -44,7 +40,6 @@ data class Article(
         this.date,
         this.timestamp,
         this.authorId,
-        this.magazineId,
         this.content.toDTO()
     )
 
@@ -60,6 +55,6 @@ data class Article(
 
     @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , date = $date , timestamp = $timestamp , authorId = $authorId , magazineId = $magazineId , content = $content )"
+        return this::class.simpleName + "(id = $id , date = $date , timestamp = $timestamp , authorId = $authorId , content = $content )"
     }
 }

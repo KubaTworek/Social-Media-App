@@ -8,10 +8,8 @@ interface ArticleService {
     fun findAllOrderByDateDesc(): List<ArticleResponse>
     fun findById(theId: Int): ArticleResponse
     fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
-    fun findAllByMagazineId(magazineId: Int): List<ArticleDTO>
     fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun save(theArticle: ArticleRequest)
     fun deleteById(theId: Int)
     fun deleteByAuthorId(authorId: Int)
-    fun deleteByMagazineId(magazineId: Int)
 }

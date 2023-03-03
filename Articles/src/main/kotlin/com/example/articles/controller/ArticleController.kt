@@ -23,10 +23,6 @@ class ArticleController(private val articleService: ArticleService) {
     fun getArticlesByAuthor(@PathVariable authorId: Int): List<ArticleDTO> =
         articleService.findAllByAuthorId(authorId)
 
-    @GetMapping("/magazine/{magazineId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByMagazine(@PathVariable magazineId: Int): List<ArticleDTO> =
-        articleService.findAllByMagazineId(magazineId)
-
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getArticlesByKeyword(@PathVariable keyword: String): List<ArticleResponse> =
         articleService.findAllByKeyword(keyword)
@@ -45,9 +41,4 @@ class ArticleController(private val articleService: ArticleService) {
     @ResponseStatus(HttpStatus.OK)
     fun deleteArticlesByAuthorId(@PathVariable authorId: Int): Unit =
         articleService.deleteByAuthorId(authorId)
-
-    @DeleteMapping("/magazineId/{magazineId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun deleteArticlesByMagazineId(@PathVariable magazineId: Int): Unit =
-        articleService.deleteByMagazineId(magazineId)
 }

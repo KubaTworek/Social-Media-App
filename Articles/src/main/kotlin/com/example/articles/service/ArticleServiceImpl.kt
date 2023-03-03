@@ -34,12 +34,6 @@ class ArticleServiceImpl(
             .map { it.toDTO() }
             .toList()
 
-    override fun findAllByMagazineId(magazineId: Int): List<ArticleDTO> =
-        articleRepository.findAllByMagazineIdOrderByDate(magazineId)
-            .stream()
-            .map { it.toDTO() }
-            .toList()
-
     override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
             .filter {
@@ -58,9 +52,5 @@ class ArticleServiceImpl(
 
     override fun deleteByAuthorId(authorId: Int) {
         articleRepository.deleteAllByAuthorId(authorId)
-    }
-
-    override fun deleteByMagazineId(magazineId: Int) {
-        articleRepository.deleteAllByMagazineId(magazineId)
     }
 }

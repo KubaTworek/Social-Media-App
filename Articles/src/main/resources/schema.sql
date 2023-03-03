@@ -11,7 +11,6 @@ CREATE TABLE Article_Post (
                          Date varchar(10) NOT NULL,
                          Timestamp varchar(255) NOT NULL,
                          Author_Id integer NOT NULL,
-                         Magazine_Id integer NOT NULL,
                          Content_Id integer NOT NULL,
                          CONSTRAINT Article_Content FOREIGN KEY (Content_Id)
                              REFERENCES Content (Id)

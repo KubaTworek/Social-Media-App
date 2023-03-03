@@ -5,8 +5,7 @@ data class ArticleDTO(
     val date: String,
     val timestamp: String,
     val authorId: Int,
-    val magazineId: Int,
     val content: ArticleContentDTO
 ) {
-    constructor() : this(0, "", "", 0, 0, ArticleContentDTO())
+    constructor() : this(0, "", "", 0, ArticleContentDTO())
 }
