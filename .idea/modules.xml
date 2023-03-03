@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/REST-API-articles.iml" filepath="$PROJECT_DIR$/.idea/REST-API-articles.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Articles/articles.iml" filepath="$PROJECT_DIR$/Articles/articles.iml" />
     </modules>
   </component>
 </project>
