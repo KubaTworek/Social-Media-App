@@ -11,37 +11,53 @@ import org.springframework.security.web.*;
 import org.springframework.security.web.authentication.www.*;
 import org.springframework.web.cors.*;
 
+import java.time.*;
 import java.util.*;
+
+import static com.example.authorization.constants.SecurityConstants.*;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .cors().configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration();
-                    config.setAllowedOrigins(Collections.singletonList("*"));
-                    config.setAllowedMethods(Collections.singletonList("*"));
-                    config.setAllowCredentials(true);
-                    config.setAllowedHeaders(Collections.singletonList("*"));
-                    config.setExposedHeaders(List.of("Authorization"));
-                    config.setMaxAge(3600L);
-                    return config;
-                }).and().csrf().disable()
-                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
-                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JWTTokenValidatorFilter(), BasicAuthenticationFilter.class)
-                .addFilterAfter(new JWTTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+        http
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS
+                )
+                .and()
+                .cors()
+                .configurationSource(
+                        corsConfigurationSource()
+                )
+                .and()
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/api/user-info").authenticated()
-                        .requestMatchers("/api/hello").authenticated()
                         .requestMatchers("/api/register", "/api/login").permitAll()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(
+                        new JWTTokenValidatorFilter(JWT_HEADER, JWT_KEY), BasicAuthenticationFilter.class
+                );
+
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedMethods(Collections.singletonList("*"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setExposedHeaders(List.of("Authorization"));
+        config.setMaxAge(Duration.ofHours(1));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

@@ -1,51 +1,54 @@
 package com.example.authorization.filter;
 
-import com.example.authorization.constants.*;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import lombok.*;
+import org.jetbrains.annotations.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
 import org.springframework.security.core.context.*;
 import org.springframework.web.filter.*;
 
-import javax.crypto.*;
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
 
+@RequiredArgsConstructor
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
+    private final String jwtHeader;
+    private final String jwtKey;
+
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        String jwt = request.getHeader(SecurityConstants.JWT_HEADER);
-        if (null != jwt) {
-            try {
-                SecretKey key = Keys.hmacShaKeyFor(
-                        SecurityConstants.JWT_KEY.getBytes(StandardCharsets.UTF_8));
-
-                Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(key)
-                        .build()
-                        .parseClaimsJws(jwt)
-                        .getBody();
-                String username = String.valueOf(claims.get("username"));
-                String authorities = (String) claims.get("authorities");
-                Authentication auth = new UsernamePasswordAuthenticationToken(username, null,
-                        AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            } catch (Exception e) {
-                throw new BadCredentialsException("Invalid Token received!");
-            }
-
+    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain chain) throws ServletException, IOException {
+        String jwt = request.getHeader(jwtHeader);
+        if (jwt != null) {
+            Claims claims = parseJwt(jwt);
+            String username = String.valueOf(claims.get("username"));
+            String authorities = String.valueOf(claims.get("authorities"));
+            Authentication auth = createAuthentication(username, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
         chain.doFilter(request, response);
     }
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/user");
+    private Claims parseJwt(String jwt) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(jwtKey.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody();
+        } catch (JwtException e) {
+            throw new BadCredentialsException("Invalid Token received!", e);
+        }
+    }
+
+    private Authentication createAuthentication(String username, String authorities) {
+        List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
+        return new UsernamePasswordAuthenticationToken(username, null, authorityList);
     }
 }

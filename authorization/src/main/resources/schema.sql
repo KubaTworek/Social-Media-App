@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS `authorities` (
 );
 
 CREATE TABLE IF NOT EXISTS `userX` (
-                                       `id` int NOT NULL UNIQUE PRIMARY KEY,
-                                       `username` VARCHAR(50) NOT NULL,
+                                       `username` VARCHAR(50) NOT NULL UNIQUE PRIMARY KEY,
                                        `password` VARCHAR(255) NOT NULL,
                                        `role_id` int,
                                        FOREIGN KEY(`role_id`) REFERENCES `authorities`(`id`)

@@ -1,6 +1,6 @@
 package com.example.authorization.repository;
 
-import com.example.authorization.model.*;
+import com.example.authorization.entity.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.*;
 

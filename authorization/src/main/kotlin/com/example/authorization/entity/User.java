@@ -1,4 +1,4 @@
-package com.example.authorization.model;
+package com.example.authorization.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,15 +8,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "userX")
 @Entity
+@Table(name = "userX")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Integer id;
-
     @Column(name = "username")
     private String username;
 
@@ -26,4 +22,5 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Authorities authorities;
+
 }
