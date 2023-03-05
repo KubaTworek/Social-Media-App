@@ -13,6 +13,11 @@ class AuthorizationController(private val authorizationService: AuthorizationSer
     fun registerUser(@RequestBody registerRequest: RegisterRequest) =
         authorizationService.registerUser(registerRequest)
 
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    fun deleteUser(@RequestHeader("Authorization") jwt: String) =
+        authorizationService.deleteUser(jwt)
+
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun loginUser(@RequestBody loginRequest: LoginRequest) =

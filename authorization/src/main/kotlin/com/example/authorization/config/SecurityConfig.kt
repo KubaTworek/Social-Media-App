@@ -29,7 +29,8 @@ class SecurityConfig {
             .configurationSource(corsConfigurationSource())
             .and()
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("/api/user-info").authenticated()
+                auth
+                    .requestMatchers("/api/user-info", "/api/delete").authenticated()
                     .requestMatchers("/api/register", "/api/login").permitAll()
             }
             .httpBasic(Customizer.withDefaults())

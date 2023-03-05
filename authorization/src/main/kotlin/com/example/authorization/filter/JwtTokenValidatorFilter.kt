@@ -19,9 +19,11 @@ class JWTTokenValidatorFilter(
     private val jwtKey: String
 ) : OncePerRequestFilter() {
 
-    override fun doFilterInternal(request: HttpServletRequest,
-                                  response: HttpServletResponse,
-                                  chain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain
+    ) {
         val jwt = request.getHeader(jwtHeader)
         if (jwt != null) {
             val claims = parseJwt(jwt)

@@ -10,4 +10,5 @@ interface AuthorService {
     fun findAllByKeyword(theKeyword: String): List<AuthorResponse>
     fun save(theAuthor: AuthorRequest)
     fun deleteById(theId: Int)
+    fun deleteByUsername(username: String)
 }

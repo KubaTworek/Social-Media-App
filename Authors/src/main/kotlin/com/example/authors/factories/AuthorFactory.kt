@@ -18,7 +18,8 @@ class AuthorFactory(
         return Author(
             0,
             authorRequest.firstName,
-            authorRequest.lastName
+            authorRequest.lastName,
+            authorRequest.username
         )
     }
 

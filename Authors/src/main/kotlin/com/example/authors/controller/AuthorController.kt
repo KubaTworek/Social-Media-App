@@ -33,4 +33,9 @@ class AuthorController(private val authorService: AuthorService) {
     @ResponseStatus(HttpStatus.OK)
     fun deleteAuthor(@PathVariable authorId: Int) =
         authorService.deleteById(authorId)
+
+    @DeleteMapping("/username/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    fun deleteAuthorByUsername(@PathVariable username: String) =
+        authorService.deleteByUsername(username)
 }

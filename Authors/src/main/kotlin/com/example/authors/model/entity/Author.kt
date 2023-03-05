@@ -17,9 +17,13 @@ data class Author(
 
     @Column(name = "lastname")
     val lastName: String,
+
+    @Column(name = "username")
+    val username: String,
 ) {
     constructor() : this(
         0,
+        "",
         "",
         ""
     )

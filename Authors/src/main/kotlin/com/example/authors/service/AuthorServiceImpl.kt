@@ -7,6 +7,7 @@ import com.example.authors.factories.AuthorFactory
 import com.example.authors.model.dto.AuthorDTO
 import com.example.authors.repository.AuthorRepository
 import lombok.RequiredArgsConstructor
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -17,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException
 class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
     private val authorFactory: AuthorFactory,
-    private val articleClient: ArticleClient
+    @Qualifier("ArticleClient") private val articleClient: ArticleClient
 ) : AuthorService {
     override fun findAllAuthors(): List<AuthorResponse> =
         authorRepository.findAll()
@@ -41,4 +42,7 @@ class AuthorServiceImpl(
         authorRepository.deleteById(theId)
         articleClient.deleteArticlesByAuthorId(theId)
     }
+
+    override fun deleteByUsername(username: String) =
+        authorRepository.deleteAuthorByUsername(username)
 }

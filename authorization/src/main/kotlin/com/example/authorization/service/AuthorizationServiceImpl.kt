@@ -1,5 +1,6 @@
 package com.example.authorization.service
 
+import com.example.authorization.clients.AuthorClient
 import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import com.example.authorization.constants.SecurityConstants.JWT_KEY
 import com.example.authorization.controller.*
@@ -11,6 +12,8 @@ import com.example.authorization.repository.UserRepository
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -23,22 +26,39 @@ import javax.crypto.SecretKey
 class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authoritiesRepository: AuthoritiesRepository,
+    @Qualifier("AuthorClient") private val authorClient: AuthorClient,
     private val passwordEncoder: PasswordEncoder,
 ) : AuthorizationService {
     override fun registerUser(registerRequest: RegisterRequest): UserResponse {
         val username = registerRequest.username
         val password = registerRequest.password
+        val firstName = registerRequest.firstName
+        val lastName = registerRequest.lastName
         val role = registerRequest.role
 
         validateUserWithThatUsernameDoesNotExist(username)
         val authority = getAuthority(role)
         val newUser = buildUser(username, password, authority)
         val createdUser = userRepository.save(newUser)
+        val authorRequest = AuthorRequest(
+            firstName,
+            lastName,
+            username
+        )
+        authorClient.createAuthor(authorRequest)
 
         return UserResponse(
             createdUser.username,
             createdUser.authorities.authority
         )
+    }
+
+    @Transactional
+    override fun deleteUser(jwt: String) {
+        val claims = parseJwtClaims(jwt)
+        val username = claims["username"].toString()
+        userRepository.deleteByUsername(username)
+        authorClient.deleteAuthorByUsername(username)
     }
 
     override fun loginUser(loginRequest: LoginRequest): String {
