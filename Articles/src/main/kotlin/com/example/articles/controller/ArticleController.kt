@@ -29,8 +29,9 @@ class ArticleController(private val articleService: ArticleService) {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    fun saveArticle(@RequestBody theArticle: ArticleRequest): Unit =
-        articleService.save(theArticle)
+    fun saveArticle(@RequestHeader("Authorization") jwt: String,
+                    @RequestBody theArticle: ArticleRequest): Unit =
+        articleService.save(theArticle, jwt)
 
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)

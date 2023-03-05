@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AuthorRepository : JpaRepository<Author, Int> {
+    fun findAuthorByUsername(username: String): Author?
     fun findAllByFirstNameContainingOrLastNameContaining(keyword1: String, keyword2: String): List<Author>
     @Transactional
     fun deleteAuthorByUsername(username: String)

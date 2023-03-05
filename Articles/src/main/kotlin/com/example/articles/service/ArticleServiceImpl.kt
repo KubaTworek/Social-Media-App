@@ -42,15 +42,14 @@ class ArticleServiceImpl(
             }
             .map { articleFactory.createResponse(it) }
 
-    override fun save(theArticle: ArticleRequest) {
-        val article = articleFactory.createArticle(theArticle)
+    override fun save(theArticle: ArticleRequest, jwt: String) {
+        val article = articleFactory.createArticle(theArticle, jwt)
         articleRepository.save(article)
     }
 
     override fun deleteById(theId: Int) =
         articleRepository.deleteById(theId)
 
-    override fun deleteByAuthorId(authorId: Int) {
+    override fun deleteByAuthorId(authorId: Int) =
         articleRepository.deleteAllByAuthorId(authorId)
-    }
 }

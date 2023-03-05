@@ -31,7 +31,8 @@ data class Author(
     fun toDTO() = AuthorDTO(
         this.id,
         this.firstName,
-        this.lastName
+        this.lastName,
+        this.username
     )
 
     override fun equals(other: Any?): Boolean {

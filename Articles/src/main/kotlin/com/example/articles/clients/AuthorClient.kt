@@ -11,5 +11,8 @@ import java.util.*
 @Qualifier("AuthorClient")
 interface AuthorClient {
     @GetMapping("/id/{authorId}")
-    fun getAuthor(@PathVariable authorId: Int): ResponseEntity<String>
+    fun getAuthorById(@PathVariable authorId: Int): ResponseEntity<String>
+
+    @GetMapping("/username/{username}")
+    fun getAuthorByUsername(@PathVariable username: String): ResponseEntity<String>
 }

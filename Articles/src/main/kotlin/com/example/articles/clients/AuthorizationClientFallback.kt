@@ -6,11 +6,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-@Qualifier("AuthorClientFallback")
-class AuthorClientFallback : AuthorClient {
-    override fun getAuthorById(authorId: Int): ResponseEntity<String> =
-        ResponseEntity(HttpStatus.NOT_FOUND)
-
-    override fun getAuthorByUsername(username: String): ResponseEntity<String> =
+@Qualifier("AuthorizationClientFallback")
+class AuthorizationClientFallback : AuthorizationClient {
+    override fun getUserDetails(jwt: String): ResponseEntity<String> =
         ResponseEntity(HttpStatus.NOT_FOUND)
 }

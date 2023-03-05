@@ -28,6 +28,10 @@ class AuthorServiceImpl(
         authorRepository.findByIdOrNull(theId)?.toDTO()
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
+    override fun findByUsername(username: String): AuthorDTO =
+        authorRepository.findAuthorByUsername(username)?.toDTO()
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
     override fun findAllByKeyword(theKeyword: String): List<AuthorResponse> =
         authorRepository.findAllByFirstNameContainingOrLastNameContaining(theKeyword, theKeyword)
             .map { authorFactory.createResponse(it) }

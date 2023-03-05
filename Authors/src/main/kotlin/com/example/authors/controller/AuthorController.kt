@@ -20,6 +20,10 @@ class AuthorController(private val authorService: AuthorService) {
     fun getAuthorById(@PathVariable authorId: Int) =
         authorService.findById(authorId)
 
+    @GetMapping("/username/{username}")
+    fun getAuthorByUsername(@PathVariable username: String) =
+        authorService.findByUsername(username)
+
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAuthorsByKeyword(@PathVariable keyword: String) =
         authorService.findAllByKeyword(keyword)

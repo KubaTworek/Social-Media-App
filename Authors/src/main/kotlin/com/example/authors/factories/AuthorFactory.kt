@@ -31,6 +31,7 @@ class AuthorFactory(
             theAuthor.id,
             theAuthor.firstName,
             theAuthor.lastName,
+            theAuthor.username,
             articleTitles
         )
     }
