@@ -12,12 +12,21 @@ import org.springframework.web.bind.annotation.ResponseBody
 class ArticleExceptionHandler {
 
     @ExceptionHandler(ArticleNotFoundException::class)
-    fun handleException(exc: Exception): ResponseEntity<ErrorResponse> {
+    fun handleArticleNotFoundException(exc: Exception): ResponseEntity<ErrorResponse> {
         val error = ErrorResponse(
             HttpStatus.NOT_FOUND.value(),
             exc.message
         )
         return ResponseEntity(error, HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    fun handleUnauthorizedException(exc: Exception): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
+            HttpStatus.UNAUTHORIZED.value(),
+            exc.message
+        )
+        return ResponseEntity(error, HttpStatus.UNAUTHORIZED)
     }
 
     @ResponseBody

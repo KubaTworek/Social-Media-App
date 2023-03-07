@@ -35,8 +35,9 @@ class ArticleController(private val articleService: ArticleService) {
 
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
-    fun deleteArticle(@PathVariable articleId: Int): Unit =
-        articleService.deleteById(articleId)
+    fun deleteArticle(@RequestHeader("Authorization") jwt: String,
+                      @PathVariable articleId: Int): Unit =
+        articleService.deleteById(articleId, jwt)
 
     @DeleteMapping("/authorId/{authorId}")
     @ResponseStatus(HttpStatus.OK)

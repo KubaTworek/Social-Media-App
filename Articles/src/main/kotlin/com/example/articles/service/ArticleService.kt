@@ -10,6 +10,6 @@ interface ArticleService {
     fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
     fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun save(theArticle: ArticleRequest, jwt: String)
-    fun deleteById(theId: Int)
+    fun deleteById(theId: Int, jwt: String)
     fun deleteByAuthorId(authorId: Int)
 }
