@@ -12,29 +12,39 @@ export class ArticlePost extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 .article-card {
-                    width: 60%;
                     display: block;
-                    background-color: blanchedalmond;
-                    border-radius: 5px;
-                    padding: 1rem;
-                    margin: 1rem;
+                    background-color: #111;
+                    color: #eee;
+                    border: 1px solid #444;
+                    padding: 0 0.8rem;
+                    box-sizing: border-box;
+
                 }
                 
-                h3 {
-                    text-align: center;
-                    font-size: 1.5rem;
+                .name {
+                    text-align: left;
+                    font-weight: 700;
                 }
                 
-                #idArticle {
+                .username {
+                    text-align: left;
+                    color: #666;
+                    font-weight: 500;
+                }
+                
+                .content {
+                    text-align: justify;
+                }
+                
+                .id {
                     display: none;
                 }             
             </style>
 
             <div class="article-card">
-                <h3>${article.title}</h3>
-                <p>${article.text}</p>
-                <p>Author: ${article.author_firstName} ${article.author_lastName}</p>
-                <p id="idArticle">${article.id}</p>
+                <p class="name">${article.author_firstName} ${article.author_lastName} <span class="username">@${article.author_username}</span></p>
+                <p class="content">${article.text}</p>
+                <p class="id">${article.id}</p>
                 <button id="delete-button">Delete</button>
             </div>
         `
