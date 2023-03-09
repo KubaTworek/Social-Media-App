@@ -33,7 +33,6 @@ export class ArticlePost extends HTMLElement {
             <div class="article-card">
                 <h3>${article.title}</h3>
                 <p>${article.text}</p>
-                <p>Magazine: ${article.magazine}</p>
                 <p>Author: ${article.author_firstName} ${article.author_lastName}</p>
                 <p id="idArticle">${article.id}</p>
                 <button id="delete-button">Delete</button>

@@ -1,7 +1,6 @@
 import Navigo from '../node_modules/navigo/src/index.js';
 import { ArticleModal } from '../article/article-modal.js';
 import { AuthorModal } from '../author/author-modal.js';
-import { MagazineModal } from '../magazine/magazine-modal.js';
 
 export class RouterHandler {
     static instance = null;
@@ -35,8 +34,7 @@ export class RouterHandler {
 
         const routes = [
             { path: '/articles', resolve: ArticleModal },
-            { path: '/authors', resolve: AuthorModal },
-            { path: '/magazines', resolve: MagazineModal },
+            { path: '/authors', resolve: AuthorModal }
         ];
 
         routes.forEach(route => {

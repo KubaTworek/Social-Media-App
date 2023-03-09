@@ -28,10 +28,6 @@ export class AuthorModal extends HTMLElement {
             .addEventListener('click',
                 () => RouterHandler.getInstance().router.navigate('/authors'))
 
-        this.shadowRoot.getElementById('magazine-button')
-            .addEventListener('click',
-                () => RouterHandler.getInstance().router.navigate('/magazines'))
-
         this.shadowRoot.getElementById('search-button')
             .addEventListener('click', this.getData.bind(this))
         this.shadowRoot.getElementById('add-button')
@@ -131,7 +127,7 @@ export class AuthorModal extends HTMLElement {
             
             <div id="background">
                 <div class="buttons-container">
-                    <button id="article-button">Articles</button><button id="author-button">Authors</button><button id="magazine-button">Magazines</button>
+                    <button id="article-button">Articles</button><button id="author-button">Authors</button>
                 </div>
                     <div class="search-bar"><input id="search-input" type="text"><button id="search-button">Search</button></div>
                     <div class="button-container"><button id="add-button">Add</button></div>
