@@ -2,6 +2,7 @@ import {ArticleCard} from "./article-card.js";
 import {Http} from '../http/http.js';
 import {config} from "../config.js";
 import {ArticlePost} from "./article-post.js";
+import {Authorization} from "../auhtorization/authorization-modal.js";
 
 export class Home extends HTMLElement {
     constructor() {
@@ -21,6 +22,10 @@ export class Home extends HTMLElement {
             .addEventListener('keyup', (event) => {
                 this.getData(event);
             });
+
+        this.authorizationBoard = this.shadowRoot.getElementById('authorization-board');
+        const authorization = new Authorization()
+        this.authorizationBoard.appendChild(authorization)
 
         this.inputBar = this.shadowRoot.getElementById('input-bar');
         const articlePost = new ArticlePost()
@@ -71,6 +76,13 @@ export class Home extends HTMLElement {
                 margin: auto;
               }
               
+              #authorization-board {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+              }
+              
               #main-board {
                 align-items: center;
                 display: flex;
@@ -106,10 +118,6 @@ export class Home extends HTMLElement {
                 height: 10rem;
               }
               
-              #add-button:hover {
-                background-color: #cc0000;
-              }
-              
               #data-list {
                 border-left: 1px solid #444;
                 border-right: 1px solid #444;
@@ -127,23 +135,39 @@ export class Home extends HTMLElement {
               
               @media screen and (min-width: 860px) {
                 #background {
-                  flex-direction: row-reverse;
+                  flex-direction: row;
                   align-items: flex-start;
                   max-width: 100%;
                   margin: auto;
                 }
+                
+                #authorization-board {
+                  order:1;
+                  width: 15rem;
+                  align-items: flex-end;
+                }
+                
+                authorization-modal {
+                  display: flex;
+                  align-items: flex-end;
+                  flex-direction: column;
+                }
+                
                 #search-input {
+                  order:3;
                   width: 15rem;
                   margin: 0 0 0 1rem;
                 }
+                
                 #main-board {
+                  order:2;
                   max-width: 35rem;
                   margin:0;
                 }
               }
             </style>
-            <div id="authorization-board"></div>
-            <div id="background">  
+            <div id="background"> 
+              <div id="authorization-board"></div>
               <input id="search-input" type="text" placeholder="Search"> 
               <div id="main-board">
                 <div id="input-bar"></div>

@@ -50,7 +50,7 @@ export class ArticlePost extends HTMLElement {
               }
               
               #send-button {
-                background-color: #ff0000;;
+                background-color: red;;
                 border: none;
                 border-radius: 9999px;
                 color: #eee;
@@ -64,6 +64,10 @@ export class ArticlePost extends HTMLElement {
                 text-decoration: none;
                 top:75%;
                 transition: background-color 0.3s ease-out;
+              }
+              
+              #send-button:hover {
+                background-color: #cc0000;
               }
         </style>
 
