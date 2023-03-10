@@ -1,6 +1,7 @@
 import {ArticleCard} from "./article-card.js";
 import {Http} from '../http/http.js';
 import {config} from "../config.js";
+import {ArticlePost} from "./article-post.js";
 
 export class Home extends HTMLElement {
     constructor() {
@@ -20,8 +21,10 @@ export class Home extends HTMLElement {
             .addEventListener('keyup', (event) => {
                 this.getData(event);
             });
-        this.shadowRoot.getElementById('send-button')
-            .addEventListener('click', this.postData.bind(this))
+
+        this.inputBar = this.shadowRoot.getElementById('input-bar');
+        const articlePost = new ArticlePost()
+        this.inputBar.appendChild(articlePost)
     }
 
     getData(event) {
@@ -38,24 +41,6 @@ export class Home extends HTMLElement {
             clearDataListAndFetch();
         }
     }
-
-    postData = (event) => {
-        event.preventDefault();
-        const content = this.shadowRoot.getElementById("post-content");
-        const data = {
-            title: "title",
-            text: content.value
-        }
-        sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5WCIsImF1dGhvcml0aWVzIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3ODQ0MjQzMywiZXhwIjoxNjc4NDUzMjAzfQ.5wrFWn7_nG5XOfAzgf-Qh1V1OQD2HJKf5utI2hCNzlU")
-        const headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": sessionStorage.getItem("jwt")
-        };
-        Http.getInstance().doPost(config.articlesUrl, JSON.stringify(data), headers)
-            .then(() => location.reload())
-            .catch((err) => console.error(err));
-    };
 
     async getArticles() {
         Http.getInstance()
@@ -77,14 +62,22 @@ export class Home extends HTMLElement {
     render() {
         return `
             <style>
+              #background {
+                max-width: 40rem;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: auto;
+              }
+              
               #main-board {
                 align-items: center;
                 display: flex;
                 flex-direction: column;
                 height: 100%;
-                justify-content: center;
                 margin: auto;
-                max-width: 30rem;
+                width: 80%;
               }
               
               #search-input {
@@ -95,13 +88,13 @@ export class Home extends HTMLElement {
                 color: #eee;
                 font-size: 1rem;
                 height: 2rem;
-                margin: 0.4rem 0;
+                margin: 0.4rem auto;
                 outline: none;
                 padding: 0.5rem;
-                width: 100%;
+                width: 80%;
               }
               
-              #post-input {
+              #input-bar {
                 align-items: center;
                 border: 1px solid #444;
                 box-sizing: border-box;
@@ -110,36 +103,7 @@ export class Home extends HTMLElement {
                 justify-content: right;
                 position: relative;
                 width: 100%;
-              }
-              
-              #post-content {
-                background-color: #111;
-                border: none;
-                box-sizing: border-box;
-                color: #eee;
-                font-size: 1.2rem;
-                height: 5rem;
-                outline: none;
-                padding: 0.5rem;
-                resize: none;
-                width: 100%;
-              }
-              
-              #send-button {
-                background-color: #ff0000;;
-                border: none;
-                border-radius: 9999px;
-                color: #eee;
-                cursor: pointer;
-                font-size: 0.9rem;
-                font-weight: 700;
-                padding: 6px 14px;
-                position: absolute;
-                right: 2%;
-                text-align: center;
-                text-decoration: none;
-                top: 50%;
-                transition: background-color 0.3s ease-out;
+                height: 10rem;
               }
               
               #add-button:hover {
@@ -155,15 +119,36 @@ export class Home extends HTMLElement {
                 padding: 0;
                 width: 100%;
               }
+              
+              article-post {
+                width: 100%;
+                height: 100%;
+              }
+              
+              @media screen and (min-width: 860px) {
+                #background {
+                  flex-direction: row-reverse;
+                  align-items: flex-start;
+                  max-width: 100%;
+                  margin: auto;
+                }
+                #search-input {
+                  width: 15rem;
+                  margin: 0 0 0 1rem;
+                }
+                #main-board {
+                  max-width: 35rem;
+                  margin:0;
+                }
+              }
             </style>
-            
-            <div id="main-board">
-                    <input id="search-input" type="text" placeholder="Search">
-                    <div id="post-input">
-                        <textarea id="post-content" placeholder="What's happening?"></textarea>
-                        <button id="send-button">SEND</button>
-                    </div>
-                    <ul id="data-list"></ul>
+            <div id="authorization-board"></div>
+            <div id="background">  
+              <input id="search-input" type="text" placeholder="Search"> 
+              <div id="main-board">
+                <div id="input-bar"></div>
+                <ul id="data-list"></ul>
+              </div>
             </div>
         `;
     }

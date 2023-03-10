@@ -3,7 +3,7 @@ import {Http} from "../http/http.js";
 export class DeletePopup extends HTMLElement {
     constructor(text, url) {
         super();
-        this.attachShadow({ mode: "open" });
+        this.attachShadow({mode: "open"});
         this.shadowRoot.innerHTML = this.render(text);
         this.url = url;
     }
@@ -26,7 +26,7 @@ export class DeletePopup extends HTMLElement {
 
     cancel(event) {
         this.hide();
-        const cancelEvent = new Event("cancel", { bubbles: true, composed: true });
+        const cancelEvent = new Event("cancel", {bubbles: true, composed: true});
         event.target.dispatchEvent(cancelEvent);
     }
 

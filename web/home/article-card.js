@@ -1,5 +1,5 @@
 import {DeletePopup} from "../utils/delete-popup.js";
-import { config } from "../config.js";
+import {config} from "../config.js";
 
 
 export class ArticleCard extends HTMLElement {

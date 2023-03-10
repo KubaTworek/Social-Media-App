@@ -4,6 +4,13 @@ import {Home} from "../home/home.js";
 export class RouterHandler {
     static instance = null;
 
+    constructor() {
+        const root = null;
+        const useHash = true;
+        const hash = '#';
+        this.router = new Navigo(root, useHash, hash);
+    }
+
     static getInstance() {
         if (!RouterHandler.instance) {
             RouterHandler.instance = new RouterHandler();
@@ -19,20 +26,13 @@ export class RouterHandler {
         outlet.appendChild(component);
     }
 
-    constructor() {
-        const root = null;
-        const useHash = true;
-        const hash = '#';
-        this.router = new Navigo(root, useHash, hash);
-    }
-
     init() {
         this.router.on(() => {
             RouterHandler.inject(new Home());
         }).resolve();
 
         const routes = [
-            { path: '/home', resolve: Home }
+            {path: '/home', resolve: Home}
         ];
 
         routes.forEach(route => {

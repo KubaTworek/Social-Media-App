@@ -1,5 +1,9 @@
 export class Http {
     static instance = null;
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    };
 
     constructor() {
         if (!Http.instance) {
@@ -12,11 +16,6 @@ export class Http {
     static getInstance() {
         return Http.instance || new Http();
     }
-
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    };
 
     doGet = (path) =>
         fetch(`${path}`, {
