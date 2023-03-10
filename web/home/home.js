@@ -1,5 +1,4 @@
-import {ArticlePost} from "../article/article-post.js";
-import {ArticleForm} from '../article/article-form.js';
+import {ArticleCard} from "./article-card.js";
 import {Http} from '../http/http.js';
 import {config} from "../config.js";
 
@@ -13,7 +12,6 @@ export class Home extends HTMLElement {
     connectedCallback() {
         this.shadowRoot.innerHTML = this.render();
 
-        this.background = this.shadowRoot.getElementById('background');
         this.dataList = this.shadowRoot.getElementById('data-list');
         this.input = this.shadowRoot.getElementById('search-input');
         this.getData()
@@ -22,7 +20,7 @@ export class Home extends HTMLElement {
             .addEventListener('keyup', (event) => {
                 this.getData(event);
             });
-        this.shadowRoot.getElementById('add-button')
+        this.shadowRoot.getElementById('send-button')
             .addEventListener('click', this.postData.bind(this))
     }
 
@@ -41,11 +39,23 @@ export class Home extends HTMLElement {
         }
     }
 
-    postData() {
-        const articleForm = new ArticleForm();
-        this.background.appendChild(articleForm);
-        articleForm.open();
-    }
+    postData = (event) => {
+        event.preventDefault();
+        const content = this.shadowRoot.getElementById("post-content");
+        const data = {
+            title: "title",
+            text: content.value
+        }
+        sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5WCIsImF1dGhvcml0aWVzIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3ODQ0MjQzMywiZXhwIjoxNjc4NDUzMjAzfQ.5wrFWn7_nG5XOfAzgf-Qh1V1OQD2HJKf5utI2hCNzlU")
+        const headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": sessionStorage.getItem("jwt")
+        };
+        Http.getInstance().doPost(config.articlesUrl, JSON.stringify(data), headers)
+            .then(() => location.reload())
+            .catch((err) => console.error(err));
+    };
 
     async getArticles() {
         Http.getInstance()
@@ -57,7 +67,7 @@ export class Home extends HTMLElement {
     renderArticles(authors) {
         authors.forEach(article => {
             const li = document.createElement('li');
-            const el = new ArticlePost();
+            const el = new ArticleCard();
             el.article = article;
             li.appendChild(el);
             this.dataList.appendChild(li);
@@ -67,96 +77,93 @@ export class Home extends HTMLElement {
     render() {
         return `
             <style>
-                #main-board {
-                    max-width: 30rem;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    flex-direction: column;
-                    margin: auto;
-                }
-                
-                #search-input {
-                    width: 100%;
-                    height: 2rem;
-                    background-color: #444;
-                    font-size:1rem;
-                    color: #eee;
-                    border: 1px solid #444;
-                    border-radius: 8px;
-                    
-                    outline: none;
-                    padding: 0.5rem;
-                    margin: 0.4rem 0;
-                    box-sizing: border-box;
-                }
-                
-                #post-input {
-                    width: 100%;
-                    position: relative;
-                    justify-content: right;
-                    align-items: center;
-                    flex-direction: column;
-                    border: 1px solid #444;
-                    box-sizing: border-box;
-                    border-bottom: none;
-                }
-                
-                #post-content {
-                    width: 100%;
-                    height: 5rem;
-                    background-color: #111;
-                    color: #eee;
-                    font-size: 1.2rem;
-                    padding: 0.5rem;
-                    
-                    box-sizing: border-box;
-                    resize: none;
-                    outline: none;
-                    border: none;
-                }
-                
-                #add-button {
-                    position: absolute;
-                    right: 2%;
-                    top: 50%;
-                    
-                    background-color: #ff0000;;
-                    border: none;
-                    border-radius: 9999px;
-                    color: #eee;
-                    cursor: pointer;
-                    font-size: 0.9rem;
-                    font-weight: 700;
-                    padding: 6px 14px;
-                    text-align: center;
-                    text-decoration: none;
-                    transition: background-color 0.3s ease-out;
-                }
-                
-                #add-button:hover {
-                    background-color: #cc0000;
-                }
+              #main-board {
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                justify-content: center;
+                margin: auto;
+                max-width: 30rem;
+              }
               
-                #data-list {
-                    width: 100%;
-                    list-style-type: none;
-                    padding: 0;
-                    margin: 0;
-                    box-sizing: border-box
-                }
+              #search-input {
+                background-color: #444;
+                border: 1px solid #444;
+                border-radius: 8px;
+                box-sizing: border-box;
+                color: #eee;
+                font-size: 1rem;
+                height: 2rem;
+                margin: 0.4rem 0;
+                outline: none;
+                padding: 0.5rem;
+                width: 100%;
+              }
+              
+              #post-input {
+                align-items: center;
+                border: 1px solid #444;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: right;
+                position: relative;
+                width: 100%;
+              }
+              
+              #post-content {
+                background-color: #111;
+                border: none;
+                box-sizing: border-box;
+                color: #eee;
+                font-size: 1.2rem;
+                height: 5rem;
+                outline: none;
+                padding: 0.5rem;
+                resize: none;
+                width: 100%;
+              }
+              
+              #send-button {
+                background-color: #ff0000;;
+                border: none;
+                border-radius: 9999px;
+                color: #eee;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 700;
+                padding: 6px 14px;
+                position: absolute;
+                right: 2%;
+                text-align: center;
+                text-decoration: none;
+                top: 50%;
+                transition: background-color 0.3s ease-out;
+              }
+              
+              #add-button:hover {
+                background-color: #cc0000;
+              }
+              
+              #data-list {
+                border-left: 1px solid #444;
+                border-right: 1px solid #444;
+                box-sizing: border-box;
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+              }
             </style>
             
             <div id="main-board">
                     <input id="search-input" type="text" placeholder="Search">
                     <div id="post-input">
                         <textarea id="post-content" placeholder="What's happening?"></textarea>
-                        <button id="add-button">SEND</button>
+                        <button id="send-button">SEND</button>
                     </div>
-                    <ul id="data-list">
-
-                    </ul>
+                    <ul id="data-list"></ul>
             </div>
         `;
     }

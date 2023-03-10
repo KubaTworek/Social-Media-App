@@ -2,7 +2,7 @@ import {DeletePopup} from "../utils/delete-popup.js";
 import { config } from "../config.js";
 
 
-export class ArticlePost extends HTMLElement {
+export class ArticleCard extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: 'open'})
@@ -11,34 +11,34 @@ export class ArticlePost extends HTMLElement {
     set article(article) {
         this.shadowRoot.innerHTML = `
             <style>
-                .article-card {
-                    display: block;
-                    background-color: #111;
-                    color: #eee;
-                    border: 1px solid #444;
-                    padding: 0 0.8rem;
-                    box-sizing: border-box;
-
-                }
-                
-                .name {
-                    text-align: left;
-                    font-weight: 700;
-                }
-                
-                .username {
-                    text-align: left;
-                    color: #666;
-                    font-weight: 500;
-                }
-                
-                .content {
-                    text-align: justify;
-                }
-                
-                .id {
-                    display: none;
-                }             
+              .article-card {
+                background-color: #111;
+                border-bottom: 1px solid #444;
+                border-top: none;
+                box-sizing: border-box;
+                color: #eee;
+                display: block;
+                padding: 0 0.8rem;
+              }
+              
+              .name {
+                font-weight: 700;
+                text-align: left;
+              }
+              
+              .username {
+                color: #666;
+                font-weight: 500;
+                text-align: left;
+              }
+              
+              .content {
+                text-align: justify;
+              }
+              
+              .id {
+                display: none;
+              }             
             </style>
 
             <div class="article-card">
@@ -49,7 +49,7 @@ export class ArticlePost extends HTMLElement {
             </div>
         `
         this.articleCard = this.shadowRoot.querySelector('.article-card')
-        this.idArticle = this.shadowRoot.getElementById('idArticle');
+        this.idArticle = this.shadowRoot.querySelector('.id');
         this.shadowRoot.getElementById('delete-button')
             .addEventListener('click', this.delete.bind(this));
     }
@@ -63,4 +63,4 @@ export class ArticlePost extends HTMLElement {
     }
 }
 
-customElements.define('article-post', ArticlePost)
+customElements.define('article-card', ArticleCard)

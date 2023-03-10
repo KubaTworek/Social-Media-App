@@ -24,16 +24,16 @@ export class Http {
         }).then((r) => r.json())
             .catch((err) => console.log(err));
 
-    doPost = (path, body) =>
+    doPost = (path, body, headers) =>
         fetch(`${path}`, {
-            headers: this.headers,
+            headers: headers,
             method: "POST",
             body,
         }).catch((err) => console.log(err));
 
-    doDelete = (path) =>
+    doDelete = (path, headers) =>
         fetch(`${path}`, {
-            headers: this.headers,
+            headers: headers,
             method: "DELETE",
         }).catch((err) => console.log(err));
 }
