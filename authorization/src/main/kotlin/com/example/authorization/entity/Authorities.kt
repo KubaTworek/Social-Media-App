@@ -11,7 +11,7 @@ data class Authorities(
     val id: Int,
 
     @get: NotNull
-    val authority: String,
+    var authority: String,
 
     @OneToMany(mappedBy = "authorities", cascade = [CascadeType.ALL], orphanRemoval = true)
     val users: MutableList<User>

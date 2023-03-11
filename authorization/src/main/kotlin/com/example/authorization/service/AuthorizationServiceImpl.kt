@@ -1,6 +1,6 @@
 package com.example.authorization.service
 
-import com.example.authorization.clients.AuthorClient
+import com.example.authorization.client.AuthorClient
 import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import com.example.authorization.constants.SecurityConstants.JWT_KEY
 import com.example.authorization.controller.*
@@ -14,9 +14,6 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -27,9 +24,8 @@ class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authoritiesRepository: AuthoritiesRepository,
     @Qualifier("AuthorClient") private val authorClient: AuthorClient,
-    private val passwordEncoder: PasswordEncoder,
 ) : AuthorizationService {
-    override fun registerUser(registerRequest: RegisterRequest): UserResponse {
+    override fun registerUser(registerRequest: RegisterRequest) {
         val username = registerRequest.username
         val password = registerRequest.password
         val firstName = registerRequest.firstName
@@ -39,18 +35,13 @@ class AuthorizationServiceImpl(
         validateUserWithThatUsernameDoesNotExist(username)
         val authority = getAuthority(role)
         val newUser = buildUser(username, password, authority)
-        val createdUser = userRepository.save(newUser)
+        userRepository.save(newUser)
         val authorRequest = AuthorRequest(
             firstName,
             lastName,
             username
         )
         authorClient.createAuthor(authorRequest)
-
-        return UserResponse(
-            createdUser.username,
-            createdUser.authorities.authority
-        )
     }
 
     @Transactional
@@ -61,18 +52,20 @@ class AuthorizationServiceImpl(
         authorClient.deleteAuthorByUsername(username)
     }
 
-    override fun loginUser(loginRequest: LoginRequest): String {
+    override fun loginUser(loginRequest: LoginRequest): LoginResponse {
         val username = loginRequest.username
         val password = loginRequest.password
         val user = getUserByUsername(username)
         validPasswords(password, user.password)
 
+        val authority = Authorities()
+        authority.authority = user.authorities.authority
         val authorities = listOf(
-            SimpleGrantedAuthority(user.authorities.authority)
+            authority
         )
         val key = createSecretKey()
 
-        return buildJwt(username, authorities, key)
+        return LoginResponse(buildJwt(username, authorities, key))
     }
 
     override fun getUserDetails(jwt: String): UserResponse {
@@ -85,11 +78,11 @@ class AuthorizationServiceImpl(
     private fun buildUser(username: String, password: String, authority: Authorities) =
         User(
             username,
-            passwordEncoder.encode(password),
+            password,
             authority
         )
 
-    private fun buildJwt(username: String, authorities: List<GrantedAuthority>, key: SecretKey) =
+    private fun buildJwt(username: String, authorities: List<Authorities>, key: SecretKey) =
         Jwts.builder()
             .setIssuer("Social Media")
             .setSubject("JWT Token")
@@ -103,7 +96,7 @@ class AuthorizationServiceImpl(
     private fun createSecretKey() = Keys.hmacShaKeyFor(JWT_KEY.toByteArray(StandardCharsets.UTF_8))
 
     private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
-        if (!isValidPasswords(passwordProvided, passwordRegistered)) {
+        if (passwordProvided != passwordRegistered) {
             throw WrongCredentialsException("Invalid password!")
         }
     }
@@ -113,9 +106,6 @@ class AuthorizationServiceImpl(
             throw UsernameAlreadyExistsException("User with this username already exists!")
         }
     }
-
-    private fun isValidPasswords(passwordProvided: String, passwordRegistered: String) =
-        passwordEncoder.matches(passwordProvided, passwordRegistered)
 
     private fun getUserByUsername(username: String) =
         userRepository.findUserByUsername(username)
@@ -137,6 +127,6 @@ class AuthorizationServiceImpl(
             .body
     }
 
-    private fun populateAuthorities(collection: Collection<GrantedAuthority>) =
+    private fun populateAuthorities(collection: Collection<Authorities>) =
         collection.joinToString(separator = ",") { it.authority }
 }

@@ -1,4 +1,4 @@
-package com.example.authorization.clients
+package com.example.authorization.client
 
 import com.example.authorization.controller.AuthorRequest
 import org.springframework.beans.factory.annotation.Qualifier
