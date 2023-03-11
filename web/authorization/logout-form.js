@@ -10,7 +10,7 @@ export class LogoutForm extends ModalForm {
     }
 
     logout() {
-        sessionStorage.removeItem("jwt");
+        // logika dla przycisku logout
     }
 
     render() {
@@ -96,7 +96,7 @@ export class LogoutForm extends ModalForm {
               <form>
                 <h2>Na pewno chcesz się wylogowac?</h2>
                 <button id="cancel-button">No</button>
-                <button id="logout-button">Yes</button>
+                <button id="login-button">Yes</button>
               </form>
             </div>
     `;

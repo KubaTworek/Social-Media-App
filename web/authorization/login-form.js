@@ -1,6 +1,4 @@
 import {ModalForm} from "../utils/modal-form.js";
-import {Http} from "../http/http.js";
-import {config} from "../config.js";
 
 export class LoginForm extends ModalForm {
 
@@ -11,27 +9,8 @@ export class LoginForm extends ModalForm {
             .addEventListener("click", this.login.bind(this));
     }
 
-    async login(event) {
-        event.preventDefault();
-
-        const requiredFields = ["username", "password"];
-        const data = this.getData(requiredFields);
-
-        Http.getInstance().doLogin(config.authUrl + "login", JSON.stringify(data))
-            .then(response => {
-                sessionStorage.setItem("jwt", response.jwt);
-            })
-    }
-
-    getData(requiredFields) {
-        const formData = {};
-        for (const fieldName of requiredFields) {
-            const inputElement = this.shadowRoot.getElementById(fieldName);
-            if (inputElement) {
-                formData[fieldName] = inputElement.value;
-            }
-        }
-        return formData;
+    login() {
+        // logika dla przycisku login
     }
 
     render() {
@@ -114,7 +93,7 @@ export class LoginForm extends ModalForm {
             
             <div id="backdrop"></div>
             <div id="background">
-                <form id="login-form">
+                <form>
                     <h2>Logowanie</h2>
                     <label for="username">Nazwa użytkownika:</label>
                     <input type="text" id="username" name="username" placeholder="Podaj nazwę użytkownika">

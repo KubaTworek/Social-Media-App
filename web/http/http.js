@@ -35,19 +35,4 @@ export class Http {
             headers: headers,
             method: "DELETE",
         }).catch((err) => console.log(err));
-
-    doLogin = (path, body) =>
-        fetch(`${path}`, {
-            method: "POST",
-            headers: this.headers,
-            body: body,
-        }).then((r) => r.json())
-            .catch((err) => console.log(err));
-
-    doRegister = (path, body) =>
-        fetch(`${path}`, {
-            method: "POST",
-            headers: this.headers,
-            body: body,
-        }).catch((err) => alert(err));
 }

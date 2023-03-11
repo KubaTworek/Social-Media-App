@@ -1,6 +1,4 @@
 import {ModalForm} from "../utils/modal-form.js";
-import {Http} from "../http/http.js";
-import {config} from "../config.js";
 
 export class RegistrationForm extends ModalForm {
     connectedCallback() {
@@ -10,24 +8,7 @@ export class RegistrationForm extends ModalForm {
             .addEventListener("click", this.register.bind(this));
     }
 
-    async register(event) {
-        event.preventDefault();
-
-        const requiredFields = ["username", "password", "firstName", "lastName", "role"];
-        const data = this.getData(requiredFields);
-
-        await Http.getInstance().doRegister(config.authUrl + "register", JSON.stringify(data))
-    }
-
-    getData(requiredFields) {
-        const formData = {};
-        for (const fieldName of requiredFields) {
-            const inputElement = this.shadowRoot.getElementById(fieldName);
-            if (inputElement) {
-                formData[fieldName] = inputElement.value;
-            }
-        }
-        return formData;
+    register() {
     }
 
     render() {
@@ -106,15 +87,11 @@ export class RegistrationForm extends ModalForm {
               button:hover {
                 background-color: #45a049;
               }
-              
-              #role {
-              display: none;
-              }
             </style>
 
         <div id="backdrop"></div>
         <div id="background">
-            <form id="register-form">
+            <form>
                 <h2>Rejestracja</h2>
                 <label for="username">Nazwa użytkownika:</label>
                 <input type="text" id="username" name="username" placeholder="Podaj nazwę użytkownika">
@@ -130,8 +107,6 @@ export class RegistrationForm extends ModalForm {
                             
                 <label for="lastName">Nazwisko:</label>
                 <input type="text" id="lastName" name="lastName" placeholder="Podaj nazwisko">
-                
-                <input type="text" id="role" name="role" value="ROLE_USER">
         
                 <button id="cancel-button">Cancel</button>
                 <button id="register-button">Ok</button>
