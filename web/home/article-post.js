@@ -20,7 +20,6 @@ export class ArticlePost extends HTMLElement {
             title: "title",
             text: content.value
         }
-        sessionStorage.setItem("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5WCIsImF1dGhvcml0aWVzIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3ODQ0MjQzMywiZXhwIjoxNjc4NDUzMjAzfQ.5wrFWn7_nG5XOfAzgf-Qh1V1OQD2HJKf5utI2hCNzlU")
         const headers = {
             "Accept": "application/json",
             "Content-Type": "application/json",
