@@ -1,4 +1,4 @@
-import {ModalForm} from "./modal-form.js";
+import {ModalForm} from "../utils/modal-form.js";
 
 export class LoginForm extends ModalForm {
 

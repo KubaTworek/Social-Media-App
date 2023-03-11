@@ -1,6 +1,6 @@
-import {LoginForm} from "./login-form.js";
-import {LogoutForm} from "./logout-form.js";
-import {RegistrationForm} from "./register-form.js";
+import {LoginForm} from "../authorization/login-form.js";
+import {LogoutForm} from "../authorization/logout-form.js";
+import {RegistrationForm} from "../authorization/register-form.js";
 
 export class ModalFactory {
     static create(type) {

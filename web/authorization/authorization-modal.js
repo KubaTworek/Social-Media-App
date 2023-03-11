@@ -1,4 +1,4 @@
-import {ModalFactory} from "./modal-factory.js";
+import {ModalFactory} from "../utils/modal-factory.js";
 
 export class Authorization extends HTMLElement {
     constructor() {

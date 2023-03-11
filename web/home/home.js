@@ -2,7 +2,7 @@ import {ArticleCard} from "./article-card.js";
 import {Http} from '../http/http.js';
 import {config} from "../config.js";
 import {ArticlePost} from "./article-post.js";
-import {Authorization} from "../auhtorization/authorization-modal.js";
+import {Authorization} from "../authorization/authorization-modal.js";
 
 export class Home extends HTMLElement {
     constructor() {
@@ -16,52 +16,47 @@ export class Home extends HTMLElement {
 
         this.dataList = this.shadowRoot.getElementById('data-list');
         this.input = this.shadowRoot.getElementById('search-input');
-        this.getData()
+        this.authorizationBoard = this.shadowRoot.getElementById('authorization-board');
+        this.authorizationBoard.appendChild(new Authorization());
+        this.inputBar = this.shadowRoot.getElementById('input-bar');
+        this.inputBar.appendChild(new ArticlePost());
 
         this.shadowRoot.getElementById('search-input')
             .addEventListener('keyup', (event) => {
                 this.getData(event);
             });
-
-        this.authorizationBoard = this.shadowRoot.getElementById('authorization-board');
-        const authorization = new Authorization()
-        this.authorizationBoard.appendChild(authorization)
-
-        this.inputBar = this.shadowRoot.getElementById('input-bar');
-        const articlePost = new ArticlePost()
-        this.inputBar.appendChild(articlePost)
+        this.getData()
     }
 
-    getData(event) {
+    async getData(event) {
         const clearDataListAndFetch = () => {
             this.dataList.innerHTML = "";
-            this.getArticles().catch(err => console.log(err));
+            return this.getArticles().catch(err => console.log(err));
         };
 
         if (event && event.key === "Enter") {
             event.preventDefault();
-            clearDataListAndFetch();
+            await clearDataListAndFetch();
             this.input.value = "";
         } else if (this.input.value === "") {
-            clearDataListAndFetch();
+            await clearDataListAndFetch();
         }
     }
 
     async getArticles() {
-        Http.getInstance()
-            .doGet(config.articlesUrl + this.input.value)
-            .then(articles => this.renderArticles(articles))
-            .catch(err => console.log(err));
+        const articles = await Http.getInstance().doGet(config.articlesUrl + this.input.value);
+        this.renderArticles(articles);
+        return articles;
     }
 
     renderArticles(authors) {
-        authors.forEach(article => {
+        for (const article of authors) {
             const li = document.createElement('li');
             const el = new ArticleCard();
-            el.article = article;
+            el.setArticle = article;
             li.appendChild(el);
             this.dataList.appendChild(li);
-        });
+        }
     }
 
     render() {
@@ -178,4 +173,4 @@ export class Home extends HTMLElement {
     }
 }
 
-customElements.define('home-modal', Home)
+customElements.define('app-home', Home)

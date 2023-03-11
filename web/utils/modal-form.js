@@ -6,7 +6,8 @@ export class ModalForm extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.addEventListener("click", this._handleBackdropClick);
+        this.shadowRoot
+            .addEventListener("click", this._handleBackdropClick);
         this.shadowRoot
             .getElementById("cancel-button")
             .addEventListener("click", this.cancel.bind(this));

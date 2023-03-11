@@ -32,12 +32,12 @@ export class RouterHandler {
         }).resolve();
 
         const routes = [
-            {path: '/home', resolve: Home}
+            { path: '/home', component: Home }
         ];
 
         routes.forEach(route => {
             this.router.on(route.path, params => {
-                RouterHandler.inject(new route.resolve(params));
+                RouterHandler.inject(new route.component(params));
             }).resolve();
         });
     }
