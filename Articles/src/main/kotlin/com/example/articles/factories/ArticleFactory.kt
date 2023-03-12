@@ -40,11 +40,12 @@ class ArticleFactory(
         val author = deserializeAuthor(getAuthorById(theArticle.authorId))
 
         return ArticleResponse(
-            0,
+            theArticle.id,
             theArticle.content.title,
             theArticle.content.text,
             author.firstName,
-            author.lastName
+            author.lastName,
+            author.username
         )
     }
 

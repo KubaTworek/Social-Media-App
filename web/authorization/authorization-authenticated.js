@@ -62,7 +62,7 @@ export class AuthorizationAuthenticated extends Authorization {
             </style>
             
             <section> 
-                <p>Hello, ${user.username}</p>
+                <p>Hello, ${user.firstName} ${user.lastName}</p>
                 <button id="logout-button">LOGOUT</button>   
             </section>
     `;

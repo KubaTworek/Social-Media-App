@@ -15,4 +15,7 @@ interface AuthorClient {
 
     @DeleteMapping("/username/{username}")
     fun deleteAuthorByUsername(@PathVariable username: String): ResponseEntity<Void>
+
+    @GetMapping("/username/{username}")
+    fun getAuthorByUsername(@PathVariable username: String): ResponseEntity<String>
 }

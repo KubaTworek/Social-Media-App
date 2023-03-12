@@ -5,5 +5,6 @@ data class ArticleResponse(
     val title: String,
     val text: String,
     val author_firstName: String,
-    val author_lastName: String
+    val author_lastName: String,
+    val author_username: String
 )

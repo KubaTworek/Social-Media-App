@@ -4,16 +4,17 @@ import com.example.authorization.client.AuthorClient
 import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import com.example.authorization.constants.SecurityConstants.JWT_KEY
 import com.example.authorization.controller.*
-import com.example.authorization.entity.Authorities
-import com.example.authorization.entity.User
+import com.example.authorization.entity.*
 import com.example.authorization.exception.*
 import com.example.authorization.repository.AuthoritiesRepository
 import com.example.authorization.repository.UserRepository
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -24,6 +25,7 @@ class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authoritiesRepository: AuthoritiesRepository,
     @Qualifier("AuthorClient") private val authorClient: AuthorClient,
+    private val objectMapper: ObjectMapper
 ) : AuthorizationService {
     override fun registerUser(registerRequest: RegisterRequest) {
         val username = registerRequest.username
@@ -72,7 +74,9 @@ class AuthorizationServiceImpl(
         val claims = parseJwtClaims(jwt)
         val username = claims["username"].toString()
         val authorities = claims["authorities"].toString()
-        return UserResponse(username, authorities)
+        val author = deserializeAuthor(getAuthorByUsername(username))
+
+        return UserResponse(author.firstName, author.lastName, username, authorities)
     }
 
     private fun buildUser(username: String, password: String, authority: Authorities) =
@@ -129,4 +133,10 @@ class AuthorizationServiceImpl(
 
     private fun populateAuthorities(collection: Collection<Authorities>) =
         collection.joinToString(separator = ",") { it.authority }
+
+    private fun getAuthorByUsername(username: String): ResponseEntity<String> =
+        authorClient.getAuthorByUsername(username)
+
+    private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO =
+        objectMapper.readValue(response.body, AuthorDTO::class.java)
 }

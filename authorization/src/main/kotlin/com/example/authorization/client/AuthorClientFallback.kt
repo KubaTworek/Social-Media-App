@@ -15,4 +15,8 @@ class AuthorClientFallback : AuthorClient {
 
     override fun deleteAuthorByUsername(username: String): ResponseEntity<Void> =
         ResponseEntity(HttpStatus.BAD_REQUEST)
+
+    override fun getAuthorByUsername(username: String): ResponseEntity<String> =
+        ResponseEntity(HttpStatus.NOT_FOUND)
+
 }
