@@ -1,16 +1,22 @@
-import {ModalForm} from "../utils/modal-form.js";
+import {Http} from "../../config/http.js";
+import {config} from "../../config/config.js";
+import {AuthorizationForm} from "./authorization-form.js";
 
-export class LogoutForm extends ModalForm {
+export class LoginForm extends AuthorizationForm {
 
     connectedCallback() {
         super.connectedCallback();
-        this.shadowRoot
-            .getElementById("logout-button")
-            .addEventListener("click", this.logout.bind(this));
     }
 
-    logout() {
-        sessionStorage.removeItem("jwt");
+    authorize() {
+        const requiredFields = ["username", "password"];
+        const data = this.getData(requiredFields);
+
+        Http.getInstance().doLogin(config.authorizationUrl + "login", JSON.stringify(data))
+            .then(response => {
+                sessionStorage.setItem("jwt", response.jwt);
+                window.location.reload();
+            })
     }
 
     render() {
@@ -21,11 +27,11 @@ export class LogoutForm extends ModalForm {
                 opacity: 1;
                 pointer-events: all;
               }
-        
+            
               :host([opened]) #background {
                 top: 15vh;
               }
-        
+            
               #backdrop {
                 position: fixed;
                 top: 0;
@@ -37,7 +43,7 @@ export class LogoutForm extends ModalForm {
                 opacity: 0;
                 pointer-events: none;
               }
-        
+            
               #background {
                 position: fixed;
                 top: 10vh;
@@ -55,7 +61,7 @@ export class LogoutForm extends ModalForm {
                 pointer-events: none;
                 transition: all 0.3s ease-out;
               }
-        
+            
               form {
                 max-width: 400px;
                 margin: 50px auto;
@@ -64,7 +70,7 @@ export class LogoutForm extends ModalForm {
                 border-radius: 5px;
                 box-shadow: 0 0 10px #ccc;
               }
-        
+            
               input[type=text],
               input[type=password] {
                 width: 100%;
@@ -74,7 +80,7 @@ export class LogoutForm extends ModalForm {
                 border-radius: 4px;
                 box-sizing: border-box;
               }
-        
+            
               button {
                 width: 100%;
                 background-color: #4CAF50;
@@ -85,22 +91,28 @@ export class LogoutForm extends ModalForm {
                 border-radius: 4px;
                 cursor: pointer;
               }
-        
+            
               button:hover {
                 background-color: #45a049;
               }
             </style>
-        
+            
             <div id="backdrop"></div>
             <div id="background">
-              <form>
-                <h2>Na pewno chcesz się wylogowac?</h2>
-                <button id="cancel-button">No</button>
-                <button id="logout-button">Yes</button>
-              </form>
+                <form id="login-form">
+                    <h2>Logowanie</h2>
+                    <label for="username">Nazwa użytkownika:</label>
+                    <input type="text" id="username" name="username" placeholder="Podaj nazwę użytkownika">
+        
+                    <label for="password">Hasło:</label>
+                    <input type="password" id="password" name="password" placeholder="Podaj hasło">
+        
+                    <button id="cancel-button">Anuluj</button>
+                    <button id="submit-button">Zaloguj</button>
+                </form>
             </div>
     `;
     }
 }
 
-customElements.define('logout-form', LogoutForm);
+customElements.define('login-form', LoginForm);

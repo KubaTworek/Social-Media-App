@@ -1,5 +1,5 @@
-import {DeleteForm} from "../authorization/delete-form.js";
-import {config} from "../config.js";
+import {DeleteForm} from "../form/delete-form.js";
+import {config} from "../config/config.js";
 
 export class ArticleCard extends HTMLElement {
     constructor() {
@@ -14,14 +14,14 @@ export class ArticleCard extends HTMLElement {
 
     delete() {
         const deletePopup = new DeleteForm(
-            "Would you like to delete Article",
+            "Would you like to delete Article?",
             config.articlesUrl + this.article.id);
         this.articleCard.appendChild(deletePopup);
         deletePopup.open();
     }
 
     render() {
-        const { author_firstName, author_lastName, author_username, text, id } = this.article || {};
+        const {author_firstName, author_lastName, author_username, text, id} = this.article || {};
 
         this.shadowRoot.innerHTML = `
             <style>

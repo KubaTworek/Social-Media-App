@@ -1,33 +1,17 @@
-import {ModalForm} from "../utils/modal-form.js";
-import {Http} from "../http/http.js";
-import {config} from "../config.js";
+import {Http} from "../../config/http.js";
+import {config} from "../../config/config.js";
+import {AuthorizationForm} from "./authorization-form.js";
 
-export class RegistrationForm extends ModalForm {
+export class RegistrationForm extends AuthorizationForm {
     connectedCallback() {
         super.connectedCallback();
-        this.shadowRoot
-            .getElementById("register-button")
-            .addEventListener("click", this.register.bind(this));
     }
 
-    async register(event) {
-        event.preventDefault();
-
+    authorize() {
         const requiredFields = ["username", "password", "firstName", "lastName", "role"];
         const data = this.getData(requiredFields);
 
-        await Http.getInstance().doRegister(config.authUrl + "register", JSON.stringify(data))
-    }
-
-    getData(requiredFields) {
-        const formData = {};
-        for (const fieldName of requiredFields) {
-            const inputElement = this.shadowRoot.getElementById(fieldName);
-            if (inputElement) {
-                formData[fieldName] = inputElement.value;
-            }
-        }
-        return formData;
+        Http.getInstance().doRegister(config.authorizationUrl + "register", JSON.stringify(data))
     }
 
     render() {
@@ -134,7 +118,7 @@ export class RegistrationForm extends ModalForm {
                 <input type="text" id="role" name="role" value="ROLE_USER">
         
                 <button id="cancel-button">Cancel</button>
-                <button id="register-button">Ok</button>
+                <button id="submit-button">Ok</button>
             </form>
         </div>
     `;

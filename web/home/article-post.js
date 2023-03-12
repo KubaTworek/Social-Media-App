@@ -1,5 +1,5 @@
-import {Http} from "../http/http.js";
-import {config} from "../config.js";
+import {Http} from "../config/http.js";
+import {config} from "../config/config.js";
 
 export class ArticlePost extends HTMLElement {
     constructor() {
@@ -9,7 +9,8 @@ export class ArticlePost extends HTMLElement {
     }
 
     connectedCallback() {
-        this.shadowRoot.getElementById('send-button')
+        this.shadowRoot
+            .getElementById('send-button')
             .addEventListener('click', this.postData.bind(this))
     }
 
@@ -27,7 +28,6 @@ export class ArticlePost extends HTMLElement {
         };
         Http.getInstance().doPost(config.articlesUrl, JSON.stringify(data), headers)
             .then(() => location.reload())
-            .catch((err) => console.error(err));
     };
 
     render() {

@@ -1,5 +1,5 @@
-import {Http} from "../http/http.js";
-import {ModalForm} from "../utils/modal-form.js";
+import {Http} from "../config/http.js";
+import {ModalForm} from "./modal/modal-form.js";
 
 export class DeleteForm extends ModalForm {
     constructor(text, url) {
@@ -10,25 +10,21 @@ export class DeleteForm extends ModalForm {
 
     connectedCallback() {
         super.connectedCallback();
-        this.shadowRoot.getElementById("confirm-button")
+        this.shadowRoot
+            .getElementById("confirm-button")
             .addEventListener("click", this.delete.bind(this));
     }
 
     delete() {
-        this.hide();
-        sessionStorage.setItem(
-            "jwt",
-            "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5WCIsImF1dGhvcml0aWVzIjoiUk9MRV9BRE1JTiIsImlhdCI6MTY3ODQ0MjQzMywiZXhwIjoxNjc4NDUzMjAzfQ.5wrFWn7_nG5XOfAzgf-Qh1V1OQD2HJKf5utI2hCNzlU"
-        );
         const headers = {
-            Accept: "application/json",
+            "Accept": "application/json",
             "Content-Type": "application/json",
-            Authorization: sessionStorage.getItem("jwt"),
+            "Authorization": sessionStorage.getItem("jwt")
         };
         Http.getInstance()
             .doDelete(this.url, headers)
             .then(() => location.reload())
-            .catch((err) => console.error(err));
+        this.hide();
     }
 
     render(text) {

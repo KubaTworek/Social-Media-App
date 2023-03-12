@@ -1,8 +1,8 @@
 import {ArticleCard} from "./article-card.js";
-import {Http} from '../http/http.js';
-import {config} from "../config.js";
+import {Http} from '../config/http.js';
+import {config} from "../config/config.js";
 import {ArticlePost} from "./article-post.js";
-import {Authorization} from "../authorization/authorization-modal.js";
+import {AuthorizationFactory} from "../authorization/authorization-factory.js";
 
 export class Home extends HTMLElement {
     constructor() {
@@ -17,7 +17,7 @@ export class Home extends HTMLElement {
         this.dataList = this.shadowRoot.getElementById('data-list');
         this.input = this.shadowRoot.getElementById('search-input');
         this.authorizationBoard = this.shadowRoot.getElementById('authorization-board');
-        this.authorizationBoard.appendChild(new Authorization());
+        this.authorizationBoard.appendChild(AuthorizationFactory.create())
         this.inputBar = this.shadowRoot.getElementById('input-bar');
         this.inputBar.appendChild(new ArticlePost());
 
@@ -140,12 +140,6 @@ export class Home extends HTMLElement {
                   order:1;
                   width: 15rem;
                   align-items: flex-end;
-                }
-                
-                authorization-modal {
-                  display: flex;
-                  align-items: flex-end;
-                  flex-direction: column;
                 }
                 
                 #search-input {

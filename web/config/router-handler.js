@@ -32,7 +32,7 @@ export class RouterHandler {
         }).resolve();
 
         const routes = [
-            { path: '/home', component: Home }
+            {path: '/home', component: Home}
         ];
 
         routes.forEach(route => {

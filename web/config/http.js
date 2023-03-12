@@ -50,4 +50,9 @@ export class Http {
             headers: this.headers,
             body: body,
         }).catch((err) => alert(err));
+
+    doUserInfo = (path, headers) =>
+        fetch(`${path}`, {
+            headers: headers
+        }).then((r) => r.json()).catch((err) => alert(err));
 }
