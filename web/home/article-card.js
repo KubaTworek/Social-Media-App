@@ -20,8 +20,32 @@ export class ArticleCard extends HTMLElement {
         deletePopup.open();
     }
 
+    getTimeElapsed(timestamp) {
+        const now = new Date();
+        const timeDiff = now.getTime() - timestamp.getTime();
+
+        if (timeDiff < 60000) { // mniej niż 1 minuta
+            const seconds = Math.floor(timeDiff / 1000);
+            return seconds + "s";
+        } else if (timeDiff < 3600000) { // mniej niż 1 godzina
+            const minutes = Math.floor(timeDiff / 60000);
+            return minutes + "m";
+        } else if (timeDiff < 86400000) { // mniej niż 1 dzień
+            const hours = Math.floor(timeDiff / 3600000);
+            return hours + "h";
+        } else if (timeDiff < 604800000) { // mniej niż 1 tydzień
+            const days = Math.floor(timeDiff / 86400000);
+            return days + "day";
+        } else {
+            const weeks = Math.floor(timeDiff / 604800000);
+            return weeks + "week";
+        }
+    }
+
     render() {
-        const {author_firstName, author_lastName, author_username, text, id} = this.article || {};
+        const {author_firstName, author_lastName, author_username, text, id, timestamp} = this.article || {};
+        const timestampJs = new Date(timestamp);
+        const newTimestamp = this.getTimeElapsed(timestampJs)
 
         this.shadowRoot.innerHTML = `
             <style>
@@ -56,7 +80,7 @@ export class ArticleCard extends HTMLElement {
             </style>
     
             <div class="article-card">
-                <p class="name">${author_firstName} ${author_lastName} <span class="username">@${author_username}</span></p>
+                <p class="name">${author_firstName} ${author_lastName} <span class="username">@${author_username}  \u2022  ${newTimestamp}</span></p>
                 <p class="content">${text}</p>
                 <p class="id">${id}</p>
                 <button id="delete-button">Delete</button>

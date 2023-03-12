@@ -6,7 +6,6 @@ import com.example.articles.controller.ArticleRequest
 import com.example.articles.controller.ArticleResponse
 import com.example.articles.exception.UnauthorizedException
 import com.example.articles.factories.ArticleFactory
-import com.example.articles.factories.ContentFactory
 import com.example.articles.model.dto.*
 import com.example.articles.repository.ArticleRepository
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -46,9 +45,7 @@ class ArticleServiceImpl(
 
     override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
-            .filter {
-                it.content.title.contains(theKeyword, ignoreCase = true)
-                        || it.content.text.contains(theKeyword, ignoreCase = true)
+            .filter {it.text.contains(theKeyword, ignoreCase = true)
             }
             .map { articleFactory.createResponse(it) }
 
@@ -83,5 +80,4 @@ class ArticleServiceImpl(
 
     private fun deserializeUserDetails(response: ResponseEntity<String>): UserDetailsDTO =
         objectMapper.readValue(response.body, UserDetailsDTO::class.java)
-
 }

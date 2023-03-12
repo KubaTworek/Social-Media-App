@@ -4,6 +4,6 @@ data class ArticleDTO(
     val id: Int,
     val date: String,
     val timestamp: String,
-    val authorId: Int,
-    val content: ArticleContentDTO
+    val text: String,
+    val authorId: Int
 )

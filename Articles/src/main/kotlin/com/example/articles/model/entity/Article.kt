@@ -3,6 +3,7 @@ package com.example.articles.model.entity
 import com.example.articles.model.dto.ArticleDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
+import java.sql.Timestamp
 
 
 @Entity
@@ -17,30 +18,29 @@ data class Article(
     val date: String,
 
     @Column(name = "Timestamp")
-    val timestamp: String,
+    val timestamp: Timestamp,
+
+    @Column(name = "Text")
+    val text: String,
 
     @Column(name = "Author_Id")
     val authorId: Int,
-
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "Content_Id")
-    val content: ArticleContent,
 
     ) {
     constructor() : this(
         0,
         "",
+        Timestamp(System.currentTimeMillis()),
         "",
-        0,
-        ArticleContent()
+        0
     )
 
     fun toDTO(): ArticleDTO = ArticleDTO(
         this.id,
         this.date,
-        this.timestamp,
+        this.timestamp.toString(),
+        this.text,
         this.authorId,
-        this.content.toDTO()
     )
 
     override fun equals(other: Any?): Boolean {
@@ -53,8 +53,7 @@ data class Article(
 
     override fun hashCode(): Int = hashCode()
 
-    @Override
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , date = $date , timestamp = $timestamp , authorId = $authorId , content = $content )"
+        return super.toString()
     }
 }

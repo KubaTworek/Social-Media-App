@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
+import java.sql.Timestamp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -19,20 +20,18 @@ import java.time.format.DateTimeFormatter
 class ArticleFactory(
     @Qualifier("AuthorClient") private val authorClient: AuthorClient,
     @Qualifier("AuthorizationClient") private val authorizationClient: AuthorizationClient,
-    private val contentFactory: ContentFactory,
     private val objectMapper: ObjectMapper
 ) {
     fun createArticle(request: ArticleRequest, jwt: String): Article {
-        val content = contentFactory.createContent(request.title, request.text)
         val userDetails = deserializeUserDetails(getUserDetailsFromToken(jwt))
         val author = deserializeAuthor(getAuthorByUsername(userDetails.username))
 
         return Article(
             0,
             getCurrentDate(),
-            System.currentTimeMillis().toString(),
-            author.id,
-            content
+            Timestamp(System.currentTimeMillis()),
+            request.text,
+            author.id
         )
     }
 
@@ -41,8 +40,8 @@ class ArticleFactory(
 
         return ArticleResponse(
             theArticle.id,
-            theArticle.content.title,
-            theArticle.content.text,
+            theArticle.text,
+            theArticle.timestamp,
             author.firstName,
             author.lastName,
             author.username

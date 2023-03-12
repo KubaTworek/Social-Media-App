@@ -25,14 +25,14 @@ class AuthorFactory(
 
     fun createResponse(theAuthor: Author): AuthorResponse {
         val articles = getArticlesByAuthor(theAuthor.id)
-        val articleTitles = articles.map { it.content.title }.toList()
+        val articleIds = articles.map { it.id }.toList()
 
         return AuthorResponse(
             theAuthor.id,
             theAuthor.firstName,
             theAuthor.lastName,
             theAuthor.username,
-            articleTitles
+            articleIds
         )
     }
 
