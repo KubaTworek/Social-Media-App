@@ -1,4 +1,4 @@
-package com.example.authors.controller
+package com.example.authors.controller.dto
 
 data class AuthorRequest(
     val firstName: String,

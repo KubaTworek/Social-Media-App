@@ -15,7 +15,7 @@
 	<description>Author-microservice</description>
 	<properties>
 		<java.version>17</java.version>
-		<kotlin.version>1.7.22</kotlin.version>
+		<kotlin.version>1.8.20-Beta</kotlin.version>
 	</properties>
 	<dependencies>
 		<dependency>

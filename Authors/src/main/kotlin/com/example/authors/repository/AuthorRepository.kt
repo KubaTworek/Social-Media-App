@@ -1,7 +1,6 @@
 package com.example.authors.repository
 
 import com.example.authors.model.entity.Author
-import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
@@ -9,7 +8,4 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AuthorRepository : JpaRepository<Author, Int> {
     fun findAuthorByUsername(username: String): Author?
-    fun findAllByFirstNameContainingOrLastNameContaining(keyword1: String, keyword2: String): List<Author>
-    @Transactional
-    fun deleteAuthorByUsername(username: String)
 }

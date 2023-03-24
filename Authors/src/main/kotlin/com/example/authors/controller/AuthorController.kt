@@ -1,21 +1,16 @@
 package com.example.authors.controller
 
+import com.example.authors.controller.dto.AuthorRequest
 import com.example.authors.service.AuthorService
-import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 
 
 @RequestMapping("/api")
 @RestController
-@RequiredArgsConstructor
 class AuthorController(private val authorService: AuthorService) {
 
-    @GetMapping("/")
-    fun getAllAuthors() =
-        authorService.findAllAuthors()
-
+    // INTERNAL
     @GetMapping("/id/{authorId}")
     fun getAuthorById(@PathVariable authorId: Int) =
         authorService.findById(authorId)
@@ -23,10 +18,6 @@ class AuthorController(private val authorService: AuthorService) {
     @GetMapping("/username/{username}")
     fun getAuthorByUsername(@PathVariable username: String) =
         authorService.findByUsername(username)
-
-    @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getAuthorsByKeyword(@PathVariable keyword: String) =
-        authorService.findAllByKeyword(keyword)
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,9 +28,4 @@ class AuthorController(private val authorService: AuthorService) {
     @ResponseStatus(HttpStatus.OK)
     fun deleteAuthor(@PathVariable authorId: Int) =
         authorService.deleteById(authorId)
-
-    @DeleteMapping("/username/{username}")
-    @ResponseStatus(HttpStatus.OK)
-    fun deleteAuthorByUsername(@PathVariable username: String) =
-        authorService.deleteByUsername(username)
 }

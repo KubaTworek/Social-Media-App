@@ -5,7 +5,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.bind.annotation.*
 
 @ControllerAdvice
-class ArticleExceptionHandler {
+class AuthorExceptionHandler {
 
     @ExceptionHandler(AuthorNotFoundException::class)
     fun handleException(exc: Exception): ResponseEntity<ErrorResponse> {

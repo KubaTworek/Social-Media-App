@@ -1,43 +1,37 @@
 package com.example.authors.service
 
 import com.example.authors.client.ArticleClient
-import com.example.authors.controller.AuthorRequest
-import com.example.authors.controller.AuthorResponse
-import com.example.authors.factories.AuthorFactory
+import com.example.authors.controller.dto.AuthorRequest
+import com.example.authors.exception.AuthorNotFoundException
 import com.example.authors.model.dto.AuthorDTO
+import com.example.authors.model.entity.Author
 import com.example.authors.repository.AuthorRepository
-import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 
 @Service
-@RequiredArgsConstructor
 class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
-    private val authorFactory: AuthorFactory,
     @Qualifier("ArticleClient") private val articleClient: ArticleClient
 ) : AuthorService {
-    override fun findAllAuthors(): List<AuthorResponse> =
-        authorRepository.findAll()
-            .map { authorFactory.createResponse(it) }
 
-    override fun findById(theId: Int): AuthorDTO =
-        authorRepository.findByIdOrNull(theId)?.toDTO()
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    override fun findById(theId: Int): AuthorDTO {
+        val author = authorRepository.findByIdOrNull(theId)
+            ?: throw AuthorNotFoundException("Author not found")
 
-    override fun findByUsername(username: String): AuthorDTO =
-        authorRepository.findAuthorByUsername(username)?.toDTO()
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        return mapAuthorToDTO(author)
+    }
 
-    override fun findAllByKeyword(theKeyword: String): List<AuthorResponse> =
-        authorRepository.findAllByFirstNameContainingOrLastNameContaining(theKeyword, theKeyword)
-            .map { authorFactory.createResponse(it) }
+    override fun findByUsername(username: String): AuthorDTO {
+        val author = authorRepository.findAuthorByUsername(username)
+            ?: throw AuthorNotFoundException("Author not found")
+
+        return mapAuthorToDTO(author)
+    }
 
     override fun save(theAuthor: AuthorRequest) {
-        val author = authorFactory.createAuthor(theAuthor)
+        val author = createAuthor(theAuthor)
 
         authorRepository.save(author)
     }
@@ -47,6 +41,19 @@ class AuthorServiceImpl(
         articleClient.deleteArticlesByAuthorId(theId)
     }
 
-    override fun deleteByUsername(username: String) =
-        authorRepository.deleteAuthorByUsername(username)
+    private fun createAuthor(authorRequest: AuthorRequest): Author =
+        Author(
+            id = 0,
+            firstName = authorRequest.firstName,
+            lastName = authorRequest.lastName,
+            username = authorRequest.username
+        )
+
+    private fun mapAuthorToDTO(author: Author): AuthorDTO =
+        AuthorDTO(
+            id = author.id,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            username = author.username
+        )
 }
