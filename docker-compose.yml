@@ -61,14 +61,6 @@ services:
       - authors
       - authorization
 
-  web:
-    image: web:latest
-    mem_limit: 700m
-    ports:
-      - "8881:8881"
-    networks:
-      - my-network
-
 networks:
   my-network:
     driver: bridge
