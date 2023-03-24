@@ -10,7 +10,4 @@ import org.springframework.stereotype.Service
 class AuthorClientFallback : AuthorClient {
     override fun getAuthorById(authorId: Int): ResponseEntity<String> =
         ResponseEntity(HttpStatus.NOT_FOUND)
-
-    override fun getAuthorByUsername(username: String): ResponseEntity<String> =
-        ResponseEntity(HttpStatus.NOT_FOUND)
 }

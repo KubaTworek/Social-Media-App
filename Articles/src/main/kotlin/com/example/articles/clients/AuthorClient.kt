@@ -12,7 +12,4 @@ import java.util.*
 interface AuthorClient {
     @GetMapping("/id/{authorId}")
     fun getAuthorById(@PathVariable authorId: Int): ResponseEntity<String>
-
-    @GetMapping("/username/{username}")
-    fun getAuthorByUsername(@PathVariable username: String): ResponseEntity<String>
 }

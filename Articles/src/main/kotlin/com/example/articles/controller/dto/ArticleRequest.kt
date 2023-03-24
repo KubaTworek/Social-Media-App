@@ -1,4 +1,4 @@
-package com.example.articles.controller
+package com.example.articles.controller.dto
 
 data class ArticleRequest(
     val title: String,

@@ -2,11 +2,12 @@ package com.example.articles.service
 
 import com.example.articles.clients.AuthorClient
 import com.example.articles.clients.AuthorizationClient
-import com.example.articles.controller.ArticleRequest
-import com.example.articles.controller.ArticleResponse
+import com.example.articles.controller.dto.ArticleRequest
+import com.example.articles.controller.dto.ArticleResponse
+import com.example.articles.exception.ArticleNotFoundException
 import com.example.articles.exception.UnauthorizedException
-import com.example.articles.factories.ArticleFactory
 import com.example.articles.model.dto.*
+import com.example.articles.model.entity.Article
 import com.example.articles.repository.ArticleRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import lombok.RequiredArgsConstructor
@@ -17,67 +18,87 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.sql.Timestamp
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
-@RequiredArgsConstructor
 class ArticleServiceImpl(
     private val articleRepository: ArticleRepository,
-    private val articleFactory: ArticleFactory,
-    @Qualifier("AuthorClient") private val authorClient: AuthorClient,
-    @Qualifier("AuthorizationClient") private val authorizationClient: AuthorizationClient,
-    private val objectMapper: ObjectMapper
+    private val authorService: AuthorApiService,
+    private val authorizationService: AuthorizationApiService
 ) : ArticleService {
+
     override fun findAllOrderByDateDesc(): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
-            .map { articleFactory.createResponse(it) }
-
-    override fun findById(theId: Int): ArticleResponse =
-        articleFactory.createResponse(
-            articleRepository.findByIdOrNull(theId)
-                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        )
-
-    override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> =
-        articleRepository.findAllByAuthorIdOrderByDate(authorId)
-            .stream()
-            .map { it.toDTO() }
-            .toList()
+            .map { createResponse(it) }
 
     override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
-            .filter {it.text.contains(theKeyword, ignoreCase = true)
+            .filter {
+                it.text.contains(theKeyword, ignoreCase = true)
             }
-            .map { articleFactory.createResponse(it) }
+            .map { createResponse(it) }
 
     override fun save(theArticle: ArticleRequest, jwt: String) {
-        val article = articleFactory.createArticle(theArticle, jwt)
+        val article = createArticle(theArticle, jwt)
         articleRepository.save(article)
     }
 
     override fun deleteById(theId: Int, jwt: String) {
-        val userDetails = deserializeUserDetails(getUserDetailsFromToken(jwt))
-        val author = deserializeAuthor(getAuthorByUsername(userDetails.username))
+        val userDetails = authorizationService.getUserDetails(jwt)
         val article = articleRepository.findByIdOrNull(theId)
-            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-        if (article.authorId == author.id){
+            ?: throw ArticleNotFoundException("Article not found")
+        if (article.authorId == userDetails.authorId) {
             articleRepository.deleteById(theId)
         } else {
             throw UnauthorizedException("You are not authorized to delete this article!")
         }
     }
 
+    override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> =
+        articleRepository.findAllByAuthorIdOrderByDate(authorId)
+            .map { mapArticleToDTO(it) }
+
     override fun deleteByAuthorId(authorId: Int) =
         articleRepository.deleteAllByAuthorId(authorId)
 
-    private fun getAuthorByUsername(username: String): ResponseEntity<String> =
-        authorClient.getAuthorByUsername(username)
+    private fun mapArticleToDTO(article: Article): ArticleDTO =
+        ArticleDTO(
+            id = article.id,
+            date = article.date,
+            timestamp = article.timestamp.toString(),
+            text = article.text,
+            authorId = article.authorId
+        )
 
-    private fun getUserDetailsFromToken(jwt: String): ResponseEntity<String> =
-        authorizationClient.getUserDetails(jwt)
+    private fun createArticle(request: ArticleRequest, jwt: String): Article {
+        val userDetails = authorizationService.getUserDetails(jwt)
 
-    private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO =
-        objectMapper.readValue(response.body, AuthorDTO::class.java)
+        return Article(
+            id = 0,
+            date = getCurrentDate(),
+            timestamp = Timestamp(System.currentTimeMillis()),
+            text = request.text,
+            authorId = userDetails.authorId
+        )
+    }
 
-    private fun deserializeUserDetails(response: ResponseEntity<String>): UserDetailsDTO =
-        objectMapper.readValue(response.body, UserDetailsDTO::class.java)
+    private fun createResponse(theArticle: Article): ArticleResponse {
+        val author = authorService.getAuthorById(theArticle.authorId)
+
+        return ArticleResponse(
+            id = theArticle.id,
+            text = theArticle.text,
+            timestamp = theArticle.timestamp,
+            author_firstName = author.firstName,
+            author_lastName = author.lastName,
+            author_username = author.username
+        )
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        return dateFormatter.format(LocalDateTime.now())
+    }
 }

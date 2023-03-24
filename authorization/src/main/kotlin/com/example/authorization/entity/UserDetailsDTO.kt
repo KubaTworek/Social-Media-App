@@ -1,6 +1,6 @@
-package com.example.authorization.controller
+package com.example.articles.model.dto
 
-data class UserResponse(
+data class UserDetailsDTO(
     val firstName: String,
     val lastName: String,
     val username: String,

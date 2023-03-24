@@ -1,6 +1,5 @@
 package com.example.articles.model.entity
 
-import com.example.articles.model.dto.ArticleDTO
 import jakarta.persistence.*
 import org.hibernate.Hibernate
 import java.sql.Timestamp
@@ -33,14 +32,6 @@ data class Article(
         Timestamp(System.currentTimeMillis()),
         "",
         0
-    )
-
-    fun toDTO(): ArticleDTO = ArticleDTO(
-        this.id,
-        this.date,
-        this.timestamp.toString(),
-        this.text,
-        this.authorId,
     )
 
     override fun equals(other: Any?): Boolean {
