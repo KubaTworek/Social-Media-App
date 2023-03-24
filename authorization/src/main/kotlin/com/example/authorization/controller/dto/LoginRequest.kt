@@ -1,4 +1,4 @@
-package com.example.authorization.controller
+package com.example.authorization.controller.dto
 
 data class LoginRequest(
     val username: String,

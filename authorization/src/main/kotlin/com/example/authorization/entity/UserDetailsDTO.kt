@@ -1,6 +1,7 @@
-package com.example.articles.model.dto
+package com.example.authorization.entity
 
 data class UserDetailsDTO(
+    val authorId: Int,
     val firstName: String,
     val lastName: String,
     val username: String,

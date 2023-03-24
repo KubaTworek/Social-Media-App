@@ -1,31 +1,25 @@
 package com.example.authorization.service
 
-import com.example.authorization.client.AuthorClient
 import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import com.example.authorization.constants.SecurityConstants.JWT_KEY
-import com.example.authorization.controller.*
+import com.example.authorization.controller.dto.*
 import com.example.authorization.entity.*
 import com.example.authorization.exception.*
-import com.example.authorization.repository.AuthoritiesRepository
-import com.example.authorization.repository.UserRepository
-import com.fasterxml.jackson.databind.ObjectMapper
-import io.jsonwebtoken.Claims
-import io.jsonwebtoken.Jwts
+import com.example.authorization.repository.*
+import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.crypto.SecretKey
 
+
 @Service
 class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authoritiesRepository: AuthoritiesRepository,
-    @Qualifier("AuthorClient") private val authorClient: AuthorClient,
-    private val objectMapper: ObjectMapper
+    private val authorApiService: AuthorApiService
 ) : AuthorizationService {
     override fun registerUser(registerRequest: RegisterRequest) {
         val username = registerRequest.username
@@ -43,15 +37,14 @@ class AuthorizationServiceImpl(
             lastName,
             username
         )
-        authorClient.createAuthor(authorRequest)
+        authorApiService.createAuthor(authorRequest)
     }
 
     @Transactional
     override fun deleteUser(jwt: String) {
-        val claims = parseJwtClaims(jwt)
-        val username = claims["username"].toString()
-        userRepository.deleteByUsername(username)
-        authorClient.deleteAuthorByUsername(username)
+        val user = getUserDetails(jwt)
+        userRepository.deleteByUsername(user.username)
+        authorApiService.deleteAuthorById(user.authorId)
     }
 
     override fun loginUser(loginRequest: LoginRequest): LoginResponse {
@@ -70,13 +63,19 @@ class AuthorizationServiceImpl(
         return LoginResponse(buildJwt(username, authorities, key))
     }
 
-    override fun getUserDetails(jwt: String): UserResponse {
+    override fun getUserDetails(jwt: String): UserDetailsDTO {
         val claims = parseJwtClaims(jwt)
         val username = claims["username"].toString()
         val authorities = claims["authorities"].toString()
-        val author = deserializeAuthor(getAuthorByUsername(username))
+        val author = authorApiService.getAuthorByUsername(username)
 
-        return UserResponse(author.firstName, author.lastName, username, authorities)
+        return UserDetailsDTO(
+            authorId = author.id,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            username = username,
+            role = authorities
+        )
     }
 
     private fun buildUser(username: String, password: String, authority: Authorities) =
@@ -113,14 +112,13 @@ class AuthorizationServiceImpl(
 
     private fun getUserByUsername(username: String) =
         userRepository.findUserByUsername(username)
-            .orElseThrow { UserNotFoundException("No user registered with this username!") }
+            ?: throw UserNotFoundException("No user registered with this username!")
 
     private fun getAuthority(authority: String) =
         authoritiesRepository.findAuthoritiesByAuthority(authority)
-            .orElse(
-                authoritiesRepository.findAuthoritiesByAuthority("ROLE_USER")
-                    .orElseThrow { RuntimeException("No authorities found!") }
-            )
+            ?: authoritiesRepository.findAuthoritiesByAuthority("ROLE_USER")
+                ?: throw RuntimeException("No authorities found!")
+
 
     private fun parseJwtClaims(jwt: String): Claims {
         val key = Keys.hmacShaKeyFor(JWT_KEY.toByteArray(StandardCharsets.UTF_8))
@@ -133,10 +131,4 @@ class AuthorizationServiceImpl(
 
     private fun populateAuthorities(collection: Collection<Authorities>) =
         collection.joinToString(separator = ",") { it.authority }
-
-    private fun getAuthorByUsername(username: String): ResponseEntity<String> =
-        authorClient.getAuthorByUsername(username)
-
-    private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO =
-        objectMapper.readValue(response.body, AuthorDTO::class.java)
 }

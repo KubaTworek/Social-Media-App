@@ -1,5 +1,6 @@
 package com.example.authorization.controller
 
+import com.example.authorization.controller.dto.*
 import com.example.authorization.service.AuthorizationService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 class AuthorizationController(private val authorizationService: AuthorizationService) {
 
+    // EXTERNAL
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     fun registerUser(@RequestBody registerRequest: RegisterRequest) =
@@ -23,6 +25,7 @@ class AuthorizationController(private val authorizationService: AuthorizationSer
     fun loginUser(@RequestBody loginRequest: LoginRequest) =
         authorizationService.loginUser(loginRequest)
 
+    // INTERNAL
     @GetMapping("/user-info")
     @ResponseStatus(HttpStatus.OK)
     fun getUserDetailsAfterLogin(@RequestHeader("Authorization") jwt: String) =

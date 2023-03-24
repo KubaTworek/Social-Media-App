@@ -1,6 +1,6 @@
 package com.example.authorization.client
 
-import com.example.authorization.controller.AuthorRequest
+import com.example.authorization.controller.dto.AuthorRequest
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.ResponseEntity
@@ -13,8 +13,8 @@ interface AuthorClient {
     @PostMapping("/")
     fun createAuthor(@RequestBody theAuthor: AuthorRequest): ResponseEntity<Void>
 
-    @DeleteMapping("/username/{username}")
-    fun deleteAuthorByUsername(@PathVariable username: String): ResponseEntity<Void>
+    @DeleteMapping("/{authorId}")
+    fun deleteAuthorById(@PathVariable authorId: Int): ResponseEntity<Void>
 
     @GetMapping("/username/{username}")
     fun getAuthorByUsername(@PathVariable username: String): ResponseEntity<String>
