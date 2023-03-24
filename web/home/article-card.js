@@ -1,5 +1,6 @@
 import {DeleteForm} from "../form/delete-form.js";
 import {config} from "../config/config.js";
+import {Http} from "../config/http.js";
 
 export class ArticleCard extends HTMLElement {
     constructor() {
@@ -18,6 +19,29 @@ export class ArticleCard extends HTMLElement {
             config.articlesUrl + this.article.id);
         this.articleCard.appendChild(deletePopup);
         deletePopup.open();
+    }
+
+    like() {
+        const headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": sessionStorage.getItem("jwt")
+        };
+
+        Http.getInstance()
+            .doPost(`${config.articlesUrl}like/${this.id}`, null, headers)
+            .then(() => {
+                this.addLike();
+            })
+            .catch((error) => {
+                console.error(`Failed to add like: ${error}`);
+            });
+    }
+
+    addLike() {
+        const likesElement = this.shadowRoot.querySelector('.likes');
+        const currentLikes = parseInt(likesElement.innerText);
+        likesElement.innerText = currentLikes + 1;
     }
 
     getTimeElapsed(timestamp) {
@@ -43,7 +67,7 @@ export class ArticleCard extends HTMLElement {
     }
 
     render() {
-        const {author_firstName, author_lastName, author_username, text, id, timestamp} = this.article || {};
+        const {author_firstName, author_lastName, author_username, text, id, timestamp, numOfLikes} = this.article || {};
         const timestampJs = new Date(timestamp);
         const newTimestamp = this.getTimeElapsed(timestampJs)
 
@@ -76,6 +100,16 @@ export class ArticleCard extends HTMLElement {
               
               .id {
                 display: none;
+              }
+              
+              #like-button {
+                font-size: 1.2rem;
+                cursor: pointer;
+              }
+            
+              .likes {
+                font-size: 1rem;
+                margin-left: 5px;
               }             
             </style>
     
@@ -83,13 +117,17 @@ export class ArticleCard extends HTMLElement {
                 <p class="name">${author_firstName} ${author_lastName} <span class="username">@${author_username}  \u2022  ${newTimestamp}</span></p>
                 <p class="content">${text}</p>
                 <p class="id">${id}</p>
-                <button id="delete-button">Delete</button>
+                <div>
+                    <p><span id="like-button">👍</span><span class="likes">${numOfLikes}</span>   </p>             
+                    <button id="delete-button">Delete</button>
+                </div>
             </div>
         `;
 
         this.articleCard = this.shadowRoot.querySelector('.article-card');
-        this.id = this.shadowRoot.querySelector('.id');
+        this.id = this.shadowRoot.querySelector('.id').innerText;
         this.shadowRoot.getElementById('delete-button').addEventListener('click', this.delete.bind(this));
+        this.shadowRoot.getElementById('like-button').addEventListener('click', this.like.bind(this));
     }
 }
 

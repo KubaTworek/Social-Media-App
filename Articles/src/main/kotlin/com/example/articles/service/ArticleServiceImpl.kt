@@ -9,6 +9,7 @@ import com.example.articles.exception.UnauthorizedException
 import com.example.articles.model.dto.*
 import com.example.articles.model.entity.Article
 import com.example.articles.repository.ArticleRepository
+import com.example.articles.repository.LikeRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import lombok.RequiredArgsConstructor
 import org.springframework.beans.factory.annotation.Qualifier
@@ -25,6 +26,7 @@ import java.time.format.DateTimeFormatter
 @Service
 class ArticleServiceImpl(
     private val articleRepository: ArticleRepository,
+    private val likeRepository: LikeRepository,
     private val authorService: AuthorApiService,
     private val authorizationService: AuthorizationApiService
 ) : ArticleService {
@@ -86,6 +88,7 @@ class ArticleServiceImpl(
 
     private fun createResponse(theArticle: Article): ArticleResponse {
         val author = authorService.getAuthorById(theArticle.authorId)
+        val numOfLikes = likeRepository.countLikesByArticleId(theArticle.id)
 
         return ArticleResponse(
             id = theArticle.id,
@@ -93,7 +96,8 @@ class ArticleServiceImpl(
             timestamp = theArticle.timestamp,
             author_firstName = author.firstName,
             author_lastName = author.lastName,
-            author_username = author.username
+            author_username = author.username,
+            numOfLikes = numOfLikes,
         )
     }
 
