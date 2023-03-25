@@ -1,7 +1,7 @@
-package com.example.articles.service
+package com.example.notifications.client.service
 
-import com.example.articles.clients.AuthorizationClient
-import com.example.articles.model.dto.UserDetailsDTO
+import com.example.notifications.client.AuthorizationClient
+import com.example.notifications.model.dto.UserDetailsDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.ResponseEntity

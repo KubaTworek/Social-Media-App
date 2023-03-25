@@ -1,4 +1,9 @@
-package com.example.notifications.model.entity
+package com.example.notifications.model.message
 
-class LikeMessage {
-}
+import java.sql.Timestamp
+
+data class LikeMessage(
+    val timestamp: Timestamp,
+    val authorId: Int,
+    val articleId: Int,
+)

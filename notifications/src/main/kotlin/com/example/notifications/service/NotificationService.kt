@@ -1,8 +1,8 @@
 package com.example.notifications.service
 
-import com.example.notifications.model.entity.Notification
+import com.example.notifications.controller.dto.NotificationResponse
 
 interface NotificationService {
-    fun findAllNotificationsByUser(jwt: String): List<Notification>
-    fun getLike(message: String)
+    fun findAllNotificationsByUser(jwt: String): List<NotificationResponse>
+    fun processLikeMessage(message: String)
 }

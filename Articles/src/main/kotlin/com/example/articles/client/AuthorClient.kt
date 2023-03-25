@@ -1,4 +1,4 @@
-package com.example.articles.clients
+package com.example.articles.client
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.cloud.openfeign.FeignClient

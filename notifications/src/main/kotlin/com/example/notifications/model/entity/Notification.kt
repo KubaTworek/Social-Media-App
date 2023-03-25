@@ -11,16 +11,24 @@ data class Notification(
     @Column(name = "id")
     val id: Int,
 
-    @Column(name = "Text")
-    val text: String,
+    @Column(name = "Article_Id")
+    val articleId: Int,
+
+    @Column(name = "Author_Id")
+    val authorId: Int,
 
     @Column(name = "Timestamp")
-    val timestamp: Timestamp
+    val timestamp: Timestamp,
+
+    @Column(name = "Type")
+    val type: String
 ) {
     constructor() : this(
         0,
-        "",
-        Timestamp(System.currentTimeMillis())
+        0,
+        0,
+        Timestamp(System.currentTimeMillis()),
+        ""
     )
 
     override fun equals(other: Any?): Boolean {

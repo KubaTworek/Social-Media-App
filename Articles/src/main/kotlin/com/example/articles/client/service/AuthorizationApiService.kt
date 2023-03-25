@@ -1,4 +1,4 @@
-package com.example.articles.service
+package com.example.articles.client.service
 
 import com.example.articles.model.dto.UserDetailsDTO
 

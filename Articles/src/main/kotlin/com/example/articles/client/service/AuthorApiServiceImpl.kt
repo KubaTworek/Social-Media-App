@@ -1,7 +1,6 @@
-package com.example.articles.service
+package com.example.articles.client.service
 
-import com.example.articles.clients.AuthorClient
-import com.example.articles.clients.AuthorizationClient
+import com.example.articles.client.AuthorClient
 import com.example.articles.model.dto.AuthorDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Qualifier
