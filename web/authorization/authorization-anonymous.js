@@ -4,10 +4,11 @@ export class AuthorizationAnonymous extends Authorization {
 
     constructor() {
         super();
-        this.shadowRoot.innerHTML = this.render();
     }
 
     connectedCallback() {
+        this.shadowRoot.innerHTML = this.render();
+
         this.shadowRoot
             .getElementById("login-button")
             .addEventListener("click", () => this.createModal("login"));

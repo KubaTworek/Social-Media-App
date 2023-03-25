@@ -2,10 +2,11 @@ export class ModalForm extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = this.render();
     }
 
     connectedCallback() {
+        this.shadowRoot.innerHTML = this.render();
+
         this.shadowRoot
             .addEventListener("click", this._handleBackdropClick);
         this.shadowRoot

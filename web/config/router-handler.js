@@ -1,11 +1,11 @@
-import Navigo from '../node_modules/navigo/src/index.js';
+import Navigo from 'navigo';
 import {Home} from "../home/home.js";
 
 export class RouterHandler {
     static instance = null;
 
     constructor() {
-        const root = null;
+        const root = '/';
         const useHash = true;
         const hash = '#';
         this.router = new Navigo(root, useHash, hash);

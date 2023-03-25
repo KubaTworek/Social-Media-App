@@ -5,10 +5,11 @@ export class ArticlePost extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({mode: "open"});
-        this.shadowRoot.innerHTML = this.render();
     }
 
     connectedCallback() {
+        this.shadowRoot.innerHTML = this.render();
+
         this.shadowRoot
             .getElementById('send-button')
             .addEventListener('click', this.postData.bind(this))

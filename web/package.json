@@ -2,10 +2,28 @@
   "name": "REST-API-Articles",
   "version": "1.0.0",
   "dependencies": {
+    "assert": "^2.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "copy-webpack-plugin": "^11.0.0",
+    "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.1",
-    "navigo": "^4.7.1"
+    "kafka-js": "^0.0.0",
+    "kafka-node": "^5.0.0",
+    "navigo": "^4.7.1",
+    "net": "^1.0.2",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
+    "tls": "^0.0.1",
+    "util": "^0.12.5",
+    "zlib": "^1.0.5"
   },
   "scripts": {
-    "start": "http-server --cors -c-1 -p 8881"
+    "start": "http-server --cors -c-1 -p 8881",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1"
   }
 }
