@@ -3,7 +3,6 @@ package com.example.articles.controller
 import com.example.articles.controller.dto.ArticleRequest
 import com.example.articles.controller.dto.ArticleResponse
 import com.example.articles.service.ArticleService
-import lombok.RequiredArgsConstructor
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -36,6 +35,10 @@ class ArticleController(private val articleService: ArticleService) {
     ) = articleService.deleteById(articleId, jwt)
 
     // INTERNAL
+    @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticlesById(@PathVariable articleId: Int) =
+        articleService.findById(articleId)
+
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getArticlesByAuthor(@PathVariable authorId: Int) =
         articleService.findAllByAuthorId(authorId)

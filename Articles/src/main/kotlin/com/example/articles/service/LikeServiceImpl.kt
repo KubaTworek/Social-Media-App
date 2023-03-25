@@ -1,5 +1,6 @@
 package com.example.articles.service
 
+import com.example.articles.client.service.AuthorizationApiService
 import com.example.articles.kafka.message.LikeMessage
 import com.example.articles.kafka.service.KafkaLikeService
 import com.example.articles.model.entity.Like
@@ -14,7 +15,7 @@ class LikeServiceImpl(
     private val authorizationService: AuthorizationApiService,
     private val kafkaLikeService: KafkaLikeService,
     private val objectMapper: ObjectMapper
-) : LikeService{
+) : LikeService {
     override fun like(articleId: Int, jwt: String) {
         val userDetails = authorizationService.getUserDetails(jwt)
         Like(

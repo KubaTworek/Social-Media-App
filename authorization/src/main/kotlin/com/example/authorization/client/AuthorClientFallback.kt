@@ -2,8 +2,7 @@ package com.example.authorization.client
 
 import com.example.authorization.controller.dto.AuthorRequest
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 

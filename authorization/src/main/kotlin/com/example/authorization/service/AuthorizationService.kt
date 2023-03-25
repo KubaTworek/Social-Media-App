@@ -1,8 +1,6 @@
 package com.example.authorization.service
 
-import com.example.authorization.controller.dto.LoginRequest
-import com.example.authorization.controller.dto.LoginResponse
-import com.example.authorization.controller.dto.RegisterRequest
+import com.example.authorization.controller.dto.*
 import com.example.authorization.entity.UserDetailsDTO
 
 interface AuthorizationService {

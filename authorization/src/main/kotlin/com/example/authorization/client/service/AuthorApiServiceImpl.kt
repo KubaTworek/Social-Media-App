@@ -1,4 +1,4 @@
-package com.example.authorization.service
+package com.example.authorization.client.service
 
 import com.example.authorization.client.AuthorClient
 import com.example.authorization.controller.dto.AuthorRequest
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class AuthorApiServiceImpl (
+class AuthorApiServiceImpl(
     @Qualifier("AuthorClient") private val authorClient: AuthorClient,
     private val objectMapper: ObjectMapper
 ) : AuthorApiService {

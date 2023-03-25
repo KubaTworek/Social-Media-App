@@ -1,4 +1,4 @@
-package com.example.authorization.service
+package com.example.authorization.client.service
 
 import com.example.authorization.controller.dto.AuthorRequest
 import com.example.authorization.entity.AuthorDTO

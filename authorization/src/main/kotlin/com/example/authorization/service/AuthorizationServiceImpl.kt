@@ -1,5 +1,6 @@
 package com.example.authorization.service
 
+import com.example.authorization.client.service.AuthorApiService
 import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import com.example.authorization.constants.SecurityConstants.JWT_KEY
 import com.example.authorization.controller.dto.*
@@ -117,7 +118,7 @@ class AuthorizationServiceImpl(
     private fun getAuthority(authority: String) =
         authoritiesRepository.findAuthoritiesByAuthority(authority)
             ?: authoritiesRepository.findAuthoritiesByAuthority("ROLE_USER")
-                ?: throw RuntimeException("No authorities found!")
+            ?: throw RuntimeException("No authorities found!")
 
 
     private fun parseJwtClaims(jwt: String): Claims {
