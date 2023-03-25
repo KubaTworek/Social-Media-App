@@ -55,6 +55,14 @@ class GatewayConfig {
                             .rewritePath("/auth/(?<segment>.*)", "/\${segment}")
                     }
                     .uri("lb://AUTHORIZATION")
+            }.route { p: PredicateSpec ->
+                p
+                    .path("/notifications/api/**")
+                    .filters { f: GatewayFilterSpec ->
+                        f
+                            .rewritePath("/notifications/(?<segment>.*)", "/\${segment}")
+                    }
+                    .uri("lb://NOTIFICATIONS")
             }.build()
     }
 
