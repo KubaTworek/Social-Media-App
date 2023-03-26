@@ -23,6 +23,12 @@ export class Http {
         }).then((r) => r.json())
             .catch((err) => console.log(err));
 
+    doGetWithHeaders = (path, headers) =>
+        fetch(`${path}`, {
+            headers: headers
+        }).then((r) => r.json())
+            .catch((err) => console.log(err));
+
     doPost = (path, body, headers) =>
         fetch(`${path}`, {
             headers: headers,

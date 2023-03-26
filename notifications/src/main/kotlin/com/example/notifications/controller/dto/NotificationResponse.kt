@@ -1,9 +1,7 @@
 package com.example.notifications.controller.dto
 
-import java.sql.Timestamp
-
 data class NotificationResponse(
+    val name: String,
     val message: String,
-    val content: String,
-    val timestamp: Timestamp,
+    val content: String
 )
