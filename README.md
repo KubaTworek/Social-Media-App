@@ -1,13 +1,13 @@
 # Articles App
-> Full-stack application presenting standard CRUD capabilities to the user. The main goal of the application is to manage a database of articles created by different people and coming from different sources.
+> This full-stack social media application allows users to create accounts, connect with friends, post updates, and comment on each other's posts. The application includes user authentication and authorization, as well as a database to store user and post data. It also allows users to search for other users or posts, and provides notifications for new posts or comments. Overall, this social media application provides a platform for users to interact and share their thoughts with others in a simple and intuitive way.
 
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Run and Test](#run-and-test)
-* [Endpoints](#endpoints)
-* [Database](#database)
+* [Use case diagram](#use-case-diagram)
+* [Microservices](#microservices)
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
 * [Contact](#contact)
@@ -17,7 +17,7 @@
 - Front-end of the application has been written in vanilla JavaScript in architecture based on Web Components.
 
 
-- The backend of the application was written based on microservice architecture. Every front-end service written in Java was reformatted to Kotlin language. Spring Boot framework was used to create the project. The database is temporarily based on an embedded H2 database.
+- The backend of the application was written based on microservice architecture. Every service written in Java was reformatted to Kotlin language. Spring Boot framework was used to create the project. The database is temporarily based on an embedded H2 database.
 
 
 - All microservices run in a Docker container.
@@ -31,9 +31,11 @@
 
 ## Technologies Used
 - Kotlin
+- JavaScript
 - Spring Boot
 - Spring Cloud
 - Hibernate, JPA
+- Apache Kafka
 
 ## Run and Test
 
@@ -49,88 +51,157 @@ To create a container
 docker-compose up
 ```
 
-## Endpoints
+## Use case diagram
+![use-case.png](use-case.png)
 
-This API provides HTTP endpoint's and tools for the following:
+## Microservices
 
-### Frontend
-url = http://localhost:8881/
+### Address
+- frontend = http://localhost:8881
+- gateway = http://localhost:3000
 
-Articles Page = http://localhost:8881/#/articles
-
-Authors Page = http://localhost:8881/#/authors
-
-Magazines Page = http://localhost:8881/#/magazines
-
-### Article
-port = 2111
-* Create an article: `POST/api/articles/`
-* Delete an article (by id): `DELETE/api/articles/{articleId}`
-* Find article (by id): `DELETE/api/articles/{articleId}`
-* Find all articles: `GET/api/articles`
-* Find all articles by keyword: `GET/api/articles/{keyword}`
-
+### Articles
+#### Description
+This is a microservice for managing articles in a social media platform. Implementation of the ArticleService interface, which provides methods for finding, saving, and deleting articles. The service communicates with an AuthorApiService and AuthorizationApiService to retrieve author details and authenticate users respectively. The service uses Spring Data JPA to interact with an ArticleRepository and a LikeRepository to persist and retrieve article and like data. The service also has methods for filtering and sorting articles by date and author. The service returns ArticleDTO and ArticleResponse objects, which are used to transfer data between the service and the client.
+#### EXTERNAL
+* Get Articles: `GET/articles/api/`
+* Get Articles by keyword: `GET/articles/api/{keyword}`
+* Create Article (with JWT, body): `POST/articles/api/`
+* Delete Article by ID (with JWT): `DELETE/articles/api/{articleId}`
+* Like Article by ID (with JWT): `POST/articles/api/like/{articleId}`
+#### INTERNAL
+* Get Article by ID: `GET/articles/api/id/{articleId}`
+* Get Articles by Author: `GET/articles/api/author/{authorId}`
+* Delete Articles By Author: `DELETE/articles/api/authorId/{authorId}`
 
 Request Body [Article]
 ```
 {
-     "title": varchar(40),
-     "text": varchar(255),
-     "authorId": Integer
-     "magzineId": Integer
+     "title": string,
+     "text": string
 }
 ```
 
-### Author
-port = 2112
-* Create an author: `POST/api/authors/`
-* Delete an author (by id): `DELETE/api/authors/{articleId}`
-* Find author (by id): `DELETE/api/authors/{authorId}`
-* Find all authors: `GET/api/authors`
-* Find all authors by keyword: `GET/api/authors/{keyword}`
-
-
-Request Body [Author]
+Response Body [ArticleResponse]
 ```
 {
-     "firstName": varchar(50),
-     "lastName": varchar(50)
+     "id": long,
+     "text": string,
+     "timestamp": string,
+     "author_firstName": string,
+     "author_lastName": string,
+     "author_username": string,
+     "numOfLikes": long
 }
 ```
 
-### Magazine
-port = 2113
-* Create an magazine: `POST/api/magazines/`
-* Delete an magazine (by id): `DELETE/api/magazines/{articleId}`
-* Find magazine (by id): `DELETE/api/magazines/{magazineId}`
-* Find all magazines: `GET/api/magazines`
-* Find all magazines by keyword: `GET/api/magazines/{keyword}`
-
-
-
-Request Body [Magazine]
+Response Body [ArticleDTO]
 ```
 {
-     "magazineName": varchar(50),
-     "test": "test"
+     "id": long,
+     "date": string,
+     "timestamp": string,
+     "text": string,
+     "authorId": long
 }
 ```
 
-## Database
+#### Database
+![articles-schema.png](articles-schema.png)
 
-The database is distributed. Each microservice has its own database describing one key part of the whole application.
+### Authors
+#### Description
+This is a microservice for managing authors in a social media platform. Implementation of the AuthorService interface, which provides methods for finding, saving, and deleting authors. The service communicates with an ArticleClient to delete articles related to an author being deleted. The service uses Spring Data JPA to interact with an AuthorRepository to persist and retrieve author data. The service returns AuthorDTO objects, which are used to transfer data between the service and the client.
+#### INTERNAL
+* Get Author by ID: `GET/authors/api/id/{articleId}`
+* Get Author by username: `GET/authors/api/username/{username}`
+* Create Author: `POST/authors/api/`
+* Delete Author by ID: `DELETE/authors/api/{authorId}`
 
-### Schema
-![Database schema](database/schema.png)
+Response Body [AuthorDTO]
+```
+{
+     "id": long,
+     "firstName": string,
+     "lastName": string,
+     "username": string
+}
+```
 
-### Description ENG
+#### Database
+![authors-schema.png](authors-schema.png)
 
-The database represents a standardized schema for the "Articles" apllication.
+### Authorization
+#### Description
+This is a microservice for managing user authorization in a social media platform. The service provides methods for registering and deleting users, as well as authenticating users through login. The service communicates with an AuthorApiService to retrieve author details and uses Spring Data JPA to interact with a UserRepository and an AuthoritiesRepository to persist and retrieve user data. The service also generates and validates JSON Web Tokens (JWTs) to authenticate and authorize users. The service returns UserDetailsDTO objects, which contain user details such as the user's author ID, first name, last name, username, and role.
+#### EXTERNAL
+* Register User: `POST/authorization/api/register`
+* Delete User (with JWT): `DELETE/authorization/api/delete`
+* Login User (with JWT): `POST/authorization/api/login`
+#### INTERNAL
+* Get user details (with JWT): `GET/authorization/api/user-info`
 
-Articles can be written by one author and published in one magazine. Each has also an entity with the content of the entire article.
-To add an article, there must already be an author and a magazine to which we can assign it.
+Request Body [Register]
+```
+{
+     "username": string,
+     "password": string,
+     "firstName": string,
+     "lastName": string,
+     "role": {"USER", "ADMIN"},
+}
+```
 
-Deletion of an author or magazine deletes all articles belonging to it. On the other hand, deleting an article has no effect on the authors or magazines.
+Request Body [Login]
+```
+{
+     "username": string,
+     "password": string
+}
+```
+
+Response Body [LoginResponse]
+```
+{
+     "jwt": string
+}
+```
+
+Response Body [UserDetails]
+```
+{
+     "authorId": long,
+     "firstName": string,
+     "lastName": string,
+     "username": string,
+     "role": {"USER", "ADMIN"},
+}
+```
+
+#### Database
+![authorization-schema.png](authorization-schema.png)
+
+### Notifications
+#### Description
+This is a microservice for managing notifications in a social media platform. The service is implemented as a NotificationServiceImpl class that implements the NotificationService interface. The service provides a method for retrieving all notifications of a particular user and another method for processing like messages from a Kafka topic.
+
+To process like messages from a Kafka topic, the service listens to the "t-like" topic using the @KafkaListener annotation. When a message is received, it is deserialized into a LikeMessage object using an ObjectMapper. The service then creates a new Notification object with the necessary details and saves it to the NotificationRepository.
+
+Overall, this microservice provides a simple and efficient way of managing notifications for users in a social media platform. It uses modern technologies such as Kafka and Spring Data JPA to provide a scalable and performant solution.
+#### EXTERNAL
+* Get Notifications (with JWT): `GET/notifications/api/`
+
+Response Body [NotificationResponse]
+```
+{
+     "name": varchar(40),
+     "message": {"LIKE"},
+     "content": varchar(255)
+}
+```
+
+#### Database
+![notifications-schema.png](notifications-schema.png)
 
 
 ## Project Status
@@ -140,16 +211,19 @@ Project is: _in_progress_
 ## Room for Improvement
 
 Room for improvement:
-- Make frontend more fancy 
-- Add frontend based on Svelte
-- Add frontend based on React
-- Add Security microservice to authenticate users
 - Make Unit Test
 - Make Integration Tests
-- Improve microservice architecture
-- Add Elastic Stack
-- Prepare schema of database
-
+- Create metrics
+- Use resilience pattern
+- Use Swagger
+- Improve logging system
+- Create real database
+- Use Kubernetes
+- Prodice Avro in Kafka
+- Provide comments functionality
+- Provide following functionality
+- Provide DMs functionality
+- Create Rest Assured tests
 
 ## Contact
 Created by [Jakub Tworek](https://github.com/KubaTworek)
