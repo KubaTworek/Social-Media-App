@@ -25,19 +25,19 @@ class ArticleServiceImpl(
     private val authorizationService: AuthorizationApiService
 ) : ArticleService {
 
-    override fun findAllOrderByDateDesc(): List<ArticleResponse> =
-        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
+    override fun findAllOrderByCreatedTimeDesc(): List<ArticleResponse> =
+        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "Timestamp"))
             .map { createResponse(it) }
 
     override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
-        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "date"))
+        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "Timestamp"))
             .filter {
                 it.text.contains(theKeyword, ignoreCase = true)
             }
             .map { createResponse(it) }
 
     override fun findById(articleId: Int): ArticleDTO {
-        val article = articleRepository.findByIdOrNull(articleId)
+        val article = articleRepository.findById(articleId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
         return mapArticleToDTO(article)
     }
@@ -49,7 +49,7 @@ class ArticleServiceImpl(
 
     override fun deleteById(theId: Int, jwt: String) {
         val userDetails = authorizationService.getUserDetails(jwt)
-        val article = articleRepository.findByIdOrNull(theId)
+        val article = articleRepository.findById(theId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
         if (article.authorId == userDetails.authorId) {
             articleRepository.deleteById(theId)

@@ -42,9 +42,9 @@ data class Article(
         return id == other.id
     }
 
-    override fun hashCode(): Int = hashCode()
+    override fun hashCode(): Int = id.hashCode()
 
     override fun toString(): String {
-        return super.toString()
+        return "Article(id=$id, date=$date, timestamp=$timestamp, text=$text, authorId=$authorId)"
     }
 }

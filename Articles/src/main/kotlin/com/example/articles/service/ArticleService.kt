@@ -5,7 +5,7 @@ import com.example.articles.controller.dto.ArticleResponse
 import com.example.articles.model.dto.ArticleDTO
 
 interface ArticleService {
-    fun findAllOrderByDateDesc(): List<ArticleResponse>
+    fun findAllOrderByCreatedTimeDesc(): List<ArticleResponse>
     fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
     fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun findById(articleId: Int): ArticleDTO

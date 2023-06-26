@@ -14,7 +14,7 @@ class ArticleController(private val articleService: ArticleService) {
     // EXTERNAL
     @GetMapping("/")
     fun getArticlesOrderByDateDesc(): List<ArticleResponse> =
-        articleService.findAllOrderByDateDesc()
+        articleService.findAllOrderByCreatedTimeDesc()
 
     @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getArticlesByKeyword(@PathVariable keyword: String) =
