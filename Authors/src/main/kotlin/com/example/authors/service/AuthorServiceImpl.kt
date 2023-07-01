@@ -1,19 +1,18 @@
 package com.example.authors.service
 
-import com.example.authors.client.ArticleClient
+import com.example.authors.client.service.ArticleApiService
 import com.example.authors.controller.dto.AuthorRequest
 import com.example.authors.exception.AuthorNotFoundException
 import com.example.authors.model.dto.AuthorDTO
 import com.example.authors.model.entity.Author
 import com.example.authors.repository.AuthorRepository
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
-    @Qualifier("ArticleClient") private val articleClient: ArticleClient
+    private val articleApiService: ArticleApiService
 ) : AuthorService {
 
     override fun findById(theId: Int): AuthorDTO {
@@ -38,7 +37,7 @@ class AuthorServiceImpl(
 
     override fun deleteById(theId: Int) {
         authorRepository.deleteById(theId)
-        articleClient.deleteArticlesByAuthorId(theId)
+        articleApiService.deleteArticlesByAuthorId(theId)
     }
 
     private fun createAuthor(authorRequest: AuthorRequest): Author =
