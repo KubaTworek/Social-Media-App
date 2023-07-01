@@ -11,11 +11,9 @@ import com.example.articles.model.entity.Article
 import com.example.articles.repository.ArticleRepository
 import com.example.articles.repository.LikeRepository
 import org.springframework.data.domain.Sort
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.sql.Timestamp
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 @Service
 class ArticleServiceImpl(
@@ -102,7 +100,6 @@ class ArticleServiceImpl(
     }
 
     private fun getCurrentDate(): String {
-        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
-        return dateFormatter.format(LocalDateTime.now())
+        return LocalDate.now().toString()
     }
 }
