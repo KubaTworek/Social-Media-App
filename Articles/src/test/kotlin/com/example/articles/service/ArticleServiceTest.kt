@@ -25,10 +25,13 @@ import java.util.*
 class ArticleServiceTest {
     @Mock
     private lateinit var articleRepository: ArticleRepository
+
     @Mock
     private lateinit var likeRepository: LikeRepository
+
     @Mock
     private lateinit var authorService: AuthorApiService
+
     @Mock
     private lateinit var authorizationService: AuthorizationApiService
 
@@ -50,9 +53,9 @@ class ArticleServiceTest {
         // Given
         val author = AuthorDTO(1, "firstName", "lastName", "Username")
         val articles = listOf(
-            Article(1,  "2023-06-27", Timestamp(System.currentTimeMillis()), "Article 1", 1),
+            Article(1, "2023-06-27", Timestamp(System.currentTimeMillis()), "Article 1", 1),
             Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Article 2", 2),
-            Article(3,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 3", 1)
+            Article(3, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 3", 1)
         )
         `when`(articleRepository.findAll(any<Sort>())).thenReturn(articles)
         `when`(authorService.getAuthorById(any(Int::class.java))).thenReturn(author)
@@ -73,9 +76,9 @@ class ArticleServiceTest {
         // Given
         val author = AuthorDTO(1, "firstName", "lastName", "Username")
         val articles = listOf(
-            Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1),
+            Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1),
             Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Keyword Article", 2),
-            Article(3,  "2023-06-27", Timestamp(System.currentTimeMillis()), "Another Article", 1)
+            Article(3, "2023-06-27", Timestamp(System.currentTimeMillis()), "Another Article", 1)
         )
         `when`(articleRepository.findAll(any<Sort>())).thenReturn(articles)
         `when`(authorService.getAuthorById(any(Int::class.java))).thenReturn(author)
@@ -93,7 +96,7 @@ class ArticleServiceTest {
     fun `findById should return the article with the given ID`() {
         // Given
         val articleId = 1
-        val article = Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
         // When
@@ -122,7 +125,7 @@ class ArticleServiceTest {
         val articleRequest = ArticleRequest("Title", "Text")
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val expectedArticle = Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val expectedArticle = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.save(any())).thenReturn(expectedArticle)
 
@@ -139,7 +142,7 @@ class ArticleServiceTest {
         val articleId = 1
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val article = Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
@@ -174,7 +177,7 @@ class ArticleServiceTest {
         val articleId = 1
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val article = Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 2)
+        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 2)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
@@ -191,7 +194,7 @@ class ArticleServiceTest {
         // Given
         val authorId = 1
         val articles = listOf(
-            Article(1,  "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", authorId),
+            Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", authorId),
             Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Article 2", authorId)
         )
         `when`(articleRepository.findAllByAuthorIdOrderByDate(authorId)).thenReturn(articles)
