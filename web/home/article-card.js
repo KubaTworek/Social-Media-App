@@ -30,8 +30,15 @@ export class ArticleCard extends HTMLElement {
 
         Http.getInstance()
             .doPost(`${config.articlesUrl}like/${this.id}`, null, headers)
-            .then(() => {
-                this.addLike();
+            .then(response => {
+                const status = response.status;
+                if (status === 'like') {
+                    this.addLike();
+                } else if (status === 'dislike') {
+                    this.deleteLike();
+                } else {
+                    console.error(`Unknown response: ${status}`);
+                }
             })
             .catch((error) => {
                 console.error(`Failed to add like: ${error}`);
@@ -42,6 +49,12 @@ export class ArticleCard extends HTMLElement {
         const likesElement = this.shadowRoot.querySelector('.likes');
         const currentLikes = parseInt(likesElement.innerText);
         likesElement.innerText = currentLikes + 1;
+    }
+
+    deleteLike() {
+        const likesElement = this.shadowRoot.querySelector('.likes');
+        const currentLikes = parseInt(likesElement.innerText);
+        likesElement.innerText = currentLikes - 1;
     }
 
     getTimeElapsed(timestamp) {

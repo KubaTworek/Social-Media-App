@@ -1,6 +1,7 @@
 package com.example.articles.service
 
 import com.example.articles.client.service.AuthorizationApiService
+import com.example.articles.controller.dto.LikeResponse
 import com.example.articles.kafka.message.LikeMessage
 import com.example.articles.kafka.service.KafkaLikeService
 import com.example.articles.model.entity.Like
@@ -14,10 +15,10 @@ class LikeServiceImpl(
     private val authorizationService: AuthorizationApiService,
     private val kafkaLikeService: KafkaLikeService
 ) : LikeService {
-    override fun like(articleId: Int, jwt: String) {
+    override fun like(articleId: Int, jwt: String): LikeResponse {
         val userDetails = authorizationService.getUserDetails(jwt)
-        val article = likeRepository.findByArticleIdAndAuthorId(articleId, userDetails.authorId)
-        if (article == null) {
+        val like = likeRepository.findByArticleIdAndAuthorId(articleId, userDetails.authorId)
+        if (like == null) {
             Like(
                 id = 0,
                 timestamp = Timestamp(System.currentTimeMillis()),
@@ -31,6 +32,10 @@ class LikeServiceImpl(
                 articleId = articleId
             )
             kafkaLikeService.sendLikeMessage(message)
+            return LikeResponse("like")
+        } else {
+            likeRepository.delete(like)
+            return LikeResponse("dislike")
         }
     }
 }

@@ -34,7 +34,7 @@ export class Http {
             headers: headers,
             method: "POST",
             body,
-        }).catch((err) => console.log(err));
+        }).then((r) => r.json()).catch((err) => console.log(err));
 
     doDelete = (path, headers) =>
         fetch(`${path}`, {

@@ -21,9 +21,9 @@ class LikeControllerIT : AbstractIT() {
         // like one more time
         likeArticle(articleId)
 
-        // didn't work for the same user
+        // dislike
         val articles3 = getArticles(2)
         val article2 = articles3.returnResult().responseBody?.filter { it.id == articleId }?.get(0)
-        assertEquals(1, article2?.numOfLikes)
+        assertEquals(0, article2?.numOfLikes)
     }
 }
