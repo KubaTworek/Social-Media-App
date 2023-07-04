@@ -1,4 +1,75 @@
 package com.example.authorization
 
-class AbstractIT {
+import com.example.authorization.client.AuthorClient
+import com.example.authorization.controller.dto.*
+import com.example.authorization.entity.*
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.*
+import org.mockito.Mockito.`when`
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.http.*
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.BodyInserters
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+@ActiveProfiles("test")
+abstract class AbstractIT {
+
+    @Autowired
+    protected lateinit var webTestClient: WebTestClient
+
+    @MockBean
+    protected lateinit var authorClient: AuthorClient
+
+    @BeforeEach
+    fun setup() {
+        val authorRequest = AuthorRequest("John", "Doe", "username")
+        val author = AuthorDTO(1, "John", "Doe", "username")
+        `when`(authorClient.deleteAuthorById(1))
+            .thenReturn(ResponseEntity.ok().build())
+        `when`(authorClient.createAuthor(authorRequest))
+            .thenReturn(ResponseEntity.ok().build())
+        `when`(authorClient.getAuthorByUsername("username"))
+            .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(author)))
+    }
+
+    @AfterEach
+    fun clean() {
+        val loginRequest = LoginRequest("username", "password")
+        val loginResponse = loginUser(loginRequest)
+            .expectStatus().isAccepted
+            .expectBody(LoginResponse::class.java)
+        val jwt = loginResponse
+            .returnResult().responseBody?.jwt
+        deleteUser(jwt!!)
+    }
+
+    fun registerUser(registerRequest: RegisterRequest) =
+        webTestClient.post().uri("/api/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromValue(registerRequest))
+            .exchange()
+
+    fun deleteUser(jwt: String) =
+        webTestClient.delete().uri("/api/delete")
+            .header("Authorization", jwt)
+            .exchange()
+            .expectStatus().isOk
+
+    fun loginUser(loginRequest: LoginRequest) =
+        webTestClient.post().uri("/api/login")
+            .body(BodyInserters.fromValue(loginRequest))
+            .exchange()
+
+    fun getUserDetailsAfterLogin(jwt: String) =
+        webTestClient.get().uri("/api/user-info")
+            .header("Authorization", jwt)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(UserDetailsDTO::class.java)
 }

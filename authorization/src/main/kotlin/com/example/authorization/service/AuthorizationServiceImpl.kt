@@ -1,26 +1,20 @@
 package com.example.authorization.service
 
 import com.example.authorization.client.service.AuthorApiService
-import com.example.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
-import com.example.authorization.constants.SecurityConstants.JWT_KEY
 import com.example.authorization.controller.dto.*
 import com.example.authorization.entity.*
 import com.example.authorization.exception.*
 import com.example.authorization.repository.*
-import io.jsonwebtoken.*
-import io.jsonwebtoken.security.Keys
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import java.nio.charset.StandardCharsets
-import java.util.*
-import javax.crypto.SecretKey
 
 
 @Service
 class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authoritiesRepository: AuthoritiesRepository,
-    private val authorApiService: AuthorApiService
+    private val authorApiService: AuthorApiService,
+    private val jwtService: JwtService
 ) : AuthorizationService {
     override fun registerUser(registerRequest: RegisterRequest) {
         val username = registerRequest.username
@@ -59,13 +53,12 @@ class AuthorizationServiceImpl(
         val authorities = listOf(
             authority
         )
-        val key = createSecretKey()
 
-        return LoginResponse(buildJwt(username, authorities, key))
+        return LoginResponse(jwtService.buildJwt(username, authorities))
     }
 
     override fun getUserDetails(jwt: String): UserDetailsDTO {
-        val claims = parseJwtClaims(jwt)
+        val claims = jwtService.parseJwtClaims(jwt)
         val username = claims["username"].toString()
         val authorities = claims["authorities"].toString()
         val author = authorApiService.getAuthorByUsername(username)
@@ -85,19 +78,6 @@ class AuthorizationServiceImpl(
             password,
             authority
         )
-
-    private fun buildJwt(username: String, authorities: List<Authorities>, key: SecretKey) =
-        Jwts.builder()
-            .setIssuer("Social Media")
-            .setSubject("JWT Token")
-            .claim("username", username)
-            .claim("authorities", populateAuthorities(authorities))
-            .setIssuedAt(Date())
-            .setExpiration(Date(JWT_EXPIRE_TIME))
-            .signWith(key)
-            .compact()
-
-    private fun createSecretKey() = Keys.hmacShaKeyFor(JWT_KEY.toByteArray(StandardCharsets.UTF_8))
 
     private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
         if (passwordProvided != passwordRegistered) {
@@ -119,17 +99,4 @@ class AuthorizationServiceImpl(
         authoritiesRepository.findAuthoritiesByAuthority(authority)
             ?: authoritiesRepository.findAuthoritiesByAuthority("ROLE_USER")
             ?: throw RuntimeException("No authorities found!")
-
-
-    private fun parseJwtClaims(jwt: String): Claims {
-        val key = Keys.hmacShaKeyFor(JWT_KEY.toByteArray(StandardCharsets.UTF_8))
-        return Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(jwt)
-            .body
-    }
-
-    private fun populateAuthorities(collection: Collection<Authorities>) =
-        collection.joinToString(separator = ",") { it.authority }
 }
