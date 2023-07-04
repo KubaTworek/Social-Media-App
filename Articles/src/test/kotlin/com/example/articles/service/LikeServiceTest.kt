@@ -1,5 +1,6 @@
 package com.example.articles.service
 
+import com.example.articles.client.service.AuthorApiService
 import com.example.articles.client.service.AuthorizationApiService
 import com.example.articles.kafka.service.KafkaLikeService
 import com.example.articles.model.dto.UserDetailsDTO
@@ -25,6 +26,9 @@ class LikeServiceTest {
     private lateinit var authorizationService: AuthorizationApiService
 
     @Mock
+    private lateinit var authorApiService: AuthorApiService
+
+    @Mock
     private lateinit var kafkaLikeService: KafkaLikeService
 
     @Captor
@@ -37,6 +41,7 @@ class LikeServiceTest {
         likeService = LikeServiceImpl(
             likeRepository,
             authorizationService,
+            authorApiService,
             kafkaLikeService
         )
     }

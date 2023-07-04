@@ -14,4 +14,10 @@ class LikeController(private val likeService: LikeService) {
         @RequestHeader("Authorization") jwt: String,
         @PathVariable articleId: Int
     ) = likeService.like(articleId, jwt)
+
+    @GetMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun showLikeInfo(
+        @PathVariable articleId: Int
+    ) = likeService.getLikeInfo(articleId)
 }

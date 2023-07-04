@@ -1,6 +1,8 @@
 package com.example.articles.service
 
+import com.example.articles.client.service.AuthorApiService
 import com.example.articles.client.service.AuthorizationApiService
+import com.example.articles.controller.dto.LikeInfoResponse
 import com.example.articles.controller.dto.LikeResponse
 import com.example.articles.kafka.message.LikeMessage
 import com.example.articles.kafka.service.KafkaLikeService
@@ -13,6 +15,7 @@ import java.sql.Timestamp
 class LikeServiceImpl(
     private val likeRepository: LikeRepository,
     private val authorizationService: AuthorizationApiService,
+    private val authorApiService: AuthorApiService,
     private val kafkaLikeService: KafkaLikeService
 ) : LikeService {
     override fun like(articleId: Int, jwt: String): LikeResponse {
@@ -37,5 +40,14 @@ class LikeServiceImpl(
             likeRepository.delete(like)
             return LikeResponse("dislike")
         }
+    }
+
+    override fun getLikeInfo(articleId: Int): LikeInfoResponse {
+        val likes = likeRepository.findByArticleId(articleId)
+        val authorNames = likes.map { like ->
+            val author = authorApiService.getAuthorById(like.authorId)
+            "${author.firstName} ${author.lastName}"
+        }
+        return LikeInfoResponse(authorNames)
     }
 }

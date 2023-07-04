@@ -2,6 +2,7 @@ import {DeleteForm} from "../form/delete-form.js";
 import {config} from "../config/config.js";
 import {Http} from "../config/http.js";
 
+
 export class ArticleCard extends HTMLElement {
     constructor() {
         super();
@@ -45,6 +46,42 @@ export class ArticleCard extends HTMLElement {
             });
     }
 
+    showLikeInfo() {
+        const headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        };
+
+        Http.getInstance()
+            .doGet(`${config.articlesUrl}like/${this.id}`, null, headers)
+            .then(response => {
+                const users = response.users;
+                if (users.length > 0) {
+                    const userNames = users.map(user => `<div>${user}</div>`).join('');
+                    const tooltipContent = `<div class="like-tooltip-content">${userNames}</div>`;
+
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'like-tooltip';
+                    tooltip.innerHTML = tooltipContent;
+
+                    const likeButton = this.shadowRoot.getElementById('like-button');
+                    likeButton.appendChild(tooltip);
+                }
+            })
+            .catch((error) => {
+                console.error(`Failed to retrieve likes: ${error}`);
+            });
+    }
+
+    hideLikeInfo() {
+        const likeButton = this.shadowRoot.getElementById('like-button');
+        const tooltip = likeButton.querySelector('.like-tooltip');
+        if (tooltip) {
+            likeButton.removeChild(tooltip);
+        }
+    }
+
+
     addLike() {
         const likesElement = this.shadowRoot.querySelector('.likes');
         const currentLikes = parseInt(likesElement.innerText);
@@ -80,13 +117,22 @@ export class ArticleCard extends HTMLElement {
     }
 
     render() {
-        const {author_firstName, author_lastName, author_username, text, id, timestamp, numOfLikes} = this.article || {};
+        const {
+            author_firstName,
+            author_lastName,
+            author_username,
+            text,
+            id,
+            timestamp,
+            numOfLikes
+        } = this.article || {};
         const timestampJs = new Date(timestamp);
         const newTimestamp = this.getTimeElapsed(timestampJs)
 
         this.shadowRoot.innerHTML = `
             <style>
               .article-card {
+                position: relative;
                 background-color: #111;
                 border-bottom: 1px solid #444;
                 border-top: none;
@@ -116,6 +162,7 @@ export class ArticleCard extends HTMLElement {
               }
               
               #like-button {
+                position: relative;
                 font-size: 1.2rem;
                 cursor: pointer;
               }
@@ -123,7 +170,33 @@ export class ArticleCard extends HTMLElement {
               .likes {
                 font-size: 1rem;
                 margin-left: 5px;
-              }             
+              }   
+                      
+              .like-tooltip {
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #333;
+                color: #fff;
+                font-size: 12px;
+                padding: 6px;
+                border-radius: 4px;
+                z-index: 9999;
+                white-space: nowrap;
+                text-align: left;
+              }
+              
+              .like-tooltip-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+              
+              #like-button:hover .like-tooltip {
+                visibility: visible;
+                opacity: 1;
+              }  
             </style>
     
             <div class="article-card">
@@ -141,6 +214,8 @@ export class ArticleCard extends HTMLElement {
         this.id = this.shadowRoot.querySelector('.id').innerText;
         this.shadowRoot.getElementById('delete-button').addEventListener('click', this.delete.bind(this));
         this.shadowRoot.getElementById('like-button').addEventListener('click', this.like.bind(this));
+        this.shadowRoot.getElementById('like-button').addEventListener('mouseenter', this.showLikeInfo.bind(this));
+        this.shadowRoot.getElementById('like-button').addEventListener('mouseleave', this.hideLikeInfo.bind(this));
     }
 }
 
