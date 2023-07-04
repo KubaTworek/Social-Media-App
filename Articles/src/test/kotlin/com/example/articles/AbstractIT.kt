@@ -4,6 +4,8 @@ import com.example.articles.client.AuthorClient
 import com.example.articles.client.AuthorizationClient
 import com.example.articles.controller.dto.ArticleRequest
 import com.example.articles.controller.dto.ArticleResponse
+import com.example.articles.controller.dto.LikeInfoResponse
+import com.example.articles.controller.dto.LikeResponse
 import com.example.articles.kafka.message.LikeMessage
 import com.example.articles.kafka.service.KafkaLikeService
 import com.example.articles.model.dto.ArticleDTO
@@ -136,5 +138,12 @@ abstract class AbstractIT {
             .header("Authorization", "dummy-jwt")
             .exchange()
             .expectStatus().isCreated
+            .expectBody(LikeResponse::class.java)
+
+    fun showLikeInfo(articleId: Int) =
+        webTestClient.get().uri("/api/like/$articleId")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(LikeInfoResponse::class.java)
 
 }

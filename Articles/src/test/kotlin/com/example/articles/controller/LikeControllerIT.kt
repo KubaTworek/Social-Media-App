@@ -7,23 +7,30 @@ import kotlin.test.assertEquals
 class LikeControllerIT : AbstractIT() {
 
     @Test
-    fun testLikeArticle() {
-        // like one article
-        val articles = getArticles(2)
-        val articleId = articles.returnResult().responseBody?.firstOrNull()?.id
-        likeArticle(articleId!!)
+    fun `testLikeArticle should perform like and dislike operations on an article`() {
+        // Like one article
+        val articlesResponse = getArticles(2)
+        val articleId = articlesResponse.returnResult().responseBody?.firstOrNull()?.id
+        val likeResponse1 = likeArticle(articleId!!)
+        assertEquals("like", likeResponse1.returnResult().responseBody?.status)
 
-        // get liked article
-        val articles2 = getArticles(2)
-        val article = articles2.returnResult().responseBody?.filter { it.id == articleId }?.get(0)
-        assertEquals(1, article?.numOfLikes)
+        // Get liked article
+        val articlesResponse2 = getArticles(2)
+        val likedArticle = articlesResponse2.returnResult().responseBody?.find { it.id == articleId }
+        assertEquals(1, likedArticle?.numOfLikes)
 
-        // like one more time
-        likeArticle(articleId)
+        // Get info about likes
+        val likeInfoResponse = showLikeInfo(articleId)
+        val likedUsers = likeInfoResponse.returnResult().responseBody?.users
+        assertEquals("FirstName LastName", likedUsers?.first())
 
-        // dislike
-        val articles3 = getArticles(2)
-        val article2 = articles3.returnResult().responseBody?.filter { it.id == articleId }?.get(0)
-        assertEquals(0, article2?.numOfLikes)
+        // Like one more time (to dislike)
+        val likeResponse2 = likeArticle(articleId)
+        assertEquals("dislike", likeResponse2.returnResult().responseBody?.status)
+
+        // Dislike
+        val articlesResponse3 = getArticles(2)
+        val dislikedArticle = articlesResponse3.returnResult().responseBody?.find { it.id == articleId }
+        assertEquals(0, dislikedArticle?.numOfLikes)
     }
 }
