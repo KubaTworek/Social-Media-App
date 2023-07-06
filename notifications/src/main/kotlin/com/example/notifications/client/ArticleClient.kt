@@ -14,4 +14,7 @@ import org.springframework.web.bind.annotation.*
 interface ArticleClient {
     @GetMapping("/id/{articleId}")
     fun getArticleById(@PathVariable articleId: Int): ResponseEntity<String>
+
+    @GetMapping("/author/{authorId}")
+    fun getArticlesByAuthor(@PathVariable authorId: Int): ResponseEntity<String>
 }
