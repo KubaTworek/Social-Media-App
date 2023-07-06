@@ -4,14 +4,14 @@ import {ModalForm} from "./modal/modal-form.js";
 export class DeleteForm extends ModalForm {
     constructor(text, url) {
         super();
-        this.shadowRoot.innerHTML = this.render(text);
+        this.text = text;
         this.url = url;
     }
 
     connectedCallback() {
         super.connectedCallback();
-        this.shadowRoot
-            .getElementById("confirm-button")
+        this.shadowRoot.innerHTML = this.render()
+        this.shadowRoot.getElementById("confirm-button")
             .addEventListener("click", this.delete.bind(this));
     }
 
@@ -27,7 +27,7 @@ export class DeleteForm extends ModalForm {
         this.hide();
     }
 
-    render(text) {
+    render() {
         return `
             <style>
               #backdrop {
@@ -93,12 +93,17 @@ export class DeleteForm extends ModalForm {
               #buttons-container button:not(:last-child) {
                 margin-right: 0.25rem;
               }
+              
+              #content p {
+                font-size: 1.5rem;
+                color: #333;
+              }
             </style>
         
             <div id="backdrop"></div>
             <div id="background">
               <section id="content">
-                <p>${text}</p>
+                <p>${this.text}</p>
               </section>
               <section id="buttons-container">
                 <button id="cancel-button">Cancel</button>

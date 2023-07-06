@@ -10,6 +10,7 @@ import com.example.articles.model.dto.ArticleDTO
 import com.example.articles.model.entity.Article
 import com.example.articles.repository.ArticleRepository
 import com.example.articles.repository.LikeRepository
+import jakarta.transaction.Transactional
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import java.sql.Timestamp
@@ -45,11 +46,13 @@ class ArticleServiceImpl(
         articleRepository.save(article)
     }
 
+    @Transactional
     override fun deleteById(theId: Int, jwt: String) {
         val userDetails = authorizationService.getUserDetails(jwt)
         val article = articleRepository.findById(theId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
         if (article.authorId == userDetails.authorId) {
+            likeRepository.deleteAllByArticleId(theId)
             articleRepository.deleteById(theId)
         } else {
             throw UnauthorizedException("You are not authorized to delete this article!")
