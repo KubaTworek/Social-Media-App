@@ -77,6 +77,20 @@ class ArticleControllerIT : AbstractIT() {
         getArticles(1)
     }
 
+    @Test
+    fun testDeleteLikedArticle() {
+        // Given
+        val articles = getArticles(2)
+        val articleId = articles.returnResult().responseBody?.firstOrNull()?.id
+
+        // When
+        likeArticle(articleId!!)
+        deleteArticleByArticleId(articleId)
+
+        // Then
+        getArticles(1)
+    }
+
     // INTERNAL
     @Test
     fun testGetArticleById() {

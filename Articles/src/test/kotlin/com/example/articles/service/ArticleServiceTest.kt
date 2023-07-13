@@ -150,6 +150,7 @@ class ArticleServiceTest {
         articleService.deleteById(articleId, jwt)
 
         // Then
+        verify(likeRepository).deleteAllByArticleId(articleId)
         verify(articleRepository).deleteById(articleId)
     }
 

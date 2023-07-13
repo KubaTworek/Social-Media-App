@@ -13,7 +13,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
 
-class AuthorizationServiceImplTest {
+class AuthorizationServiceTest {
     @Mock
     private lateinit var userRepository: UserRepository
 

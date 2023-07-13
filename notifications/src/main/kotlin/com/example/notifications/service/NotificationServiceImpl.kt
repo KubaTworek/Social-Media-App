@@ -21,9 +21,9 @@ class NotificationServiceImpl(
 ) : NotificationService {
     override fun findAllNotificationsByUser(jwt: String): List<NotificationResponse> {
         val userDetails = authorizationService.getUserDetails(jwt)
-        val articleIds = articleService.getArticlesByAuthor(userDetails.authorId)
+        val articles = articleService.getArticlesByAuthor(userDetails.authorId)
 
-        val notifications = articleIds.flatMap { article ->
+        val notifications = articles.flatMap { article ->
             notificationRepository.findAllByArticleIdOrderByTimestampDesc(article.id)
                 .map { mapToNotificationResponse(it) }
         }
