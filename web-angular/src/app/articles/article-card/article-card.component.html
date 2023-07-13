@@ -1,0 +1,15 @@
+<article class="article-card__article-card">
+  <p class="article-card__author-name">{{ article.author_firstName }} {{ article.author_lastName }} <span
+    class="article-card__author-username">@{{ article.author_username }} &bull; {{ article.elapsed }}</span></p>
+  <p class="article-card__content">{{ article.text }}</p>
+  <p class="article-card__article-id">{{ article.id }}</p>
+  <div>
+    <p><span (click)="likeArticle(article.id)" (mouseenter)="showLikes(article.id)"
+             (mouseleave)="hideLikeInfo(article.id)"
+             class="article-card__like-button" id="like-button-{{article.id}}">👍</span><span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+    </p>
+    <button (click)="openDeleteModal()" class="article-card__delete-button">Delete</button>
+  </div>
+</article>
+<article-delete (cancelled)="onArticleDeleteCancelled()" (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
+

@@ -1,0 +1,74 @@
+.article-card__article-card {
+  position: relative;
+  background-color: #111;
+  border-bottom: 1px solid #444;
+  border-top: none;
+  box-sizing: border-box;
+  color: #eee;
+  display: block;
+  padding: 0 0.8rem;
+  width: 100%;
+}
+
+.article-card__author-name {
+  font-weight: 700;
+  text-align: left;
+}
+
+.article-card__author-username {
+  color: #666;
+  font-weight: 500;
+  text-align: left;
+}
+
+.article-card__content {
+  text-align: justify;
+}
+
+.article-card__article-id {
+  display: none;
+}
+
+.article-card__like-button {
+  position: relative;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.article-card__likes {
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.article-card__like-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  font-size: 12px;
+  padding: 6px;
+  border-radius: 4px;
+  z-index: 9999;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.article-card__like-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.article-card__like-button:hover .article-card__like-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+article-delete {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+}
