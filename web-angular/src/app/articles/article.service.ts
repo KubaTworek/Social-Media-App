@@ -5,6 +5,8 @@ import {ArticleRequest} from "./dto/article-request.type";
 
 @Injectable()
 export class ArticleService {
+  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkwMjEwNjE0LCJleHAiOjE2OTAyMjE0MTR9.2YoY-8VS_R83lbeaUqFUJtPbcCLpIfkeIwDVnJGZdNc';
+
   constructor(private http: HttpClient) {
   }
 
@@ -27,7 +29,7 @@ export class ArticleService {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjg5MjgwMDA5LCJleHAiOjE2ODkyOTA4MDl9.nfFtuQCjKXE7W9gkzrXKVffkmwSlgks6uG0v-Obkkbk' || ''
+      'Authorization': this.jwt
     });
 
     try {
@@ -41,7 +43,7 @@ export class ArticleService {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjg5MjgwMDA5LCJleHAiOjE2ODkyOTA4MDl9.nfFtuQCjKXE7W9gkzrXKVffkmwSlgks6uG0v-Obkkbk' || ''
+      'Authorization': this.jwt
     });
 
     try {

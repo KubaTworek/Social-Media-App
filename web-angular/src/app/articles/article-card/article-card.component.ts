@@ -85,7 +85,7 @@ export class ArticleCardComponent {
 
   hideLikeInfo(articleId: string): void {
     const likeButton = document.querySelector(`#like-button-${articleId}`);
-    const tooltip = likeButton?.querySelector('.like-tooltip');
+    const tooltip = likeButton?.querySelector('.article-card__like-tooltip');
     if (tooltip) {
       likeButton?.removeChild(tooltip);
     }
