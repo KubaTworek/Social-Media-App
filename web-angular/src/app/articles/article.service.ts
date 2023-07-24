@@ -10,15 +10,13 @@ export class ArticleService {
   constructor(private http: HttpClient) {
   }
 
-  async getArticles(): Promise<Article[] | undefined> {
+  async getArticles(keyword: string): Promise<Article[] | undefined> {
     try {
-      const response = await this.http.get<Article[]>('http://localhost:3000/articles/api/').toPromise();
-      const articlesWithElapsed = response?.map(article => ({
+      const response = await this.http.get<Article[]>(`http://localhost:3000/articles/api/${keyword}`).toPromise();
+      return response?.map(article => ({
         ...article,
         elapsed: this.getTimeElapsed(article.timestamp)
       }));
-      console.log(articlesWithElapsed);
-      return articlesWithElapsed;
     } catch (error) {
       console.error(error);
       return undefined;

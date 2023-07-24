@@ -20,7 +20,6 @@ export class NotificationListComponent implements OnInit {
   async getNotifications(): Promise<void> {
     try {
       this.notificationList = await this.notificationService.getNotifications() || [];
-      console.log(this.notificationList);
     } catch (error) {
       console.error(error);
     }

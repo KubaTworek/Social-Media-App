@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 import {ArticlePostComponent} from "./articles/article-post/article-post.component";
 import {ArticleCardComponent} from "./articles/article-card/article-card.component";
 import {ArticleListComponent} from "./articles/article-list/article-list.component";
@@ -34,4 +34,5 @@ import {NotificationService} from "./notifications/notification.service";
   providers: [ArticleService, LikeService, NotificationService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

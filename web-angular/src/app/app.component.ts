@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
-import {ArticleRequest} from "./articles/dto/article-request.type";
+import {Component} from '@angular/core';
+import {AppService} from "./app.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [AppService]
 })
 export class AppComponent {
   title = 'web-angular';
+
+  constructor(private appService: AppService) {
+  }
 
   navigateToArticles(): void {
     const articlePost = document.querySelector('article-post')
@@ -31,5 +35,10 @@ export class AppComponent {
     articles.style.display = 'none';
     // @ts-ignore
     notifications.style.display = 'flex';
+  }
+
+  updateArticleList(event: Event): void {
+    const inputText = (event.target as HTMLInputElement).value;
+    this.appService.updateArticleList(inputText);
   }
 }

@@ -1,7 +1,6 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Notification} from './dto/notification.type';
-import {ArticleRequest} from "../articles/dto/article-request.type";
 
 @Injectable()
 export class NotificationService {

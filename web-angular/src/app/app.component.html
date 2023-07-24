@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <input id="search-input" type="text" placeholder="Search">
+  <input (input)="updateArticleList($event)" id="search-input" placeholder="Search" type="text">
   <div id="main-board">
     <article-post></article-post>
     <article-list></article-list>

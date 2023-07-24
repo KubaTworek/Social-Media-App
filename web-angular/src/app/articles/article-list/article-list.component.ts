@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ArticleService} from '../article.service';
 import {Article} from '../dto/article.type';
+import {Subscription} from "rxjs";
+import {AppService} from "../../app.service";
 
 @Component({
   selector: 'article-list',
@@ -9,18 +11,29 @@ import {Article} from '../dto/article.type';
 })
 export class ArticleListComponent implements OnInit {
   articleList: Article[] = [];
+  private subscription: Subscription = new Subscription();
 
-  constructor(private articleService: ArticleService) {
+  constructor(
+    private articleService: ArticleService,
+    private appService: AppService
+  ) {
   }
 
   ngOnInit(): void {
-    this.getArticles();
+    this.subscription = this.appService.articleListUpdated$.subscribe(
+      (keyword: string) => {
+        this.getArticles(keyword);
+      }
+    );
   }
 
-  async getArticles(): Promise<void> {
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  async getArticles(keyword: string): Promise<void> {
     try {
-      this.articleList = await this.articleService.getArticles() || [];
-      console.log(this.articleList);
+      this.articleList = await this.articleService.getArticles(keyword) || [];
     } catch (error) {
       console.error(error);
     }

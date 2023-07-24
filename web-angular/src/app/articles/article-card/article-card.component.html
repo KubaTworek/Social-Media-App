@@ -6,10 +6,12 @@
   <div>
     <p><span (click)="likeArticle(article.id)" (mouseenter)="showLikes(article.id)"
              (mouseleave)="hideLikeInfo(article.id)"
-             class="article-card__like-button" id="like-button-{{article.id}}">👍</span><span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+             class="article-card__like-button" id="like-button-{{article.id}}">👍</span><span class="article-card__likes"
+                                                                                             id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
     <button (click)="openDeleteModal()" class="article-card__delete-button">Delete</button>
   </div>
 </article>
-<article-delete (cancelled)="onArticleDeleteCancelled()" (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
+<article-delete (cancelled)="onArticleDeleteCancelled()"
+                (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 
