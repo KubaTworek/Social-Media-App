@@ -11,6 +11,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {LikeService} from "./articles/like.service";
 import {ArticleDeleteComponent} from "./articles/article-delete/article-delete.component";
+import {NotificationCardComponent} from "./notifications/notification-card/notification-card.component";
+import {NotificationListComponent} from "./notifications/notification-list/notification-list.component";
+import {NotificationService} from "./notifications/notification.service";
 
 @NgModule({
   declarations: [
@@ -18,7 +21,9 @@ import {ArticleDeleteComponent} from "./articles/article-delete/article-delete.c
     ArticlePostComponent,
     ArticleCardComponent,
     ArticleListComponent,
-    ArticleDeleteComponent
+    ArticleDeleteComponent,
+    NotificationCardComponent,
+    NotificationListComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +31,7 @@ import {ArticleDeleteComponent} from "./articles/article-delete/article-delete.c
     HttpClientModule,
     FormsModule
   ],
-  providers: [ArticleService, LikeService],
+  providers: [ArticleService, LikeService, NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

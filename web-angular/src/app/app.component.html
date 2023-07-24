@@ -1,8 +1,8 @@
 <div id="background">
   <div id="navigation-board">
     <div class="button-container">
-      <button id="home-button">Home</button>
-      <button id="notifications-button">Notifications</button>
+      <button (click)="navigateToArticles()" id="home-button">Home</button>
+      <button (click)="navigateToNotifications()" id="notifications-button">Notifications</button>
     </div>
   </div>
 
@@ -10,6 +10,7 @@
   <div id="main-board">
     <article-post></article-post>
     <article-list></article-list>
+    <notification-list></notification-list>
   </div>
 
 </div>

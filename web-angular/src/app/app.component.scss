@@ -84,6 +84,16 @@ article-list {
   position: relative;
 }
 
+notification-list {
+  width: 100%;
+  border: 1px solid #444;
+  box-sizing: border-box;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
 @media screen and (min-width: 860px) {
   #background {
     flex-direction: row;
