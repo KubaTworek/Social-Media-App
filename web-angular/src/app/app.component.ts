@@ -9,4 +9,9 @@ import {SearchService} from "./search-board/service/search.service";
 })
 export class AppComponent {
   title = 'web-angular';
+  loadedFeature = 'articles';
+
+  onNavigate(feature: string) {
+    this.loadedFeature = feature;
+  }
 }

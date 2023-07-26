@@ -1,3 +1,4 @@
-<ng-container>
-  <article-card *ngFor="let article of articleList" [article]="article"></article-card>
-</ng-container>
+<article-card
+  *ngFor="let articleEl of articleList"
+  [article]="articleEl"
+></article-card>

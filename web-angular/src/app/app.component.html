@@ -1,8 +1,8 @@
 <div id="background">
-  <navigation-board></navigation-board>
+  <navigation-board (featureSelected)="onNavigate($event)"></navigation-board>
   <main id="main-board">
-    <articles></articles>
-    <notifications></notifications>
+    <articles *ngIf="loadedFeature === 'articles'"></articles>
+    <notifications *ngIf="loadedFeature === 'notifications'"></notifications>
   </main>
   <search-board></search-board>
 </div>

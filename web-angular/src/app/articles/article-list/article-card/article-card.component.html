@@ -4,12 +4,12 @@
   <p class="article-card__content">{{ article.text }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
   <div>
-    <p><span (click)="likeArticle(article.id)" (mouseenter)="showLikes(article.id)"
+    <p class="article-card__like-container" id="like-container-{{article.id}}"><span (click)="likeArticle(article.id)" (mouseenter)="showLikes(article.id)"
              (mouseleave)="hideLikeInfo(article.id)"
-             class="article-card__like-button" id="like-button-{{article.id}}">👍</span><span class="article-card__likes"
+             class="article-card__like-button" id="like-button-{{article.id}}">❤️</span><span class="article-card__likes"
                                                                                              id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
-    <button (click)="openDeleteModal()" class="article-card__delete-button">Delete</button>
+    <a (click)="openDeleteModal()" class="article-card__delete-button">❌</a>
   </div>
 </article>
 <article-delete (cancelled)="onArticleDeleteCancelled()"

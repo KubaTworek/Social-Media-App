@@ -11,16 +11,7 @@ import {ArticleService} from "../../service/article.service";
   encapsulation: ViewEncapsulation.None
 })
 export class ArticleCardComponent {
-  @Input() article: Article = {
-    author_firstName: '',
-    author_lastName: '',
-    author_username: '',
-    timestamp: new Date(),
-    text: '',
-    id: '',
-    numOfLikes: '',
-    elapsed: ''
-  };
+  @Input() article!: Article
 
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
 
@@ -61,7 +52,7 @@ export class ArticleCardComponent {
           tooltip.classList.add('article-card__like-tooltip');
           tooltip.innerHTML = tooltipContent;
 
-          const likeButton = document.querySelector(`#like-button-${articleId}`);
+          const likeButton = document.querySelector(`#like-container-${articleId}`);
           likeButton?.appendChild(tooltip);
         }
       })
@@ -84,7 +75,7 @@ export class ArticleCardComponent {
   }
 
   hideLikeInfo(articleId: string): void {
-    const likeButton = document.querySelector(`#like-button-${articleId}`);
+    const likeButton = document.querySelector(`#like-container-${articleId}`);
     const tooltip = likeButton?.querySelector('.article-card__like-tooltip');
     if (tooltip) {
       likeButton?.removeChild(tooltip);
@@ -92,14 +83,20 @@ export class ArticleCardComponent {
   }
 
   private addLike(articleId: string): void {
-    const likesElement = document.querySelector(`#likes-${articleId}`) as HTMLElement;
-    const currentLikes = parseInt(likesElement.innerText);
-    likesElement.innerText = (currentLikes + 1).toString();
+    const numberOfLikes = document.querySelector(`#likes-${articleId}`) as HTMLElement;
+    const likeContainer = document.querySelector(`#like-container-${articleId}`) as HTMLElement;
+    const currentLikes = parseInt(numberOfLikes.innerText);
+    numberOfLikes.innerText = (currentLikes + 1).toString();
+    likeContainer.style.filter = 'grayscale(0%)';
+    likeContainer.style.color = 'red';
   }
 
   private deleteLike(articleId: string): void {
-    const likesElement = document.querySelector(`#likes-${articleId}`) as HTMLElement;
-    const currentLikes = parseInt(likesElement.innerText);
-    likesElement.innerText = (currentLikes - 1).toString();
+    const numberOfLikes = document.querySelector(`#likes-${articleId}`) as HTMLElement;
+    const likeContainer = document.querySelector(`#like-container-${articleId}`) as HTMLElement;
+    const currentLikes = parseInt(numberOfLikes.innerText);
+    numberOfLikes.innerText = (currentLikes - 1).toString();
+    likeContainer.style.filter = 'grayscale(100%)';
+    likeContainer.style.color = '#555';
   }
 }
