@@ -42,15 +42,3 @@
 .article-post__send-button:hover {
   background-color: #cc0000;
 }
-
-@media screen and (max-width: 600px) {
-  .article-post {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-  }
-
-  .article-post__send-button {
-    position: static;
-    margin-top: 1rem;
-  }
-}

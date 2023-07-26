@@ -1,8 +1,8 @@
 import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
-import {Article} from "../dto/article.type";
-import {LikeService} from "../like.service";
-import {ArticleDeleteComponent} from "../article-delete/article-delete.component";
-import {ArticleService} from "../article.service";
+import {Article} from "../../dto/article.type";
+import {LikeService} from "../../service/like.service";
+import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
+import {ArticleService} from "../../service/article.service";
 
 @Component({
   selector: 'article-card',

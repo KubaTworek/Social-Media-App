@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ArticleService} from "../article.service";
+import {ArticleService} from "../service/article.service";
 import {ArticleRequest} from "../dto/article-request.type";
 
 @Component({

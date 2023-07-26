@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ArticleService} from '../article.service';
+import {ArticleService} from '../service/article.service';
 import {Article} from '../dto/article.type';
 import {Subscription} from "rxjs";
-import {AppService} from "../../app.service";
+import {SearchService} from "../../search-board/service/search.service";
 
 @Component({
   selector: 'article-list',
@@ -15,7 +15,7 @@ export class ArticleListComponent implements OnInit {
 
   constructor(
     private articleService: ArticleService,
-    private appService: AppService
+    private appService: SearchService
   ) {
   }
 

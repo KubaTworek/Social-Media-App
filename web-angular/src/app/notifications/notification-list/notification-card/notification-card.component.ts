@@ -1,5 +1,5 @@
 import {Component, Input, ViewEncapsulation} from "@angular/core";
-import {Notification} from "../dto/notification.type";
+import {Notification} from "../../dto/notification.type";
 
 @Component({
   selector: 'notification-card',
