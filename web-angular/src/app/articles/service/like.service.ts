@@ -1,37 +1,42 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {catchError, Observable} from "rxjs";
 
 @Injectable()
 export class LikeService {
-  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkwNDA1MzkyLCJleHAiOjE2OTA0MTYxOTJ9.eN_b2gNR3B1MNfuAZMnEGK566yMpafJHfgIY1fmUj2g';
+  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkwNDE3NTg2LCJleHAiOjE2OTA0MjgzODZ9.rHmzIO3leTyCKgxA9mDiutVNuIKa11glXcsx9Gi7gWI';
 
   constructor(private http: HttpClient) {
   }
 
-  async likeArticle(id: string): Promise<any> {
+  likeArticle(id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'Authorization': this.jwt
     });
 
-    try {
-      return await this.http.post<any>(`http://localhost:3000/articles/api/like/${id}`, null, {headers}).toPromise();
-    } catch (error) {
-      console.error(error);
-    }
+    return this.http.post<any>(`http://localhost:3000/articles/api/like/${id}`, null, { headers })
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return [];
+        })
+      );
   }
 
-  async showLikes(id: string): Promise<any> {
+  showLikes(id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     });
 
-    try {
-      return await this.http.get<any>(`http://localhost:3000/articles/api/like/${id}`, {headers}).toPromise();
-    } catch (error) {
-      console.error(error);
-    }
+    return this.http.get<any>(`http://localhost:3000/articles/api/like/${id}`, { headers })
+      .pipe(
+        catchError(error => {
+          console.error(error);
+          return [];
+        })
+      );
   }
 }

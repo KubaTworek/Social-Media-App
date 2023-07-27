@@ -12,7 +12,6 @@ import {ArticleService} from "../../service/article.service";
 })
 export class ArticleCardComponent {
   @Input() article!: Article
-
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
 
   constructor(private likeService: LikeService, private articleService: ArticleService) {
@@ -20,12 +19,12 @@ export class ArticleCardComponent {
 
   deleteArticle(articleId: string) {
     this.articleService.deleteArticle(articleId)
-      .then(() => location.reload());
+      .subscribe(() => location.reload());
   }
 
   likeArticle(articleId: string): void {
     this.likeService.likeArticle(articleId)
-      .then(response => {
+      .subscribe(response => {
         const status = response?.status;
         if (status === 'like') {
           this.addLike(articleId);
@@ -35,30 +34,22 @@ export class ArticleCardComponent {
           console.error(`Unknown response: ${status}`);
         }
       })
-      .catch(error => {
-        console.error(error);
-      });
   }
 
   showLikes(articleId: string): void {
     this.likeService.showLikes(articleId)
-      .then(response => {
+      .subscribe(response => {
         const users = response.users;
         if (users.length > 0) {
           const userNames = users.map((user: string) => `<div>${user}</div>`).join('');
           const tooltipContent = `<div class="article-card__like-tooltip-content">${userNames}</div>`;
-
           const tooltip = document.createElement('div');
           tooltip.classList.add('article-card__like-tooltip');
           tooltip.innerHTML = tooltipContent;
-
           const likeButton = document.querySelector(`#like-container-${articleId}`);
           likeButton?.appendChild(tooltip);
         }
       })
-      .catch(error => {
-        console.error(error);
-      });
   }
 
   openDeleteModal(): void {

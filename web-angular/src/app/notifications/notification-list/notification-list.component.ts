@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NotificationService} from "../service/notification.service";
 import {Notification} from "../dto/notification.type";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'notification-list',
@@ -9,19 +10,20 @@ import {Notification} from "../dto/notification.type";
 })
 export class NotificationListComponent implements OnInit {
   notificationList: Notification[] = [];
+  private subscription: Subscription = new Subscription();
 
   constructor(private notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
-    this.getNotifications();
-  }
-
-  async getNotifications(): Promise<void> {
-    try {
-      this.notificationList = await this.notificationService.getNotifications() || [];
-    } catch (error) {
-      console.error(error);
-    }
+    this.subscription = this.notificationService.getNotifications()
+      .subscribe(
+        (notifications: Notification[]) => {
+          this.notificationList = notifications || [];
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
   }
 }

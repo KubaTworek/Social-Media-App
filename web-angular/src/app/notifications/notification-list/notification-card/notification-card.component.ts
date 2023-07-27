@@ -8,11 +8,7 @@ import {Notification} from "../../dto/notification.type";
   encapsulation: ViewEncapsulation.None
 })
 export class NotificationCardComponent {
-  @Input() notification: Notification = {
-    name: '',
-    message: '',
-    content: ''
-  };
+  @Input() notification!: Notification
 
   constructor() {
   }

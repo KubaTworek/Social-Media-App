@@ -9,5 +9,4 @@ import {Component, OnInit} from '@angular/core';
 export class ArticlesComponent implements OnInit {
   ngOnInit(): void {
   }
-
 }

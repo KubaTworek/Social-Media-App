@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ArticleService} from '../service/article.service';
 import {Article} from '../dto/article.type';
 import {Subscription} from "rxjs";
@@ -9,19 +9,19 @@ import {SearchService} from "../../search-board/service/search.service";
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss']
 })
-export class ArticleListComponent implements OnInit {
+export class ArticleListComponent implements OnInit, OnDestroy {
   articleList: Article[] = [];
   private subscription: Subscription = new Subscription();
 
   constructor(
     private articleService: ArticleService,
-    private appService: SearchService
+    private searchService: SearchService
   ) {
   }
 
   ngOnInit(): void {
-    this.subscription = this.appService.articleListUpdated$.subscribe(
-      (keyword: string) => {
+    this.subscription = this.searchService.articleListUpdated$
+      .subscribe((keyword: string) => {
         this.getArticles(keyword);
       }
     );
@@ -33,7 +33,14 @@ export class ArticleListComponent implements OnInit {
 
   async getArticles(keyword: string): Promise<void> {
     try {
-      this.articleList = await this.articleService.getArticles(keyword) || [];
+      this.articleService.getArticles(keyword).subscribe(
+        (articles: Article[]) => {
+          this.articleList = articles || [];
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
     } catch (error) {
       console.error(error);
     }

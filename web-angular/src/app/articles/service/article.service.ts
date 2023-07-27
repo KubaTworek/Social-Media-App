@@ -2,56 +2,72 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
 import {ArticleRequest} from "../dto/article-request.type";
+import {catchError, Observable, throwError} from "rxjs";
+import { map } from 'rxjs/operators';
+
 
 @Injectable()
 export class ArticleService {
-  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkwNDA1MzkyLCJleHAiOjE2OTA0MTYxOTJ9.eN_b2gNR3B1MNfuAZMnEGK566yMpafJHfgIY1fmUj2g';
+  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkwNDE3NTg2LCJleHAiOjE2OTA0MjgzODZ9.rHmzIO3leTyCKgxA9mDiutVNuIKa11glXcsx9Gi7gWI';
 
   constructor(private http: HttpClient) {
   }
 
-  async getArticles(keyword: string): Promise<Article[] | undefined> {
-    try {
-      const response = await this.http.get<Article[]>(`http://localhost:3000/articles/api/${keyword}`).toPromise();
-      return response?.map(article => ({
-        ...article,
-        elapsed: this.getTimeElapsed(article.timestamp)
-      }));
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
+  getArticles(keyword: string): Observable<Article[]> {
+    const headers = this.createHeaders();
+
+    return this.http.get<Article[]>(`http://localhost:3000/articles/api/${keyword}`, {
+      headers,
+    }).pipe(
+      map((response) =>
+        response.map((article) => ({
+          ...article,
+          elapsed: this.getTimeElapsed(article.timestamp),
+        }))
+      )
+    ).pipe(
+      catchError((error) => {
+        console.error(error);
+        return throwError(error);
+      })
+    );
   }
 
-  async postArticle(data: ArticleRequest): Promise<void> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
+  postArticle(data: ArticleRequest): Observable<void> {
+    const headers = this.createHeaders();
+
+    return this.http.post<void>('http://localhost:3000/articles/api/', JSON.stringify(data), {
+      headers,
+    }).pipe(
+      catchError((error) => {
+        console.error(error);
+        return throwError(error);
+      })
+    );
+  }
+
+  deleteArticle(articleId: string): Observable<void> {
+    const headers = this.createHeaders();
+
+    return this.http.delete<void>(`http://localhost:3000/articles/api/${articleId}`, {
+      headers,
+    }).pipe(
+      catchError((error) => {
+        console.error(error);
+        return throwError(error);
+      })
+    );
+  }
+
+  private createHeaders(): HttpHeaders {
+    return new HttpHeaders({
+      Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': this.jwt
+      Authorization: this.jwt,
     });
-
-    try {
-      await this.http.post('http://localhost:3000/articles/api/', JSON.stringify(data), {headers}).toPromise();
-    } catch (error) {
-      console.error(error);
-    }
   }
 
-  async deleteArticle(articleId: string): Promise<void> {
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': this.jwt
-    });
-
-    try {
-      await this.http.delete(`http://localhost:3000/articles/api/${articleId}`, {headers}).toPromise();
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  getTimeElapsed(timestamp: Date): string {
+  private getTimeElapsed(timestamp: Date): string {
     const now = new Date();
     const timeDiff = now.getTime() - new Date(timestamp).getTime();
 

@@ -14,11 +14,11 @@ export class ArticlePostComponent {
   }
 
   createArticle(): void {
-    const data: ArticleRequest = {
+    const request: ArticleRequest = {
       title: '',
       text: this.articleContent
     };
-    this.articleService.postArticle(data)
-      .then(() => location.reload());
+    this.articleService.postArticle(request)
+      .subscribe(() => location.reload());
   }
 }
