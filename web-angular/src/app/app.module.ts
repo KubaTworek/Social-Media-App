@@ -39,7 +39,8 @@ import {SearchBoardComponent} from "./search-board/search-board.component";
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule
   ],
   providers: [ArticleService, LikeService, NotificationService],
   bootstrap: [AppComponent]

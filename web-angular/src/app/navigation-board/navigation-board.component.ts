@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'navigation-board',
@@ -6,12 +6,6 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
   styleUrls: ['./navigation-board.component.scss']
 })
 export class NavigationBoardComponent implements OnInit {
-  @Output() featureSelected = new EventEmitter<string>()
-
   ngOnInit(): void {
-  }
-
-  onSelect(feature: string) {
-    this.featureSelected.emit(feature)
   }
 }
