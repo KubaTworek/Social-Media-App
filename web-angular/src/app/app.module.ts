@@ -9,7 +9,6 @@ import {ArticleListComponent} from "./articles/article-list/article-list.compone
 import {ArticleService} from "./articles/service/article.service";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
-import {LikeService} from "./articles/service/like.service";
 import {ArticleDeleteComponent} from "./articles/article-list/article-card/article-delete/article-delete.component";
 import {
   NotificationCardComponent
@@ -42,7 +41,7 @@ import {SearchBoardComponent} from "./search-board/search-board.component";
     FormsModule,
     AppRoutingModule
   ],
-  providers: [ArticleService, LikeService, NotificationService],
+  providers: [ArticleService, NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

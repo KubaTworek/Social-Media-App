@@ -10,8 +10,10 @@ import {SearchService} from "../../search-board/service/search.service";
   styleUrls: ['./article-list.component.scss']
 })
 export class ArticleListComponent implements OnInit, OnDestroy {
-  articleList: Article[] = [];
-  private subscription: Subscription = new Subscription();
+  articles: Article[] = [];
+  keyword: string = '';
+  private keywordSubscription: Subscription = new Subscription();
+  private articlesSubscription: Subscription = new Subscription();
 
   constructor(
     private articleService: ArticleService,
@@ -20,29 +22,24 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.searchService.articleListUpdated$
+    this.keywordSubscription = this.searchService.articleListUpdated$
       .subscribe((keyword: string) => {
-        this.getArticles(keyword);
-      }
-    );
+          this.keyword = keyword;
+          this.articles = this.articleService.getArticlesByKeyword(keyword);
+        }
+      );
+
+    this.articlesSubscription = this.articleService.articlesChanged
+      .subscribe(
+        (articles: Article[]) => {
+          this.articles = articles;
+        }
+      );
+    this.articles = this.articleService.getArticles();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  async getArticles(keyword: string): Promise<void> {
-    try {
-      this.articleService.getArticles(keyword).subscribe(
-        (articles: Article[]) => {
-          this.articleList = articles || [];
-        },
-        (error) => {
-          console.error(error);
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    this.keywordSubscription.unsubscribe();
+    this.articlesSubscription.unsubscribe();
   }
 }

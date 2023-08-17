@@ -1,3 +1,5 @@
+import {Like} from "./like.type";
+
 export class Article {
   public author_firstName: string;
   public author_lastName: string;
@@ -5,8 +7,9 @@ export class Article {
   public timestamp: Date;
   public text: string;
   public id: string;
-  public numOfLikes: string;
+  public numOfLikes: number;
   public elapsed: string;
+  public likes: Like[];
 
   constructor(
     author_firstName: string,
@@ -15,7 +18,7 @@ export class Article {
     timestamp: Date,
     text: string,
     id: string,
-    numOfLikes: string,
+    numOfLikes: number,
     elapsed: string
   ) {
     this.author_firstName = author_firstName;
@@ -26,5 +29,6 @@ export class Article {
     this.id = id;
     this.numOfLikes = numOfLikes;
     this.elapsed = elapsed;
+    this.likes = [];
   }
 }

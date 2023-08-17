@@ -1,8 +1,8 @@
 import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
-import {LikeService} from "../../service/like.service";
 import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
-import {ArticleService} from "../../service/article.service";
+import {DataStorageService} from "../../shared/data-storage.service";
+import {Like} from "../../dto/like.type";
 
 @Component({
   selector: 'article-card',
@@ -14,42 +14,32 @@ export class ArticleCardComponent {
   @Input() article!: Article
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
 
-  constructor(private likeService: LikeService, private articleService: ArticleService) {
+  constructor(private dataStorage: DataStorageService) {
   }
 
   deleteArticle(articleId: string) {
-    this.articleService.deleteArticle(articleId)
-      .subscribe(() => location.reload());
+    this.dataStorage.deleteArticle(articleId);
   }
 
-  likeArticle(articleId: string): void {
-    this.likeService.likeArticle(articleId)
-      .subscribe(response => {
-        const status = response?.status;
-        if (status === 'like') {
-          this.addLike(articleId);
-        } else if (status === 'dislike') {
-          this.deleteLike(articleId);
-        } else {
-          console.error(`Unknown response: ${status}`);
-        }
-      })
+  likeArticle(articleId: string) {
+    this.dataStorage.likeArticle(articleId);
   }
 
-  showLikes(articleId: string): void {
-    this.likeService.showLikes(articleId)
-      .subscribe(response => {
-        const users = response.users;
-        if (users.length > 0) {
-          const userNames = users.map((user: string) => `<div>${user}</div>`).join('');
-          const tooltipContent = `<div class="article-card__like-tooltip-content">${userNames}</div>`;
-          const tooltip = document.createElement('div');
-          tooltip.classList.add('article-card__like-tooltip');
-          tooltip.innerHTML = tooltipContent;
-          const likeButton = document.querySelector(`#like-container-${articleId}`);
-          likeButton?.appendChild(tooltip);
-        }
-      })
+  showLikes(articleId: string) {
+    this.dataStorage.showLikes(articleId);
+    this.displayLikeTooltip(articleId);
+  }
+
+  displayLikeTooltip(articleId: string): void {
+    if (this.article.likes.length > 0) {
+      const userNames = this.article.likes.map((like: Like) => `<div>${like.username}</div>`).join('');
+      const tooltipContent = `<div class="article-card__like-tooltip-content">${userNames}</div>`;
+      const tooltip = document.createElement('div');
+      tooltip.classList.add('article-card__like-tooltip');
+      tooltip.innerHTML = tooltipContent;
+      const likeButton = document.querySelector(`#like-container-${articleId}`);
+      likeButton?.appendChild(tooltip);
+    }
   }
 
   openDeleteModal(): void {

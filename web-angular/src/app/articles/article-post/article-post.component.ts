@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
-import {ArticleService} from "../service/article.service";
 import {ArticleRequest} from "../dto/article-request.type";
+import {DataStorageService} from "../shared/data-storage.service";
 
 @Component({
   selector: 'article-post',
@@ -10,7 +10,7 @@ import {ArticleRequest} from "../dto/article-request.type";
 export class ArticlePostComponent {
   articleContent = '';
 
-  constructor(private articleService: ArticleService) {
+  constructor(private dataStorageService: DataStorageService) {
   }
 
   createArticle(): void {
@@ -18,7 +18,7 @@ export class ArticlePostComponent {
       title: '',
       text: this.articleContent
     };
-    this.articleService.postArticle(request)
-      .subscribe(() => location.reload());
+    this.articleContent = '';
+    this.dataStorageService.storeArticle(request);
   }
 }
