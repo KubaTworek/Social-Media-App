@@ -23,11 +23,11 @@ class JwtServiceImpl : JwtService {
             .compact()
 
     override fun parseJwtClaims(jwt: String): Claims {
-        val key = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.toByteArray(StandardCharsets.UTF_8))
+        val jwtWithoutBearer = jwt.replaceFirst("Bearer ", "")
         return Jwts.parserBuilder()
-            .setSigningKey(key)
+            .setSigningKey(createSecretKey())
             .build()
-            .parseClaimsJws(jwt)
+            .parseClaimsJws(jwtWithoutBearer)
             .body
     }
 

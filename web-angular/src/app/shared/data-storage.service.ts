@@ -1,28 +1,31 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {ArticleService} from "../service/article.service";
-import {Article} from "../dto/article.type";
-import {catchError, tap, throwError} from "rxjs";
+import {ArticleService} from "../articles/service/article.service";
+import {Article} from "../articles/dto/article.type";
+import {catchError, Observable, tap, throwError} from "rxjs";
 import {map} from "rxjs/operators";
-import {ArticleRequest} from "../dto/article-request.type";
+import {ArticleRequest} from "../articles/dto/article-request.type";
+import {Notification} from "../notifications/dto/notification.type";
+import {NotificationService} from "../notifications/service/notification.service";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
-  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkyMjI4MDEzLCJleHAiOjE2OTIyMzg4MTN9.wVx6plcLMDsYx0vNaItNByY5fsI-fg7WlvKJzqwEi8E';
+  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkyMzExODA1LCJleHAiOjE2OTIzMjI2MDV9.qtrF8LF1aXIFd-H5MroVNvvjfkVdrieOm2cEAMb5Dd0';
 
   constructor(
     private http: HttpClient,
     private articleService: ArticleService,
+    private notificationService: NotificationService,
   ) {
   }
 
   fetchArticles() {
-    const headers = this.createHeadersWithJwt();
+    const headers = this.createHeaderWithJwt();
 
     return this.http
-      .get<Article[]>(`http://localhost:3000/articles/api/`, {
-        headers,
-      })
+      .get<Article[]>(`http://localhost:3000/articles/api/`,
+        {headers}
+      )
       .pipe(
         map(articles => {
           return articles.map(article => {
@@ -40,7 +43,7 @@ export class DataStorageService {
   }
 
   storeArticle(request: ArticleRequest) {
-    const headers = this.createHeadersWithJwt();
+    const headers = this.createHeaderWithJwt();
 
     return this.http
       .post<void>(
@@ -62,7 +65,7 @@ export class DataStorageService {
   }
 
   deleteArticle(articleId: string) {
-    const headers = this.createHeadersWithJwt();
+    const headers = this.createHeaderWithJwt();
 
     return this.http
       .delete<void>(
@@ -81,7 +84,7 @@ export class DataStorageService {
   }
 
   likeArticle(articleId: string) {
-    const headers = this.createHeadersWithJwt();
+    const headers = this.createHeaderWithJwt();
 
     return this.http
       .post<any>(
@@ -102,7 +105,7 @@ export class DataStorageService {
   }
 
   showLikes(articleId: string) {
-    const headers = this.createHeaders();
+    const headers = this.createHeader();
 
     return this.http
       .get<any>(
@@ -121,7 +124,28 @@ export class DataStorageService {
       })
   }
 
-  private createHeadersWithJwt(): HttpHeaders {
+  fetchNotifications() {
+    const headers = this.createHeaderWithJwt();
+
+    return this.http
+      .get<Notification[]>(`http://localhost:3000/notifications/api/`,
+        {headers}
+      )
+      .pipe(
+        map(notifications => {
+          return notifications.map(notification => {
+            return {
+              ...notification
+            };
+          });
+        }),
+        tap(notifications => {
+          this.notificationService.setNotifications(notifications);
+        })
+      )
+  }
+
+  private createHeaderWithJwt(): HttpHeaders {
     return new HttpHeaders({
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -129,7 +153,7 @@ export class DataStorageService {
     });
   }
 
-  private createHeaders(): HttpHeaders {
+  private createHeader(): HttpHeaders {
     return new HttpHeaders({
       Accept: 'application/json',
       'Content-Type': 'application/json'
@@ -157,5 +181,4 @@ export class DataStorageService {
       return weeks + "w";
     }
   }
-
 }

@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {ArticleRequest} from "../dto/article-request.type";
-import {DataStorageService} from "../shared/data-storage.service";
+import {DataStorageService} from "../../shared/data-storage.service";
 
 @Component({
   selector: 'article-post',

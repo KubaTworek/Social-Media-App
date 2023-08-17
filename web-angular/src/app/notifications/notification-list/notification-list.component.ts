@@ -9,21 +9,21 @@ import {Subscription} from "rxjs";
   styleUrls: ['./notification-list.component.scss']
 })
 export class NotificationListComponent implements OnInit {
-  notificationList: Notification[] = [];
-  private subscription: Subscription = new Subscription();
+  notifications: Notification[] = [];
+  private notificationsSubscription: Subscription = new Subscription();
 
-  constructor(private notificationService: NotificationService) {
+  constructor(
+    private notificationService: NotificationService
+  ) {
   }
 
   ngOnInit(): void {
-    this.subscription = this.notificationService.getNotifications()
+    this.notificationsSubscription = this.notificationService.notificationsChanged
       .subscribe(
         (notifications: Notification[]) => {
-          this.notificationList = notifications || [];
-        },
-        (error) => {
-          console.error(error);
+          this.notifications = notifications;
         }
       );
+    this.notifications = this.notificationService.getNotifications();
   }
 }
