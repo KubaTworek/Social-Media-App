@@ -2,11 +2,14 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {ArticleService} from "../articles/service/article.service";
 import {Article} from "../articles/dto/article.type";
-import {catchError, Observable, tap, throwError} from "rxjs";
+import {catchError, tap, throwError} from "rxjs";
 import {map} from "rxjs/operators";
 import {ArticleRequest} from "../articles/dto/article-request.type";
 import {Notification} from "../notifications/dto/notification.type";
 import {NotificationService} from "../notifications/service/notification.service";
+import {RegisterRequest} from "../auth/dto/register-request.type";
+import {LoginRequest} from "../auth/dto/login-request.type";
+import {AuthorizationService} from "../auth/service/authorization.service";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -16,6 +19,7 @@ export class DataStorageService {
     private http: HttpClient,
     private articleService: ArticleService,
     private notificationService: NotificationService,
+    private authorizationService: AuthorizationService,
   ) {
   }
 
@@ -145,12 +149,73 @@ export class DataStorageService {
       )
   }
 
+  login(request: LoginRequest) {
+    const headers = this.createHeaderWithJwt();
+
+    return this.http
+      .post<any>(`http://localhost:3000/auth/api/login`,
+        JSON.stringify(request),
+        {headers}
+      )
+      .pipe(
+        catchError((error) => {
+          if (error.status === 404) {
+            const errorMessage = "User does not exist!";
+            this.authorizationService.handleLoginError(errorMessage);
+          } else if (error.status === 401) {
+            const errorMessage = "Invalid credentials!";
+            this.authorizationService.handleLoginError(errorMessage);
+          } else {
+            console.error(error);
+          }
+          return throwError(error);
+        })
+      )
+      .subscribe(response => {
+        const jwt = response?.jwt
+        this.authorizationService.handleLogin(jwt)
+      });
+  }
+
+  register(request: RegisterRequest) {
+    const headers = this.createHeaderWithJwt();
+
+    return this.http
+      .post<void>(`http://localhost:3000/auth/api/register`,
+        JSON.stringify(request),
+        {headers}
+      )
+      .pipe(
+        catchError((error) => {
+          if (error.status === 400) {
+            const errorMessage = "Username already exist!";
+            this.authorizationService.handleRegisterError(errorMessage);
+          } else {
+            console.error(error);
+          }
+          return throwError(error);
+        })
+      )
+      .subscribe(() => {
+        this.authorizationService.handleRegister()
+      });
+  }
+
   private createHeaderWithJwt(): HttpHeaders {
-    return new HttpHeaders({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: this.jwt
-    });
+    const jwtToken = sessionStorage.getItem('jwt');
+
+    if (jwtToken) {
+      return new HttpHeaders({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: jwtToken
+      });
+    } else {
+      return new HttpHeaders({
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      });
+    }
   }
 
   private createHeader(): HttpHeaders {

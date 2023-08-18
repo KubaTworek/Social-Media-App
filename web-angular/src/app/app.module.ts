@@ -19,6 +19,9 @@ import {NotificationsComponent} from "./notifications/notifications.component";
 import {ArticlesComponent} from "./articles/articles.component";
 import {NavigationBoardComponent} from "./navigation-board/navigation-board.component";
 import {SearchBoardComponent} from "./search-board/search-board.component";
+import {LoginComponent} from "./auth/login/login.component";
+import {RegisterComponent} from "./auth/register/register.component";
+import {AuthorizationService} from "./auth/service/authorization.service";
 
 @NgModule({
   declarations: [
@@ -32,7 +35,9 @@ import {SearchBoardComponent} from "./search-board/search-board.component";
     ArticleDeleteComponent,
     NotificationsComponent,
     NotificationListComponent,
-    NotificationCardComponent
+    NotificationCardComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,7 @@ import {SearchBoardComponent} from "./search-board/search-board.component";
     FormsModule,
     AppRoutingModule
   ],
-  providers: [ArticleService, NotificationService],
+  providers: [ArticleService, NotificationService, AuthorizationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -38,17 +38,20 @@ search-board {
     flex-direction: row;
     justify-content: center;
   }
+
   navigation-board {
     position: sticky;
     top: 2rem;
     left: 0;
     width: 5rem;
   }
+
   main#main-board {
     padding-right: 1rem;
     padding-left: 5rem;
     max-width: 40rem;
   }
+
   search-board {
     display: flex;
     position: sticky;

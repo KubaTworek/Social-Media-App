@@ -1,0 +1,60 @@
+form {
+  background-color: black;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  margin: 0 auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+input[type=email],
+input[type=text] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid white;
+  border-radius: 5px;
+  background-color: transparent;
+  color: white;
+}
+
+button {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-link {
+  display: block;
+  text-align: center;
+  color: #666666;
+}
+
+a {
+  margin: 10px auto;
+  color: blue;
+  text-decoration: underline;
+  display: inline-block;
+}
+
+a:hover {
+  color: darkblue;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/*# sourceMappingURL=register.component.css.map */

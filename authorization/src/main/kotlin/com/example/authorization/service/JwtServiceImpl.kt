@@ -6,6 +6,7 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
+import java.time.Instant
 import java.util.*
 
 @Service
@@ -18,7 +19,7 @@ class JwtServiceImpl : JwtService {
             .claim("username", username)
             .claim("authorities", populateAuthorities(authorities))
             .setIssuedAt(Date())
-            .setExpiration(Date(SecurityConstants.JWT_EXPIRE_TIME))
+            .setExpiration(Date(Instant.now().toEpochMilli() + 10800000))
             .signWith(createSecretKey())
             .compact()
 

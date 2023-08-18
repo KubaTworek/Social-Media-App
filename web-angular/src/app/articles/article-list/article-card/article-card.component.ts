@@ -62,22 +62,4 @@ export class ArticleCardComponent {
       likeButton?.removeChild(tooltip);
     }
   }
-
-  private addLike(articleId: string): void {
-    const numberOfLikes = document.querySelector(`#likes-${articleId}`) as HTMLElement;
-    const likeContainer = document.querySelector(`#like-container-${articleId}`) as HTMLElement;
-    const currentLikes = parseInt(numberOfLikes.innerText);
-    numberOfLikes.innerText = (currentLikes + 1).toString();
-    likeContainer.style.filter = 'grayscale(0%)';
-    likeContainer.style.color = 'red';
-  }
-
-  private deleteLike(articleId: string): void {
-    const numberOfLikes = document.querySelector(`#likes-${articleId}`) as HTMLElement;
-    const likeContainer = document.querySelector(`#like-container-${articleId}`) as HTMLElement;
-    const currentLikes = parseInt(numberOfLikes.innerText);
-    numberOfLikes.innerText = (currentLikes - 1).toString();
-    likeContainer.style.filter = 'grayscale(100%)';
-    likeContainer.style.color = '#555';
-  }
 }

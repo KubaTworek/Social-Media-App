@@ -1,4 +1,6 @@
 <div class="button-container">
-  <button routerLink="/home" id="home-button">Home</button>
-  <button routerLink="/notifications" id="notifications-button">Notifications</button>
+  <button id="home-button" routerLink="/home">Home</button>
+  <button *ngIf="isLoggedIn()" id="notifications-button" routerLink="/notifications">Notifications</button>
+  <button *ngIf="isLoggedOut()" id="login-button" routerLink="/login">Login</button>
+  <button (click)="logout()" *ngIf="isLoggedIn()" id="logout-button">Logout</button>
 </div>

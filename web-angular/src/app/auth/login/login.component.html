@@ -1,0 +1,37 @@
+<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <div>
+    <label for="username">Username</label>
+    <input
+      id="username"
+      name="username"
+      ngModel
+      required
+      type="text"
+    />
+  </div>
+  <div>
+    <label for="password">Password</label>
+    <input
+      id="password"
+      minlength="6"
+      name="password"
+      ngModel
+      required
+      type="text"
+    />
+  </div>
+  <div>
+    <button
+      type="submit"
+    >
+      Login
+    </button>
+  </div>
+</form>
+
+<div class="signup-link">
+  <p>Don't have an account? <a href="/register">Sign Up</a></p>
+</div>
