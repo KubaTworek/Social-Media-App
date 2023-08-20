@@ -17,6 +17,13 @@ export class ArticleCardComponent {
   constructor(private dataStorage: DataStorageService) {
   }
 
+  isAbleToDelete() {
+    const userDataJson = sessionStorage.getItem("userData");
+    const username = userDataJson ? JSON.parse(userDataJson).username : null;
+
+    return username !== null && username === this.article.author_username;
+  }
+
   deleteArticle(articleId: string) {
     this.dataStorage.deleteArticle(articleId);
   }

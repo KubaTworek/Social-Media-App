@@ -12,7 +12,7 @@
       class="article-card__likes"
       id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
-    <a (click)="openDeleteModal()" class="article-card__delete-button">❌</a>
+    <a *ngIf="isAbleToDelete()" (click)="openDeleteModal()" class="article-card__delete-button">❌</a>
   </div>
 </article>
 <article-delete (cancelled)="onArticleDeleteCancelled()"

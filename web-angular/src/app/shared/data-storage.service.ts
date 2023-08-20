@@ -1,19 +1,20 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {catchError, map, tap} from "rxjs/operators";
+import {Observable, throwError} from "rxjs";
 import {ArticleService} from "../articles/service/article.service";
+import {NotificationService} from "../notifications/service/notification.service";
+import {AuthorizationService} from "../auth/service/authorization.service";
 import {Article} from "../articles/dto/article.type";
-import {catchError, tap, throwError} from "rxjs";
-import {map} from "rxjs/operators";
 import {ArticleRequest} from "../articles/dto/article-request.type";
 import {Notification} from "../notifications/dto/notification.type";
-import {NotificationService} from "../notifications/service/notification.service";
 import {RegisterRequest} from "../auth/dto/register-request.type";
 import {LoginRequest} from "../auth/dto/login-request.type";
-import {AuthorizationService} from "../auth/service/authorization.service";
+import {UserData} from "../auth/dto/user-data-type";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
-  private jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJTb2NpYWwgTWVkaWEiLCJzdWIiOiJKV1QgVG9rZW4iLCJ1c2VybmFtZSI6ImhhcHB5IiwiYXV0aG9yaXRpZXMiOiJST0xFX0FETUlOIiwiaWF0IjoxNjkyMzExODA1LCJleHAiOjE2OTIzMjI2MDV9.qtrF8LF1aXIFd-H5MroVNvvjfkVdrieOm2cEAMb5Dd0';
+  private apiUrl = 'http://localhost:3000';
 
   constructor(
     private http: HttpClient,
@@ -25,138 +26,99 @@ export class DataStorageService {
 
   fetchArticles() {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/articles/api/`;
 
     return this.http
-      .get<Article[]>(`http://localhost:3000/articles/api/`,
-        {headers}
-      )
+      .get<Article[]>(endpoint, {headers})
       .pipe(
-        map(articles => {
-          return articles.map(article => {
-            return {
-              ...article,
-              elapsed: this.getTimeElapsed(article.timestamp),
-              likes: [],
-            };
-          });
-        }),
-        tap(articles => {
-          this.articleService.setArticles(articles);
-        })
-      )
+        catchError(this.handleHttpError),
+        map(articles => articles.map(article => ({
+          ...article,
+          elapsed: this.getTimeElapsed(article.timestamp),
+          likes: [],
+        }))),
+        tap(articles => this.articleService.setArticles(articles))
+      );
   }
 
   storeArticle(request: ArticleRequest) {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/articles/api/`;
 
     return this.http
-      .post<void>(
-        'http://localhost:3000/articles/api/',
-        JSON.stringify(request),
-        {headers}
-      )
+      .post<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
-        catchError((error) => {
-          console.error(error);
-          return throwError(error);
-        })
+        catchError(this.handleHttpError),
+        tap(() => this.fetchArticles().subscribe())
       )
-      .subscribe(() => {
-        this.fetchArticles().subscribe(() => {
-          console.log(request);
-        });
-      });
+      .subscribe();
   }
 
   deleteArticle(articleId: string) {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/articles/api/${articleId}`;
 
     return this.http
-      .delete<void>(
-        `http://localhost:3000/articles/api/${articleId}`,
-        {headers}
-      )
+      .delete<void>(endpoint, {headers})
       .pipe(
-        catchError((error) => {
-          console.error(error);
-          return throwError(error);
-        })
+        catchError(this.handleHttpError),
+        tap(() => this.articleService.deleteArticle(articleId))
       )
-      .subscribe(() => {
-        this.articleService.deleteArticle(articleId)
-      });
+      .subscribe();
   }
 
   likeArticle(articleId: string) {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
 
     return this.http
-      .post<any>(
-        `http://localhost:3000/articles/api/like/${articleId}`,
-        null,
-        {headers}
-      )
+      .post<any>(endpoint, null, {headers})
       .pipe(
-        catchError((error) => {
-          console.error(error);
-          return throwError(error);
+        catchError(this.handleHttpError),
+        tap(response => {
+          const status: string = response?.status;
+          this.articleService.likeArticle(articleId, status);
         })
       )
-      .subscribe(response => {
-        const status: string = response?.status
-        this.articleService.likeArticle(articleId, status)
-      });
+      .subscribe();
   }
 
   showLikes(articleId: string) {
     const headers = this.createHeader();
+    const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
 
     return this.http
-      .get<any>(
-        `http://localhost:3000/articles/api/like/${articleId}`,
-        {headers}
-      )
+      .get<any>(endpoint, {headers})
       .pipe(
-        catchError((error) => {
-          console.error(error);
-          return throwError(error);
+        catchError(this.handleHttpError),
+        tap(response => {
+          const users: string[] = response?.users;
+          this.articleService.showLikes(articleId, users);
         })
       )
-      .subscribe(response => {
-        const users: string[] = response?.users
-        this.articleService.showLikes(articleId, users)
-      })
+      .subscribe();
   }
 
   fetchNotifications() {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/notifications/api/`;
 
     return this.http
-      .get<Notification[]>(`http://localhost:3000/notifications/api/`,
-        {headers}
-      )
+      .get<Notification[]>(endpoint, {headers})
       .pipe(
-        map(notifications => {
-          return notifications.map(notification => {
-            return {
-              ...notification
-            };
-          });
-        }),
-        tap(notifications => {
-          this.notificationService.setNotifications(notifications);
-        })
-      )
+        catchError(this.handleHttpError),
+        map(notifications => notifications.map(notification => ({
+          ...notification
+        }))),
+        tap(notifications => this.notificationService.setNotifications(notifications))
+      );
   }
 
   login(request: LoginRequest) {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/auth/api/login`;
 
-    return this.http
-      .post<any>(`http://localhost:3000/auth/api/login`,
-        JSON.stringify(request),
-        {headers}
-      )
+    return this.http.post<any>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError((error) => {
           if (error.status === 404) {
@@ -169,22 +131,20 @@ export class DataStorageService {
             console.error(error);
           }
           return throwError(error);
+        }),
+        tap(response => {
+          const userData = this.buildUserData(response?.jwt, request.username);
+          this.authorizationService.handleLogin(userData);
         })
       )
-      .subscribe(response => {
-        const jwt = response?.jwt
-        this.authorizationService.handleLogin(jwt)
-      });
+      .subscribe();
   }
 
   register(request: RegisterRequest) {
     const headers = this.createHeaderWithJwt();
+    const endpoint = `${this.apiUrl}/auth/api/register`;
 
-    return this.http
-      .post<void>(`http://localhost:3000/auth/api/register`,
-        JSON.stringify(request),
-        {headers}
-      )
+    return this.http.post<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError((error) => {
           if (error.status === 400) {
@@ -194,35 +154,46 @@ export class DataStorageService {
             console.error(error);
           }
           return throwError(error);
-        })
+        }),
+        tap(() => this.authorizationService.handleRegister())
       )
-      .subscribe(() => {
-        this.authorizationService.handleRegister()
-      });
+      .subscribe();
   }
 
   private createHeaderWithJwt(): HttpHeaders {
-    const jwtToken = sessionStorage.getItem('jwt');
-
-    if (jwtToken) {
-      return new HttpHeaders({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: jwtToken
-      });
-    } else {
-      return new HttpHeaders({
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      });
-    }
+    const jwt = this.getJwtFromSession();
+    return this.createHeaders(jwt);
   }
 
   private createHeader(): HttpHeaders {
-    return new HttpHeaders({
+    return this.createHeaders();
+  }
+
+  private createHeaders(jwt?: string | null): HttpHeaders {
+    let headers = new HttpHeaders({
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     });
+
+    if (jwt) {
+      headers = headers.set('Authorization', jwt);
+    }
+
+    return headers;
+  }
+
+  private getJwtFromSession(): string {
+    const userDataJson = sessionStorage.getItem("userData");
+    return userDataJson ? JSON.parse(userDataJson).jwt : null;
+  }
+
+  private buildUserData(jwt: string | null, username: string): UserData {
+    const validJwt = jwt || '';
+    return new UserData(validJwt, username);  }
+
+  private handleHttpError(error: HttpErrorResponse): Observable<never> {
+    console.error(error);
+    return throwError(error);
   }
 
   private getTimeElapsed(timestamp: Date): string {

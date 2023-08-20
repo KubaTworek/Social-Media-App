@@ -1,10 +1,11 @@
-import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {Article} from "../dto/article.type";
-import {DataStorageService} from "../../shared/data-storage.service";
-import {ArticleService} from "./article.service";
+import { Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
+import { Article } from "../dto/article.type";
+import { DataStorageService } from "../../shared/data-storage.service";
+import { ArticleService } from "./article.service";
+import { Observable } from "rxjs";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ArticlesResolverService implements Resolve<Article[]> {
   constructor(
     private dataStorageService: DataStorageService,
@@ -12,7 +13,7 @@ export class ArticlesResolverService implements Resolve<Article[]> {
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Article[]> | Article[] {
     const articles = this.articlesService.getArticles();
 
     if (articles.length === 0) {

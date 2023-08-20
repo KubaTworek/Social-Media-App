@@ -1,12 +1,13 @@
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import {BehaviorSubject, Observable} from "rxjs";
+import {UserData} from "../dto/user-data-type";
 
 
 @Injectable()
 export class AuthorizationService {
-  private loginErrorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private registerErrorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private loginErrorSubject = new BehaviorSubject<string>('');
+  private registerErrorSubject = new BehaviorSubject<string>('');
 
   constructor(
     private router: Router,
@@ -22,11 +23,9 @@ export class AuthorizationService {
     return this.registerErrorSubject.asObservable();
   }
 
-  handleLogin(jwt: string | undefined) {
-    if (jwt) {
-      const logoutTime = new Date().getTime() + 10800000;
-      this.storeSessionData(jwt, logoutTime);
-      sessionStorage.setItem('jwt', jwt);
+  handleLogin(userData: UserData) {
+    if (userData) {
+      this.storeUserData(userData);
       this.router.navigate(['/home']);
     }
   }
@@ -36,7 +35,7 @@ export class AuthorizationService {
   }
 
   logout() {
-    this.removeSessionData();
+    this.removeUserData();
     this.router.navigate(['/login']);
   }
 
@@ -48,16 +47,6 @@ export class AuthorizationService {
     this.registerErrorSubject.next(errorMessage);
   }
 
-  private storeSessionData(jwt: string, logoutTime: number) {
-    sessionStorage.setItem('jwt', jwt);
-    sessionStorage.setItem('logout_time', logoutTime.toString());
-  }
-
-  private removeSessionData() {
-    sessionStorage.removeItem('jwt');
-    sessionStorage.removeItem('logout_time');
-  }
-
   private setupInteractionsListener() {
     document.addEventListener("mousemove", () => {
       if (this.isSessionExpired()) {
@@ -66,9 +55,19 @@ export class AuthorizationService {
     });
   }
 
+  private storeUserData(userData: UserData) {
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+  }
+
+  private removeUserData() {
+    sessionStorage.removeItem('userData');
+  }
+
   private isSessionExpired() {
-    const logoutTime = Number(sessionStorage.getItem('logout_time'));
-    if (logoutTime !== 0) {
+    const userDataJson = sessionStorage.getItem("userData");
+    const logoutTime = userDataJson ? Number(JSON.parse(userDataJson).expirationTime) : null;
+
+    if (logoutTime !== null && logoutTime !== undefined) {
       return new Date().getTime() >= logoutTime;
     } else {
       return false;

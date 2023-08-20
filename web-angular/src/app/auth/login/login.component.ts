@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {DataStorageService} from "../../shared/data-storage.service";
 import {LoginRequest} from "../dto/login-request.type";
@@ -10,7 +10,7 @@ import {AuthorizationService} from "../service/authorization.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnDestroy {
   errorMessage: string = '';
   loginErrorSubscription: Subscription;
 
@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.errorMessage = '';
+  ngOnDestroy(): void {
+    this.loginErrorSubscription.unsubscribe();
   }
 
   onSubmit(form: NgForm) {

@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {ArticleRequest} from "../dto/article-request.type";
-import {DataStorageService} from "../../shared/data-storage.service";
+import { Component } from "@angular/core";
+import { ArticleRequest } from "../dto/article-request.type";
+import { DataStorageService } from "../../shared/data-storage.service";
 
 @Component({
   selector: 'article-post',
@@ -10,15 +10,19 @@ import {DataStorageService} from "../../shared/data-storage.service";
 export class ArticlePostComponent {
   articleContent = '';
 
-  constructor(private dataStorageService: DataStorageService) {
-  }
+  constructor(private dataStorageService: DataStorageService) {}
 
   createArticle(): void {
+    if (!this.articleContent) {
+      return;
+    }
+
     const request: ArticleRequest = {
-      title: '',
+      title: '', // Set appropriate title
       text: this.articleContent
     };
-    this.articleContent = '';
+
     this.dataStorageService.storeArticle(request);
+    this.articleContent = '';
   }
 }

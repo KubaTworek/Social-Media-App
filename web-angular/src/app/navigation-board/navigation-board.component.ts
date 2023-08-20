@@ -16,11 +16,11 @@ export class NavigationBoardComponent implements OnInit {
   }
 
   isLoggedOut(): boolean {
-    return sessionStorage.getItem('jwt') === null;
+    return sessionStorage.getItem('userData') === null;
   }
 
   isLoggedIn(): boolean {
-    return sessionStorage.getItem('jwt') !== null;
+    return sessionStorage.getItem('userData') !== null;
   }
 
   logout(): void {

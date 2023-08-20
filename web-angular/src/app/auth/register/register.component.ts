@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {DataStorageService} from "../../shared/data-storage.service";
 import {RegisterRequest} from "../dto/register-request.type";
@@ -10,25 +10,25 @@ import {AuthorizationService} from "../service/authorization.service";
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnDestroy {
 
   errorMessage: string = '';
   registerErrorSubscription: Subscription;
 
   constructor(
-    private dataStorageService: DataStorageService,
     private authorizationService: AuthorizationService,
+    private dataStorageService: DataStorageService,
   ) {
     this.registerErrorSubscription = this.authorizationService.getRegisterError().subscribe(error => {
       this.errorMessage = error;
     });
   }
 
-  ngOnInit(): void {
-    this.errorMessage = '';
+  ngOnDestroy(): void {
+    this.registerErrorSubscription.unsubscribe();
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit(form: NgForm): void {
     if (!form.valid) {
       return;
     }
@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
       role: 'ROLE_USER',
     };
 
-    this.dataStorageService.register(registerRequest)
+    this.dataStorageService.register(registerRequest);
 
     form.reset();
   }
