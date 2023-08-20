@@ -189,7 +189,8 @@ export class DataStorageService {
 
   private buildUserData(jwt: string | null, username: string): UserData {
     const validJwt = jwt || '';
-    return new UserData(validJwt, username);  }
+    return new UserData(validJwt, username);
+  }
 
   private handleHttpError(error: HttpErrorResponse): Observable<never> {
     console.error(error);
