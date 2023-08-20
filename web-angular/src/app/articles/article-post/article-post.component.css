@@ -1,0 +1,46 @@
+.article-post {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+}
+
+.article-post__content {
+  background-color: #111;
+  border: none;
+  box-sizing: border-box;
+  color: #eee;
+  font-size: 1rem;
+  height: 100%;
+  width: 100%;
+  outline: none;
+  padding: 0.5rem;
+  resize: none;
+  overflow: hidden;
+  grid-column: 1/-1;
+}
+
+.article-post__send-button {
+  position: absolute;
+  right: 2%;
+  top: 75%;
+  background-color: red;
+  border: none;
+  border-radius: 9999px;
+  color: #eee;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease-out;
+}
+
+.article-post__send-button:hover {
+  background-color: #cc0000;
+}
+
+/*# sourceMappingURL=article-post.component.css.map */

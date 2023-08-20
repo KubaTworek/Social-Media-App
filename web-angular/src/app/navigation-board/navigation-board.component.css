@@ -9,8 +9,10 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease-out;
-
-  &:hover {
-    background-color: #cc0000;
-  }
 }
+
+button:hover {
+  background-color: #cc0000;
+}
+
+/*# sourceMappingURL=navigation-board.component.css.map */

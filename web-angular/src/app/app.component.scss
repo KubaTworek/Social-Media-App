@@ -7,28 +7,28 @@
   align-items: flex-end;
   justify-content: center;
   position: relative;
-}
 
-navigation-board {
-  top: 2rem;
-  left: 0;
-  position: fixed;
-  width: 5rem;
-  padding-left: 1rem;
-}
+  navigation-board {
+    top: 2rem;
+    left: 0;
+    position: fixed;
+    width: 5rem;
+    padding-left: 1rem;
+  }
 
-main#main-board {
-  min-width: 15rem;
-  width: 100%;
-  padding-left: 9rem;
-}
+  main#main-board {
+    min-width: 15rem;
+    width: 100%;
+    padding-left: 9rem;
 
-articles {
-  flex-direction: column;
-}
+    articles {
+      flex-direction: column;
+    }
 
-search-board {
-  display: none;
+    search-board {
+      display: none;
+    }
+  }
 }
 
 /* Style dla większych ekranów (desktop) */
@@ -38,27 +38,31 @@ search-board {
     align-items: flex-start;
     flex-direction: row;
     justify-content: center;
-  }
 
-  navigation-board {
-    position: sticky;
-    top: 2rem;
-    left: 0;
-    width: 5rem;
-  }
+    navigation-board {
+      position: sticky;
+      top: 2rem;
+      left: 0;
+      width: 5rem;
+    }
 
-  main#main-board {
-    padding-right: 1rem;
-    padding-left: 5rem;
-    max-width: 40rem;
-  }
+    main#main-board {
+      padding-right: 1rem;
+      padding-left: 5rem;
+      max-width: 40rem;
 
-  search-board {
-    display: flex;
-    position: sticky;
-    top: 2rem;
-    right: 0;
-    padding-right: 1rem;
-    width: 12rem;
+      articles {
+        flex-direction: row; /* lub inną kierunkowość */
+      }
+
+      search-board {
+        display: flex;
+        position: sticky;
+        top: 2rem;
+        right: 0;
+        padding-right: 1rem;
+        width: 12rem;
+      }
+    }
   }
 }

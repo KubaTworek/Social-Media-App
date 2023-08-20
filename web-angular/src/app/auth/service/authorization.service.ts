@@ -31,12 +31,12 @@ export class AuthorizationService {
   }
 
   handleRegister() {
-    this.router.navigate(['/login']);
+    this.router.navigate(['auth/login']);
   }
 
   logout() {
     this.removeUserData();
-    this.router.navigate(['/login']);
+    this.router.navigate(['auth/login']);
   }
 
   handleLoginError(errorMessage: string) {

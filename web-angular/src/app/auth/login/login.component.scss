@@ -17,56 +17,56 @@ form {
   margin: 0 auto;
   position: relative;
   z-index: 2;
-}
 
-label {
-  display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
-}
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
 
-input[type="email"],
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid white;
-  border-radius: 5px;
-  background-color: transparent;
-  color: white;
-}
+  input[type=email],
+  input[type=text] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: transparent;
+    color: white;
+  }
 
-button {
-  background-color: red;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  button {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-.signup-link {
-  display: block;
-  text-align: center;
-  color: #666666;
-  position: relative;
-  z-index: 2;
-}
+  .signup-link {
+    display: block;
+    text-align: center;
+    color: #666666;
+    position: relative;
+    z-index: 2;
+  }
 
-a {
-  margin: 10px auto;
-  color: blue;
-  text-decoration: underline;
-  display: inline-block;
-}
+  a {
+    margin: 10px auto;
+    color: blue;
+    text-decoration: underline;
+    display: inline-block;
 
-a:hover {
-  color: darkblue;
-}
+    &:hover {
+      color: darkblue;
+    }
+  }
 
-.error-message {
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
 }

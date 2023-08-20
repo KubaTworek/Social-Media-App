@@ -9,7 +9,7 @@
   position: relative;
 }
 
-navigation-board {
+#background navigation-board {
   top: 2rem;
   left: 0;
   position: fixed;
@@ -17,17 +17,17 @@ navigation-board {
   padding-left: 1rem;
 }
 
-main#main-board {
+#background main#main-board {
   min-width: 15rem;
   width: 100%;
   padding-left: 9rem;
 }
 
-articles {
+#background main#main-board articles {
   flex-direction: column;
 }
 
-search-board {
+#background main#main-board search-board {
   display: none;
 }
 
@@ -39,20 +39,24 @@ search-board {
     justify-content: center;
   }
 
-  navigation-board {
+  #background navigation-board {
     position: sticky;
     top: 2rem;
     left: 0;
     width: 5rem;
   }
 
-  main#main-board {
+  #background main#main-board {
     padding-right: 1rem;
     padding-left: 5rem;
     max-width: 40rem;
   }
 
-  search-board {
+  #background main#main-board articles {
+    flex-direction: row; /* lub inną kierunkowość */
+  }
+
+  #background main#main-board search-board {
     display: flex;
     position: sticky;
     top: 2rem;

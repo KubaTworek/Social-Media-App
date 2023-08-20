@@ -6,23 +6,23 @@
   display: block;
   padding: 0 0.8rem;
   margin-bottom: 1rem;
-}
 
-.notification-card:last-child {
-  margin-bottom: 0;
-  border-bottom: 1px solid #444;
-}
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #444;
+  }
 
-.notification-card__message {
-  text-align: left;
-}
+  &__message {
+    text-align: left;
+  }
 
-.notification-card__name {
-  font-weight: 700;
-  text-align: left;
-}
+  &__name {
+    font-weight: 700;
+    text-align: left;
+  }
 
-.notification-card__content {
-  text-align: justify;
-  color: #666;
+  &__content {
+    text-align: justify;
+    color: #666;
+  }
 }
