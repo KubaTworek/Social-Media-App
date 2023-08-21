@@ -10,9 +10,8 @@ import {ArticleRequest} from "../articles/dto/article-request.type";
 import {Notification} from "../notifications/dto/notification.type";
 import {RegisterRequest} from "../auth/dto/register-request.type";
 import {LoginRequest} from "../auth/dto/login-request.type";
-import {UserData} from "../auth/dto/user-data-type";
 
-@Injectable({providedIn: 'root'})
+@Injectable({providedIn: 'root' })
 export class DataStorageService {
   private apiUrl = 'http://localhost:3000';
 
@@ -25,26 +24,22 @@ export class DataStorageService {
   }
 
   fetchArticles() {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;
 
     return this.http
       .get<Article[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(articles => articles.map(article => ({
-          ...article,
-          elapsed: this.getTimeElapsed(article.timestamp),
-          likes: [],
-        }))),
-        tap(articles => this.articleService.setArticles(articles))
+        map(this.mapArticleData),
+        tap(this.updateArticleService)
       );
   }
 
   storeArticle(request: ArticleRequest) {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;
-
+    console.log(request)
     return this.http
       .post<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
@@ -55,7 +50,7 @@ export class DataStorageService {
   }
 
   deleteArticle(articleId: string) {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/${articleId}`;
 
     return this.http
@@ -68,7 +63,7 @@ export class DataStorageService {
   }
 
   likeArticle(articleId: string) {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
 
     return this.http
@@ -76,31 +71,15 @@ export class DataStorageService {
       .pipe(
         catchError(this.handleHttpError),
         tap(response => {
-          const status: string = response?.status;
-          this.articleService.likeArticle(articleId, status);
-        })
-      )
-      .subscribe();
-  }
-
-  showLikes(articleId: string) {
-    const headers = this.createHeader();
-    const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
-
-    return this.http
-      .get<any>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        tap(response => {
-          const users: string[] = response?.users;
-          this.articleService.showLikes(articleId, users);
+          const status: 'like' | 'dislike' = response?.status;
+          this.articleService.likeOrDislikeArticle(articleId, status);
         })
       )
       .subscribe();
   }
 
   fetchNotifications() {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/`;
 
     return this.http
@@ -115,7 +94,7 @@ export class DataStorageService {
   }
 
   login(request: LoginRequest) {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/auth/api/login`;
 
     return this.http.post<any>(endpoint, JSON.stringify(request), {headers})
@@ -132,16 +111,13 @@ export class DataStorageService {
           }
           return throwError(error);
         }),
-        tap(response => {
-          const userData = this.buildUserData(response?.jwt, request.username);
-          this.authorizationService.handleLogin(userData);
-        })
+        tap(userData => this.authorizationService.handleLogin(userData))
       )
       .subscribe();
   }
 
   register(request: RegisterRequest) {
-    const headers = this.createHeaderWithJwt();
+    const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/auth/api/register`;
 
     return this.http.post<void>(endpoint, JSON.stringify(request), {headers})
@@ -160,42 +136,34 @@ export class DataStorageService {
       .subscribe();
   }
 
-  private createHeaderWithJwt(): HttpHeaders {
-    const jwt = this.getJwtFromSession();
-    return this.createHeaders(jwt);
-  }
-
-  private createHeader(): HttpHeaders {
-    return this.createHeaders();
-  }
-
-  private createHeaders(jwt?: string | null): HttpHeaders {
-    let headers = new HttpHeaders({
+  private createHeaders(): HttpHeaders {
+    const userData = this.authorizationService.getUserData();
+    const headersConfig: HttpHeaders = new HttpHeaders({
       Accept: 'application/json',
       'Content-Type': 'application/json',
     });
 
-    if (jwt) {
-      headers = headers.set('Authorization', jwt);
+    if (userData) {
+      headersConfig.set('Authorization', userData.token);
     }
 
-    return headers;
-  }
-
-  private getJwtFromSession(): string {
-    const userDataJson = sessionStorage.getItem("userData");
-    return userDataJson ? JSON.parse(userDataJson).jwt : null;
-  }
-
-  private buildUserData(jwt: string | null, username: string): UserData {
-    const validJwt = jwt || '';
-    return new UserData(validJwt, username);
+    return headersConfig;
   }
 
   private handleHttpError(error: HttpErrorResponse): Observable<never> {
     console.error(error);
     return throwError(error);
   }
+
+  private mapArticleData = (articles: Article[]) =>
+    articles.map(article => ({
+      ...article,
+      elapsed: this.getTimeElapsed(article.timestamp),
+      numOfLikes: article.likes.users.length,
+    }));
+
+  private updateArticleService = (articles: Article[]) =>
+    this.articleService.setArticles(articles);
 
   private getTimeElapsed(timestamp: Date): string {
     const now = new Date();

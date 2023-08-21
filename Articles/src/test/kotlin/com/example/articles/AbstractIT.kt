@@ -63,8 +63,8 @@ abstract class AbstractIT {
         val headers = HttpHeaders()
         headers.set("Authorization", "dummy-jwt")
 
-        val articleRequest1 = ArticleRequest("Example Title 1", "Example Content 1")
-        val articleRequest2 = ArticleRequest("Example Title 2", "Example Content 2")
+        val articleRequest1 = ArticleRequest("Example Content 1")
+        val articleRequest2 = ArticleRequest("Example Content 2")
 
         createArticle(articleRequest1)
         createArticle(articleRequest2)
@@ -105,14 +105,6 @@ abstract class AbstractIT {
             .expectStatus().isOk
             .expectBody(ArticleDTO::class.java)
 
-
-    fun getArticlesByKeyword(keyword: String, expectedSize: Int) =
-        webTestClient.get().uri("/api/$keyword")
-            .exchange()
-            .expectStatus().isOk
-            .expectBodyList(ArticleResponse::class.java)
-            .hasSize(expectedSize)
-
     fun getArticlesByAuthorId(authorId: Int, expectedSize: Int) =
         webTestClient.get().uri("/api/author/$authorId")
             .exchange()
@@ -145,5 +137,4 @@ abstract class AbstractIT {
             .exchange()
             .expectStatus().isOk
             .expectBody(LikeInfoResponse::class.java)
-
 }

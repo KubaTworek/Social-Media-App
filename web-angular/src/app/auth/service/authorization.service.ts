@@ -47,6 +47,11 @@ export class AuthorizationService {
     this.registerErrorSubject.next(errorMessage);
   }
 
+  getUserData(): UserData {
+    const userDataJson = sessionStorage.getItem("userData");
+    return userDataJson ? JSON.parse(userDataJson) : null;
+  }
+
   private setupInteractionsListener() {
     document.addEventListener("mousemove", () => {
       if (this.isSessionExpired()) {
@@ -67,10 +72,6 @@ export class AuthorizationService {
     const userDataJson = sessionStorage.getItem("userData");
     const logoutTime = userDataJson ? Number(JSON.parse(userDataJson).expirationTime) : null;
 
-    if (logoutTime !== null && logoutTime !== undefined) {
-      return new Date().getTime() >= logoutTime;
-    } else {
-      return false;
-    }
+    return logoutTime !== null && logoutTime <= new Date().getTime();
   }
 }

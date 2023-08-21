@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
-import {Subject} from "rxjs";
-import {Like} from "../dto/like.type";
-
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class ArticleService {
@@ -14,51 +12,80 @@ export class ArticleService {
     this.notifyArticlesChanged();
   }
 
-  getArticles() {
-    return this.articles.slice();
+  getArticles(): Article[] {
+    return [...this.articles];
   }
 
   getArticlesByKeyword(keyword: string): Article[] {
-    return this.articles.filter(article => {
-      return article.text.toLowerCase().includes(keyword.toLowerCase());
-    });
+    const lowerKeyword = keyword.toLowerCase();
+    return this.articles.filter(article => article.text.toLowerCase().includes(lowerKeyword));
   }
 
   deleteArticle(articleId: string): void {
-    const index = this.articles.findIndex(article => article.id === articleId);
+    const index = this.findArticleIndex(articleId);
     if (index !== -1) {
       this.articles.splice(index, 1);
       this.notifyArticlesChanged();
     }
   }
 
-  likeArticle(articleId: string, status: string): void {
-    const article = this.articles.find(article => article.id === articleId);
-    if (article) {
-      if (status === 'like') {
-        article.numOfLikes += 1;
-      } else if (status === 'dislike') {
-        article.numOfLikes -= 1;
-      } else {
-        console.error(`Unknown response: ${status}`);
-      }
-      this.notifyArticlesChanged();
-    }
-  }
+  likeOrDislikeArticle(articleId: string, action: 'like' | 'dislike'): void {
+    const article = this.findArticleById(articleId);
 
-  showLikes(articleId: string, users: string[]): void {
-    const article: Article | undefined = this.articles.find(article => article.id === articleId);
-    if (article !== undefined) {
-      for (const user of users) {
-        if (!article.likes.some(like => like.username === user)) {
-          article.likes.push(new Like(user));
-        }
-      }
-      this.notifyArticlesChanged();
+    if (!article) {
+      console.error(`Article with ID ${articleId} not found`);
+      return;
     }
+
+    const fullName = this.getUserFullNameFromSession();
+
+    switch (action) {
+      case 'like':
+        this.likeArticle(article, fullName);
+        break;
+      case 'dislike':
+        this.dislikeArticle(article, fullName);
+        break;
+      default:
+        console.error(`Unknown action: ${action}`);
+        return;
+    }
+
+    this.notifyArticlesChanged();
   }
 
   private notifyArticlesChanged(): void {
-    this.articlesChanged.next(this.articles.slice());
+    this.articlesChanged.next([...this.articles]);
+  }
+
+  private findArticleIndex(articleId: string): number {
+    return this.articles.findIndex(article => article.id === articleId);
+  }
+
+  private findArticleById(articleId: string): Article | undefined {
+    return this.articles.find(article => article.id === articleId);
+  }
+
+  private getUserFullNameFromSession(): string {
+    const userData = sessionStorage.getItem('userData');
+    if (userData === null) {
+      console.error('User data is missing in sessionStorage');
+      return '';
+    }
+    const {firstName, lastName} = JSON.parse(userData);
+    return `${firstName} ${lastName}`;
+  }
+
+  private likeArticle(article: Article, fullName: string): void {
+    article.numOfLikes += 1;
+    article.likes.users.push(fullName);
+  }
+
+  private dislikeArticle(article: Article, fullName: string): void {
+    article.numOfLikes -= 1;
+    const userIndex = article.likes.users.indexOf(fullName);
+    if (userIndex !== -1) {
+      article.likes.users.splice(userIndex, 1);
+    }
   }
 }

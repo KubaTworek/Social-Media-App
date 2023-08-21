@@ -6,20 +6,19 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Service
 import java.nio.charset.StandardCharsets
-import java.time.Instant
 import java.util.*
 
 @Service
 class JwtServiceImpl : JwtService {
 
-    override fun buildJwt(username: String, authorities: List<Authorities>): String =
+    override fun buildJwt(username: String, authorities: List<Authorities>, expirationDate: Long): String =
         Jwts.builder()
             .setIssuer("Social Media")
             .setSubject("JWT Token")
             .claim("username", username)
             .claim("authorities", populateAuthorities(authorities))
             .setIssuedAt(Date())
-            .setExpiration(Date(Instant.now().toEpochMilli() + 10800000))
+            .setExpiration(Date(expirationDate))
             .signWith(createSecretKey())
             .compact()
 

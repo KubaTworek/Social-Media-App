@@ -16,10 +16,6 @@ class ArticleController(private val articleService: ArticleService) {
     fun getArticlesOrderByDateDesc(): List<ArticleResponse> =
         articleService.findAllOrderByCreatedTimeDesc()
 
-    @GetMapping("/{keyword}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByKeyword(@PathVariable keyword: String) =
-        articleService.findAllByKeyword(keyword)
-
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveArticle(

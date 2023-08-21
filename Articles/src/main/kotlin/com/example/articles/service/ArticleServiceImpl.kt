@@ -4,6 +4,8 @@ import com.example.articles.client.service.AuthorApiService
 import com.example.articles.client.service.AuthorizationApiService
 import com.example.articles.controller.dto.ArticleRequest
 import com.example.articles.controller.dto.ArticleResponse
+import com.example.articles.controller.dto.AuthorResponse
+import com.example.articles.controller.dto.LikeInfoResponse
 import com.example.articles.exception.ArticleNotFoundException
 import com.example.articles.exception.UnauthorizedException
 import com.example.articles.model.dto.ArticleDTO
@@ -26,13 +28,6 @@ class ArticleServiceImpl(
 
     override fun findAllOrderByCreatedTimeDesc(): List<ArticleResponse> =
         articleRepository.findAll(Sort.by(Sort.Direction.DESC, "Timestamp"))
-            .map { createResponse(it) }
-
-    override fun findAllByKeyword(theKeyword: String): List<ArticleResponse> =
-        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "Timestamp"))
-            .filter {
-                it.text.contains(theKeyword, ignoreCase = true)
-            }
             .map { createResponse(it) }
 
     override fun findById(articleId: Int): ArticleDTO {
@@ -89,16 +84,27 @@ class ArticleServiceImpl(
 
     private fun createResponse(theArticle: Article): ArticleResponse {
         val author = authorService.getAuthorById(theArticle.authorId)
-        val numOfLikes = likeRepository.countLikesByArticleId(theArticle.id)
+        val likes = likeRepository.findByArticleId(theArticle.id)
+        val likerFullNames = mutableListOf<String>()
+
+        for (like in likes) {
+            val liker = authorService.getAuthorById(like.authorId)
+            val fullName = "${liker.firstName} ${liker.lastName}"
+            likerFullNames.add(fullName)
+        }
 
         return ArticleResponse(
             id = theArticle.id,
             text = theArticle.text,
             timestamp = theArticle.timestamp,
-            author_firstName = author.firstName,
-            author_lastName = author.lastName,
-            author_username = author.username,
-            numOfLikes = numOfLikes,
+            author = AuthorResponse(
+                username = author.username,
+                firstName = author.firstName,
+                lastName = author.lastName
+            ),
+            likes = LikeInfoResponse(
+                users = likerFullNames
+            )
         )
     }
 

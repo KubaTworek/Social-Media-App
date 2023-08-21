@@ -2,7 +2,6 @@ import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
 import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
 import {DataStorageService} from "../../../shared/data-storage.service";
-import {Like} from "../../dto/like.type";
 
 @Component({
   selector: 'article-card',
@@ -21,7 +20,7 @@ export class ArticleCardComponent {
     const userDataJson = sessionStorage.getItem("userData");
     const username = userDataJson ? JSON.parse(userDataJson).username : null;
 
-    return username !== null && username === this.article.author_username;
+    return username !== null && username === this.article.author.username;
   }
 
   deleteArticle(articleId: string) {
@@ -33,13 +32,12 @@ export class ArticleCardComponent {
   }
 
   showLikes(articleId: string) {
-    this.dataStorage.showLikes(articleId);
     this.displayLikeTooltip(articleId);
   }
 
   displayLikeTooltip(articleId: string): void {
-    if (this.article.likes.length > 0) {
-      const userNames = this.article.likes.map((like: Like) => `<div>${like.username}</div>`).join('');
+    if (this.article.likes.users.length > 0) {
+      const userNames = this.article.likes.users.map((user: string) => `<div>${user}</div>`).join('');
       const tooltipContent = `<div class="article-card__like-tooltip-content">${userNames}</div>`;
       const tooltip = document.createElement('div');
       tooltip.classList.add('article-card__like-tooltip');

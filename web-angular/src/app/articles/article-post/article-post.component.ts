@@ -19,7 +19,6 @@ export class ArticlePostComponent {
     }
 
     const request: ArticleRequest = {
-      title: '', // Set appropriate title
       text: this.articleContent
     };
 

@@ -18,38 +18,19 @@ class ArticleControllerIT : AbstractIT() {
         // Then
         val articles = response.returnResult().responseBody
         assertEquals("Example Content 2", articles?.get(0)?.text)
-        assertEquals("FirstName", articles?.get(0)?.author_firstName)
-        assertEquals("LastName", articles?.get(0)?.author_lastName)
-        assertEquals("Username", articles?.get(0)?.author_username)
-        assertEquals(0, articles?.get(0)?.numOfLikes)
+        assertEquals("FirstName", articles?.get(0)?.author?.firstName)
+        assertEquals("LastName", articles?.get(0)?.author?.lastName)
+        assertEquals("Username", articles?.get(0)?.author?.username)
         assertEquals("Example Content 1", articles?.get(1)?.text)
-        assertEquals("FirstName", articles?.get(1)?.author_firstName)
-        assertEquals("LastName", articles?.get(1)?.author_lastName)
-        assertEquals("Username", articles?.get(1)?.author_username)
-        assertEquals(0, articles?.get(1)?.numOfLikes)
-    }
-
-    @Test
-    fun testGetArticlesByKeyword() {
-        // Given
-        val keyword = "1"
-
-        // When
-        val response = getArticlesByKeyword(keyword, 1)
-
-        // Then
-        val articles = response.returnResult().responseBody
-        assertEquals("Example Content 1", articles?.get(0)?.text)
-        assertEquals("FirstName", articles?.get(0)?.author_firstName)
-        assertEquals("LastName", articles?.get(0)?.author_lastName)
-        assertEquals("Username", articles?.get(0)?.author_username)
-        assertEquals(0, articles?.get(0)?.numOfLikes)
+        assertEquals("FirstName", articles?.get(1)?.author?.firstName)
+        assertEquals("LastName", articles?.get(1)?.author?.lastName)
+        assertEquals("Username", articles?.get(1)?.author?.username)
     }
 
     @Test
     fun testSaveArticle() {
         // Given
-        val articleRequest = ArticleRequest("New Article", "New content")
+        val articleRequest = ArticleRequest("New content")
 
         // When
         createArticle(articleRequest)
@@ -58,10 +39,9 @@ class ArticleControllerIT : AbstractIT() {
         val response = getArticles(3)
         val articles = response.returnResult().responseBody
         assertEquals("New content", articles?.get(0)?.text)
-        assertEquals("FirstName", articles?.get(0)?.author_firstName)
-        assertEquals("LastName", articles?.get(0)?.author_lastName)
-        assertEquals("Username", articles?.get(0)?.author_username)
-        assertEquals(0, articles?.get(0)?.numOfLikes)
+        assertEquals("FirstName", articles?.get(0)?.author?.firstName)
+        assertEquals("LastName", articles?.get(0)?.author?.lastName)
+        assertEquals("Username", articles?.get(0)?.author?.username)
     }
 
     @Test

@@ -1,34 +1,30 @@
-import {Like} from "./like.type";
+import {LikesInfo} from "./likes-info.type";
+import {Author} from "./author.type";
 
 export class Article {
-  public author_firstName: string;
-  public author_lastName: string;
-  public author_username: string;
+  public author: Author;
   public timestamp: Date;
   public text: string;
   public id: string;
-  public numOfLikes: number;
   public elapsed: string;
-  public likes: Like[];
+  public likes: LikesInfo;
+  public numOfLikes: number;
 
   constructor(
-    author_firstName: string,
-    author_lastName: string,
-    author_username: string,
+    author: Author,
     timestamp: Date,
     text: string,
     id: string,
-    numOfLikes: number,
-    elapsed: string
+    elapsed: string,
+    likes: LikesInfo,
+    numOfLikes: number
   ) {
-    this.author_firstName = author_firstName;
-    this.author_lastName = author_lastName;
-    this.author_username = author_username;
+    this.author = author;
     this.timestamp = timestamp;
     this.text = text;
     this.id = id;
-    this.numOfLikes = numOfLikes;
     this.elapsed = elapsed;
-    this.likes = [];
+    this.likes = likes;
+    this.numOfLikes = numOfLikes;
   }
 }

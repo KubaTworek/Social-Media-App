@@ -1,11 +1,15 @@
 export class UserData {
-  public jwt: string;
   public username: string;
-  public expirationTime: Number;
+  public firstName: string;
+  public lastName: string;
+  public token: string;
+  public tokenExpirationDate: Number;
 
-  constructor(jwt: string, username: string) {
-    this.jwt = jwt;
+  constructor(username: string, firstName: string, lastName: string, token: string, tokenExpirationDate: Number) {
     this.username = username;
-    this.expirationTime = new Date().getTime() + 10800000;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.token = token;
+    this.tokenExpirationDate = tokenExpirationDate
   }
 }

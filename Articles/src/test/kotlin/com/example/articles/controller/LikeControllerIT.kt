@@ -17,7 +17,7 @@ class LikeControllerIT : AbstractIT() {
         // Get liked article
         val articlesResponse2 = getArticles(2)
         val likedArticle = articlesResponse2.returnResult().responseBody?.find { it.id == articleId }
-        assertEquals(1, likedArticle?.numOfLikes)
+        assertEquals(1, likedArticle?.likes?.users?.size)
 
         // Get info about likes
         val likeInfoResponse = showLikeInfo(articleId)
@@ -31,6 +31,6 @@ class LikeControllerIT : AbstractIT() {
         // Dislike
         val articlesResponse3 = getArticles(2)
         val dislikedArticle = articlesResponse3.returnResult().responseBody?.find { it.id == articleId }
-        assertEquals(0, dislikedArticle?.numOfLikes)
+        assertEquals(0, dislikedArticle?.likes?.users?.size)
     }
 }

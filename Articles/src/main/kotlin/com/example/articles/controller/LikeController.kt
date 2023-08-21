@@ -15,6 +15,7 @@ class LikeController(private val likeService: LikeService) {
         @PathVariable articleId: Int
     ) = likeService.like(articleId, jwt)
 
+    // deprecated
     @GetMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
     fun showLikeInfo(

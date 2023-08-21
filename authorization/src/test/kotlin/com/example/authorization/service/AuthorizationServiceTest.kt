@@ -12,6 +12,7 @@ import org.mockito.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
+import java.time.Instant
 
 class AuthorizationServiceTest {
     @Mock
@@ -74,7 +75,7 @@ class AuthorizationServiceTest {
     @Test
     fun `deleteUser should delete the user and associated author`() {
         // Given
-        val jwt = jwtService.buildJwt("username", listOf(Authorities(1, "ROLE_USER", mutableListOf())))
+        val jwt = jwtService.buildJwt("username", listOf(Authorities(1, "ROLE_USER", mutableListOf())), Instant.MAX.epochSecond)
         val user = User("username", "password", Authorities(1, "ROLE_USER", mutableListOf()))
         val author = AuthorDTO(1, "John", "Doe", "username")
 
@@ -95,14 +96,16 @@ class AuthorizationServiceTest {
         // Given
         val loginRequest = LoginRequest("username", "password")
         val user = User("username", "password", Authorities(1, "ROLE_USER", mutableListOf()))
+        val author = AuthorDTO(1, "John", "Doe", "username")
 
         `when`(userRepository.findUserByUsername(loginRequest.username)).thenReturn(user)
+        `when`(authorApiService.getAuthorByUsername("username")).thenReturn(author)
 
         // When
         val loginResponse = authorizationService.loginUser(loginRequest)
 
         // Then
-        val claims = jwtService.parseJwtClaims(loginResponse.jwt)
+        val claims = jwtService.parseJwtClaims(loginResponse.token)
         assertEquals("username", claims["username"].toString())
         assertEquals("ROLE_USER", claims["authorities"].toString())
     }
@@ -124,7 +127,7 @@ class AuthorizationServiceTest {
     @Test
     fun `getUserDetails should return UserDetailsDTO with user details extracted from the JWT token`() {
         // Given
-        val jwt = jwtService.buildJwt("username", listOf(Authorities(1, "ROLE_USER", mutableListOf())))
+        val jwt = jwtService.buildJwt("username", listOf(Authorities(1, "ROLE_USER", mutableListOf())), Instant.MAX.epochSecond)
         val claims = Jwts.claims()
         claims["username"] = "username"
         claims["authorities"] = "ROLE_USER"
@@ -146,7 +149,7 @@ class AuthorizationServiceTest {
     @Test
     fun `getUserDetails should throw UserNotFoundException when user with the given username does not exist`() {
         // Given
-        val jwt = jwtService.buildJwt("nonexistentuser", listOf(Authorities(1, "ROLE_USER", mutableListOf())))
+        val jwt = jwtService.buildJwt("nonexistentuser", listOf(Authorities(1, "ROLE_USER", mutableListOf())), Instant.MAX.epochSecond)
 
         `when`(authorApiService.getAuthorByUsername("nonexistentuser")).thenThrow(UserNotFoundException::class.java)
 

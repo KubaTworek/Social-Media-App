@@ -1,5 +1,5 @@
 package com.example.articles.controller.dto
 
-class LikeResponse(
+data class LikeResponse(
     val status: String
 )

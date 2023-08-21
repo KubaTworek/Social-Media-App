@@ -7,7 +7,6 @@ import com.example.articles.model.dto.ArticleDTO
 interface ArticleService {
     fun findAllOrderByCreatedTimeDesc(): List<ArticleResponse>
     fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
-    fun findAllByKeyword(theKeyword: String): List<ArticleResponse>
     fun findById(articleId: Int): ArticleDTO
     fun save(theArticle: ArticleRequest, jwt: String)
     fun deleteById(theId: Int, jwt: String)

@@ -45,7 +45,7 @@ abstract class AbstractIT {
             .expectStatus().isAccepted
             .expectBody(LoginResponse::class.java)
         val jwt = loginResponse
-            .returnResult().responseBody?.jwt
+            .returnResult().responseBody?.token
         deleteUser(jwt!!)
     }
 

@@ -18,7 +18,7 @@ class AuthorizationControllerIT : AbstractIT() {
             .expectStatus().isAccepted
             .expectBody(LoginResponse::class.java)
         val jwt = loginResponse
-            .returnResult().responseBody?.jwt
+            .returnResult().responseBody?.token
 
         val userDetailsResponse = getUserDetailsAfterLogin(jwt!!)
         val userDetails = userDetailsResponse.returnResult().responseBody

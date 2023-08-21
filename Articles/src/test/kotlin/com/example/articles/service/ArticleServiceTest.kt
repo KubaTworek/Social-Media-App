@@ -72,27 +72,6 @@ class ArticleServiceTest {
     }
 
     @Test
-    fun `findAllByKeyword should return articles containing the keyword`() {
-        // Given
-        val author = AuthorDTO(1, "firstName", "lastName", "Username")
-        val articles = listOf(
-            Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1),
-            Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Keyword Article", 2),
-            Article(3, "2023-06-27", Timestamp(System.currentTimeMillis()), "Another Article", 1)
-        )
-        `when`(articleRepository.findAll(any<Sort>())).thenReturn(articles)
-        `when`(authorService.getAuthorById(any(Int::class.java))).thenReturn(author)
-        `when`(likeRepository.countLikesByArticleId(any(Int::class.java))).thenReturn(5)
-
-        // When
-        val result = articleService.findAllByKeyword("keyword")
-
-        // Then
-        assertEquals(1, result.size)
-        assertEquals("Keyword Article", result[0].text)
-    }
-
-    @Test
     fun `findById should return the article with the given ID`() {
         // Given
         val articleId = 1
@@ -122,7 +101,7 @@ class ArticleServiceTest {
     @Test
     fun `save should create and save a new article`() {
         // Given
-        val articleRequest = ArticleRequest("Title", "Text")
+        val articleRequest = ArticleRequest("Text")
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
         val expectedArticle = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)

@@ -7,6 +7,7 @@ import com.example.authorization.exception.*
 import com.example.authorization.repository.*
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
+import java.time.Instant
 
 
 @Service
@@ -54,7 +55,17 @@ class AuthorizationServiceImpl(
             authority
         )
 
-        return LoginResponse(jwtService.buildJwt(username, authorities))
+        val expirationDate = Instant.now().toEpochMilli() + 180000
+        val token = jwtService.buildJwt(username, authorities, expirationDate)
+        val author = authorApiService.getAuthorByUsername(username)
+
+        return LoginResponse(
+            username = username,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            token = token,
+            tokenExpirationDate = expirationDate
+        )
     }
 
     override fun getUserDetails(jwt: String): UserDetailsDTO {
