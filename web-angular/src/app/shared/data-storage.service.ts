@@ -138,16 +138,21 @@ export class DataStorageService {
 
   private createHeaders(): HttpHeaders {
     const userData = this.authorizationService.getUserData();
-    const headersConfig: HttpHeaders = new HttpHeaders({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    });
 
     if (userData) {
-      headersConfig.set('Authorization', userData.token);
-    }
+      const token = userData.token;
 
-    return headersConfig;
+      return new HttpHeaders({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': token
+      });
+    } else {
+      return new HttpHeaders({
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      });
+    }
   }
 
   private handleHttpError(error: HttpErrorResponse): Observable<never> {
