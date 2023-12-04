@@ -3,6 +3,13 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Articles/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Articles/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Authors/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/authorization/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/eureka/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gateway/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/notifications/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
   </component>
 </project>

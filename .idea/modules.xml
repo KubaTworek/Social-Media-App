@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Social-Media-App.iml" filepath="$PROJECT_DIR$/Social-Media-App.iml" />
       <module fileurl="file://$PROJECT_DIR$/Articles/articles.iml" filepath="$PROJECT_DIR$/Articles/articles.iml" />
+      <module fileurl="file://$PROJECT_DIR$/authorization/authorization.iml" filepath="$PROJECT_DIR$/authorization/authorization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Authors/authors.iml" filepath="$PROJECT_DIR$/Authors/authors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Eureka/eureka.iml" filepath="$PROJECT_DIR$/Eureka/eureka.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gateway/gateway.iml" filepath="$PROJECT_DIR$/gateway/gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/notifications/notifications.iml" filepath="$PROJECT_DIR$/notifications/notifications.iml" />
     </modules>
   </component>
 </project>
