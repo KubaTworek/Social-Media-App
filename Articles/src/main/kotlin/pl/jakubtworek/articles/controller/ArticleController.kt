@@ -1,0 +1,46 @@
+package pl.jakubtworek.articles.controller
+
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.*
+import pl.jakubtworek.articles.controller.dto.ArticleRequest
+import pl.jakubtworek.articles.controller.dto.ArticleResponse
+import pl.jakubtworek.articles.service.ArticleService
+
+@RequestMapping("/api")
+@RestController
+class ArticleController(private val articleService: ArticleService) {
+
+    // EXTERNAL
+    @GetMapping("/")
+    fun getArticlesOrderByDateDesc(): List<ArticleResponse> =
+        articleService.findAllOrderByCreatedTimeDesc()
+
+    @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveArticle(
+        @RequestHeader("Authorization") jwt: String,
+        @RequestBody theArticle: ArticleRequest
+    ) = articleService.save(theArticle, jwt)
+
+    @DeleteMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun deleteArticle(
+        @RequestHeader("Authorization") jwt: String,
+        @PathVariable articleId: Int
+    ) = articleService.deleteById(articleId, jwt)
+
+    // INTERNAL
+    @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticlesById(@PathVariable articleId: Int) =
+        articleService.findById(articleId)
+
+    @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticlesByAuthor(@PathVariable authorId: Int) =
+        articleService.findAllByAuthorId(authorId)
+
+    @DeleteMapping("/authorId/{authorId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun deleteArticlesByAuthorId(@PathVariable authorId: Int) =
+        articleService.deleteByAuthorId(authorId)
+}

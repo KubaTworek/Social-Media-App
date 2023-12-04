@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="authorization" />
         <module name="articles" />
-        <module name="notifications" />
         <module name="gateway" />
+        <module name="notifications" />
         <module name="eureka" />
         <module name="authors" />
       </profile>
