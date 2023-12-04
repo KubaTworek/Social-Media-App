@@ -1,29 +1,12 @@
-package com.example.gateway
+package pl.jakubtworek.gateway
 
 import org.springframework.cloud.gateway.route.RouteLocator
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.reactive.config.CorsRegistry
-import org.springframework.web.reactive.config.WebFluxConfigurer
-
 
 @Configuration
-open class GatewayConfig : WebFluxConfigurer {
-
-    @Bean
-    open fun corsConfigurer(): WebFluxConfigurer {
-        return object : WebFluxConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**")
-                    .allowedOrigins("http://localhost:4200/")
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("Content-Type", "Authorization")
-                    .exposedHeaders("Content-Disposition")
-                    .maxAge(3600)
-            }
-        }
-    }
+open class GatewayConfig {
 
     @Bean
     open fun myRoutes(builder: RouteLocatorBuilder): RouteLocator {
