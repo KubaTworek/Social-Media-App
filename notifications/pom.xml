@@ -5,136 +5,96 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.2</version>
+		<version>3.1.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>pl.jakubtworek</groupId>
 	<artifactId>notifications</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>notifications</name>
-	<description>Notification Service</description>
+	<description>Notification-microservice</description>
 	<properties>
 		<java.version>17</java.version>
-		<kotlin.version>1.8.20-Beta</kotlin.version>
-		<junit.jupiter.version>5.9.2</junit.jupiter.version>
+		<kotlin.version>1.9.20</kotlin.version>
 	</properties>
+
 	<dependencies>
-
-		<!-- SPRING BOOT -->
-
-		<!-- Spring Boot Starter Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- Spring Boot Starter Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.hateoas</groupId>
+			<artifactId>spring-hateoas</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Spring Cloud Starter Netflix Eureka Client -->
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-			<version>4.0.0</version>
+			<version>4.0.3</version>
 		</dependency>
-		<!-- Spring Boot Starter Data JPA -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<!-- Spring Cloud Starter OpenFeign -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>4.0.1</version>
+			<version>4.0.4</version>
 		</dependency>
-		<!-- Spring Kafka -->
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-			<version>3.0.4</version>
-		</dependency>
-		<!-- Spring HATEOAS -->
-		<dependency>
-			<groupId>org.springframework.hateoas</groupId>
-			<artifactId>spring-hateoas</artifactId>
 		</dependency>
 
-		<!-- KOTLIN -->
-
-		<!-- Jackson module for Kotlin -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-kotlin</artifactId>
 		</dependency>
-		<!-- Kotlin Reflect -->
-		<dependency>
-			<groupId>org.jetbrains.kotlin</groupId>
-			<artifactId>kotlin-reflect</artifactId>
-		</dependency>
-		<!-- Kotlin Standard Library for JDK 8 -->
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-stdlib-jdk8</artifactId>
 		</dependency>
-
-		<!-- OTHERS -->
-
-		<!-- H2 Database -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-		</dependency>
-		<!-- Lombok -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<!-- TEST -->
-
-		<!-- Spring Test -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>6.0.6</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Kotlin Test -->
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>
 			<artifactId>kotlin-test</artifactId>
 			<version>${kotlin.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- JUnit Jupiter API -->
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- JUnit Jupiter Engine -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>${junit.jupiter.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Spring Boot Webflux -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Mockito -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -167,7 +127,7 @@
 				<executions>
 					<execution>
 						<id>compile</id>
-						<phase>compile</phase>
+						<phase>process-sources</phase>
 						<goals>
 							<goal>compile</goal>
 						</goals>
@@ -197,46 +157,6 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>default-compile</id>
-						<phase>none</phase>
-					</execution>
-					<execution>
-						<id>default-testCompile</id>
-						<phase>none</phase>
-					</execution>
-					<execution>
-						<id>compile</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>testCompile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
-				<configuration>
-					<includes>
-						<include>**/*Test.java</include>
-						<include>**/*Tests.java</include>
-					</includes>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>
