@@ -2,6 +2,7 @@ import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
 import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
 import {DataStorageService} from "../../../shared/data-storage.service";
+import {ArticleDetailsComponent} from "./article-details/article-details.component";
 
 @Component({
   selector: 'article-card',
@@ -12,15 +13,9 @@ import {DataStorageService} from "../../../shared/data-storage.service";
 export class ArticleCardComponent {
   @Input() article!: Article
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
+  @ViewChild(ArticleDetailsComponent) articleDetailsComponent!: ArticleDetailsComponent;
 
   constructor(private dataStorage: DataStorageService) {
-  }
-
-  isAbleToDelete() {
-    const userDataJson = sessionStorage.getItem("userData");
-    const username = userDataJson ? JSON.parse(userDataJson).username : null;
-
-    return username !== null && username === this.article.author.username;
   }
 
   deleteArticle(articleId: string) {
@@ -47,8 +42,8 @@ export class ArticleCardComponent {
     }
   }
 
-  openDeleteModal(): void {
-    this.articleDeleteComponent.openModal();
+  openEditModal(): void {
+    this.articleDetailsComponent.openModal();
   }
 
   onArticleDeleteConfirmed(articleId: string): void {

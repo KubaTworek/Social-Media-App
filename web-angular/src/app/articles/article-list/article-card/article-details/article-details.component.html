@@ -1,7 +1,7 @@
-<article class="article-card__article-card" (click)="openEditModal()">
+<article class="article-card__article-details" #modal>
   <p class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }} <span
     class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span></p>
-  <p class="article-card__content">{{ article.text }}</p>
+  <textarea class="article-details__content">{{ article.text }}</textarea>
   <p class="article-card__article-id">{{ article.id }}</p>
   <div>
     <p class="article-card__like-container" id="like-container-{{article.id}}"><span (click)="likeArticle(article.id)"
@@ -12,9 +12,12 @@
       class="article-card__likes"
       id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
     </p>
+    <a (click)="closeModal()" class="article-card__delete-button">❌</a>
+    <a (click)="openDeleteModal()" *ngIf="isAbleToDelete()" class="article-card__delete-link">Delete</a>
+    <a (click)="save()" *ngIf="isAbleToEdit()" class="article-card__edit-link">Save</a>
   </div>
 </article>
 <article-delete (cancelled)="onArticleDeleteCancelled()"
                 (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 
-<article-details [article]="article"></article-details>
+<div class="overlay" #overlay></div>

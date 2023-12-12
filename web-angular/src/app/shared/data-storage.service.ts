@@ -36,6 +36,19 @@ export class DataStorageService {
       );
   }
 
+  updateArticle(id: string, request: ArticleRequest) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/articles/api/${id}`;
+    console.log(request)
+    return this.http
+      .put<void>(endpoint, JSON.stringify(request), {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(() => this.fetchArticles().subscribe())
+      )
+      .subscribe();
+  }
+
   storeArticle(request: ArticleRequest) {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;

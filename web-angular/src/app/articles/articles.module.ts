@@ -7,6 +7,7 @@ import {ArticleDeleteComponent} from "./article-list/article-card/article-delete
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
+import {ArticleDetailsComponent} from "./article-list/article-card/article-details/article-details.component";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import {SharedModule} from "../shared/shared.module";
     ArticlePostComponent,
     ArticleListComponent,
     ArticleCardComponent,
-    ArticleDeleteComponent
+    ArticleDeleteComponent,
+    ArticleDetailsComponent
   ],
   imports: [
     FormsModule,
