@@ -92,6 +92,14 @@ abstract class AbstractIT {
             .exchange()
             .expectStatus().isCreated
 
+    fun updateArticle(articleRequest: ArticleRequest, articleId: Int) =
+        webTestClient.put().uri("/api/$articleId")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "dummy-jwt")
+            .body(BodyInserters.fromValue(articleRequest))
+            .exchange()
+            .expectStatus().isOk
+
     fun getArticles(expectedSize: Int) =
         webTestClient.get().uri("/api/")
             .exchange()

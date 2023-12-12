@@ -8,6 +8,8 @@ import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
 import pl.jakubtworek.articles.controller.dto.AuthorResponse
 import pl.jakubtworek.articles.controller.dto.LikeInfoResponse
+import pl.jakubtworek.articles.exception.ArticleNotFoundException
+import pl.jakubtworek.articles.exception.UnauthorizedException
 import pl.jakubtworek.articles.model.dto.ArticleDTO
 import pl.jakubtworek.articles.model.entity.Article
 import pl.jakubtworek.articles.repository.ArticleRepository
@@ -29,7 +31,7 @@ class ArticleServiceImpl(
 
     override fun findById(articleId: Int): ArticleDTO {
         val article = articleRepository.findById(articleId).orElse(null)
-            ?: throw pl.jakubtworek.articles.exception.ArticleNotFoundException("Article not found")
+            ?: throw ArticleNotFoundException("Article not found")
         return mapArticleToDTO(article)
     }
 
@@ -42,18 +44,30 @@ class ArticleServiceImpl(
     override fun deleteById(theId: Int, jwt: String) {
         val userDetails = authorizationService.getUserDetails(jwt)
         val article = articleRepository.findById(theId).orElse(null)
-            ?: throw pl.jakubtworek.articles.exception.ArticleNotFoundException("Article not found")
+            ?: throw ArticleNotFoundException("Article not found")
         if (article.authorId == userDetails.authorId) {
             likeRepository.deleteAllByArticleId(theId)
             articleRepository.deleteById(theId)
         } else {
-            throw pl.jakubtworek.articles.exception.UnauthorizedException("You are not authorized to delete this article!")
+            throw UnauthorizedException("You are not authorized to delete this article!")
         }
     }
 
     override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> =
         articleRepository.findAllByAuthorIdOrderByDate(authorId)
             .map { mapArticleToDTO(it) }
+
+    override fun update(theArticle: ArticleRequest, theId: Int, jwt: String) {
+        val userDetails = authorizationService.getUserDetails(jwt)
+        val article = articleRepository.findById(theId).orElse(null)
+            ?: throw ArticleNotFoundException("Article not found")
+        if (article.authorId == userDetails.authorId) {
+            val updatedArticle = updateArticle(theArticle, theId, jwt)
+            articleRepository.save(updatedArticle)
+        } else {
+            throw UnauthorizedException("You are not authorized to delete this article!")
+        }
+    }
 
     override fun deleteByAuthorId(authorId: Int) =
         articleRepository.deleteAllByAuthorId(authorId)
@@ -72,6 +86,18 @@ class ArticleServiceImpl(
 
         return Article(
             id = 0,
+            date = getCurrentDate(),
+            timestamp = Timestamp(System.currentTimeMillis()),
+            text = request.text,
+            authorId = userDetails.authorId
+        )
+    }
+
+    private fun updateArticle(request: ArticleRequest, idToUpdate: Int, jwt: String): Article {
+        val userDetails = authorizationService.getUserDetails(jwt)
+
+        return Article(
+            id = idToUpdate,
             date = getCurrentDate(),
             timestamp = Timestamp(System.currentTimeMillis()),
             text = request.text,

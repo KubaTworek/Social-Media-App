@@ -5,6 +5,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
+import pl.jakubtworek.articles.model.dto.ArticleDTO
 import pl.jakubtworek.articles.service.ArticleService
 
 @RequestMapping("/api")
@@ -23,6 +24,14 @@ class ArticleController(private val articleService: ArticleService) {
         @RequestBody theArticle: ArticleRequest
     ) = articleService.save(theArticle, jwt)
 
+    @PutMapping("/{articleId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateArticle(
+        @RequestHeader("Authorization") jwt: String,
+        @RequestBody theArticle: ArticleRequest,
+        @PathVariable articleId: Int
+    ) = articleService.update(theArticle, articleId, jwt)
+
     @DeleteMapping("/{articleId}")
     @ResponseStatus(HttpStatus.OK)
     fun deleteArticle(
@@ -32,7 +41,7 @@ class ArticleController(private val articleService: ArticleService) {
 
     // INTERNAL
     @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesById(@PathVariable articleId: Int) =
+    fun getArticleById(@PathVariable articleId: Int) =
         articleService.findById(articleId)
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
