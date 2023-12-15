@@ -1,9 +1,14 @@
-<div #modal class="article-delete__modal">
+<a class="article-delete__modal" #modal>
   <div class="article-delete__modal-content">
-    <h4>Would you like to delete this article?</h4>
+    <h4>Delete Article?</h4>
+    <p>
+      This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.
+    </p>
     <div class="article-delete__actions">
-      <button (click)="confirm()" class="article-delete__btn article-delete__btn-confirm">Confirm</button>
+      <button (click)="confirm()" class="article-delete__btn article-delete__btn-confirm">Delete</button>
       <button (click)="cancel()" class="article-delete__btn article-delete__btn-cancel">Cancel</button>
     </div>
   </div>
-</div>
+</a>
+
+<div (click)="close()" class="overlay-delete" #overlay></div>

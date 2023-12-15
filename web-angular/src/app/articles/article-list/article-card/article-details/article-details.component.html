@@ -1,23 +1,30 @@
-<article class="article-card__article-details" #modal>
-  <p class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }} <span
-    class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span></p>
-  <textarea class="article-details__content">{{ article.text }}</textarea>
+<article class="article-details" #modal>
+  <div class="article-details__header">
+      <span class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }}</span>
+      <br>
+      <span class="article-card__author-username">@{{ article.author.username }}</span>
+  </div>
+  <textarea class="article-card__content" id="content-{{article.id}}" [readonly]="!canModify()">{{ article.text }}</textarea>
+  <p class="article-details__date-create">{{ article.createDate }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
-  <div>
-    <p class="article-card__like-container" id="like-container-{{article.id}}"><span (click)="likeArticle(article.id)"
-                                                                                     (mouseenter)="showLikes(article.id)"
-                                                                                     (mouseleave)="hideLikeInfo(article.id)"
-                                                                                     class="article-card__like-button"
-                                                                                     id="like-button-{{article.id}}">❤️</span><span
-      class="article-card__likes"
-      id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
+  <div class="article-card__actions">
+    <p class="article-card__like-container" id="article-details__like-container-{{article.id}}">
+      <span (click)="likeArticle(article.id)"
+            (mouseenter)="showLikes(article.id)"
+            (mouseleave)="hideLikes(article.id)"
+            class="article-card__like-button"
+            id="like-button-{{article.id}}">❤️</span>
+      <span class="article-card__likes" id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
     </p>
-    <a (click)="closeModal()" class="article-card__delete-button">❌</a>
-    <a (click)="openDeleteModal()" *ngIf="isAbleToDelete()" class="article-card__delete-link">Delete</a>
-    <a (click)="save()" *ngIf="isAbleToEdit()" class="article-card__edit-link">Save</a>
+    <a (click)="close()" class="article-details__exit-button">❌</a>
+    <a (click)="openOptionsList()" class="article-details__more-button" *ngIf="canModify()" >⋯</a>
+    <div class="article-details__more-options" *ngIf="showOptions">
+      <a (click)="openDeleteModal()" *ngIf="canModify()" class="article-details__delete-link">Delete</a>
+      <a (click)="save()" *ngIf="canModify()" class="article-details__edit-link">Save</a>
+    </div>
   </div>
 </article>
 <article-delete (cancelled)="onArticleDeleteCancelled()"
                 (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 
-<div class="overlay" #overlay></div>
+<div (click)="close()" class="overlay" #overlay></div>

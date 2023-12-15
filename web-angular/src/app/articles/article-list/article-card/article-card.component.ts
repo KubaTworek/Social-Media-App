@@ -12,51 +12,37 @@ import {ArticleDetailsComponent} from "./article-details/article-details.compone
 })
 export class ArticleCardComponent {
   @Input() article!: Article
-  @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
   @ViewChild(ArticleDetailsComponent) articleDetailsComponent!: ArticleDetailsComponent;
 
   constructor(private dataStorage: DataStorageService) {
   }
 
-  deleteArticle(articleId: string) {
-    this.dataStorage.deleteArticle(articleId);
+  openDetails(event: Event): void {
+    const clickedElement = event.target as HTMLElement;
+
+    if (!clickedElement.classList.contains('article-card__like-button')) {
+      this.articleDetailsComponent.open();
+    }
   }
 
   likeArticle(articleId: string) {
     this.dataStorage.likeArticle(articleId);
   }
 
-  showLikes(articleId: string) {
-    this.displayLikeTooltip(articleId);
-  }
-
-  displayLikeTooltip(articleId: string): void {
+  showLikes(articleId: string): void {
     if (this.article.likes.users.length > 0) {
       const userNames = this.article.likes.users.map((user: string) => `<div>${user}</div>`).join('');
       const tooltipContent = `<div class="article-card__like-tooltip-content">${userNames}</div>`;
       const tooltip = document.createElement('div');
       tooltip.classList.add('article-card__like-tooltip');
       tooltip.innerHTML = tooltipContent;
-      const likeButton = document.querySelector(`#like-container-${articleId}`);
+      const likeButton = document.querySelector(`#article-card__like-container-${articleId}`);
       likeButton?.appendChild(tooltip);
     }
   }
 
-  openEditModal(): void {
-    this.articleDetailsComponent.openModal();
-  }
-
-  onArticleDeleteConfirmed(articleId: string): void {
-    this.deleteArticle(articleId)
-    this.articleDeleteComponent.closeModal();
-  }
-
-  onArticleDeleteCancelled(): void {
-    this.articleDeleteComponent.closeModal();
-  }
-
-  hideLikeInfo(articleId: string): void {
-    const likeButton = document.querySelector(`#like-container-${articleId}`);
+  hideLikes(articleId: string): void {
+    const likeButton = document.querySelector(`#article-card__like-container-${articleId}`);
     const tooltip = likeButton?.querySelector('.article-card__like-tooltip');
     if (tooltip) {
       likeButton?.removeChild(tooltip);

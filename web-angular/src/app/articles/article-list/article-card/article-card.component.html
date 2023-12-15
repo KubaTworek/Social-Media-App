@@ -1,20 +1,22 @@
-<article class="article-card__article-card" (click)="openEditModal()">
-  <p class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }} <span
-    class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span></p>
-  <p class="article-card__content">{{ article.text }}</p>
+<article class="article-card" (click)="openDetails($event)">
+  <div class="article-card__header">
+    <p class="article-card__author-name">
+      {{ article.author.firstName }} {{ article.author.lastName }}
+      <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
+    </p>
+  </div>
+  <textarea class="article-card__content">{{ article.text }}</textarea>
   <p class="article-card__article-id">{{ article.id }}</p>
-  <div>
-    <p class="article-card__like-container" id="like-container-{{article.id}}"><span (click)="likeArticle(article.id)"
-                                                                                     (mouseenter)="showLikes(article.id)"
-                                                                                     (mouseleave)="hideLikeInfo(article.id)"
-                                                                                     class="article-card__like-button"
-                                                                                     id="like-button-{{article.id}}">❤️</span><span
-      class="article-card__likes"
-      id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
+  <div class="article-card__actions">
+    <p class="article-card__like-container" id="article-card__like-container-{{article.id}}">
+      <span (click)="likeArticle(article.id)"
+            (mouseenter)="showLikes(article.id)"
+            (mouseleave)="hideLikes(article.id)"
+            class="article-card__like-button"
+            id="like-button-{{article.id}}">❤️</span>
+      <span class="article-card__likes" id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
     </p>
   </div>
 </article>
-<article-delete (cancelled)="onArticleDeleteCancelled()"
-                (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 
 <article-details [article]="article"></article-details>

@@ -7,6 +7,7 @@ export class Article {
   public text: string;
   public id: string;
   public elapsed: string;
+  public createDate: string;
   public likes: LikesInfo;
   public numOfLikes: number;
 
@@ -16,6 +17,7 @@ export class Article {
     text: string,
     id: string,
     elapsed: string,
+    createDate: string,
     likes: LikesInfo,
     numOfLikes: number
   ) {
@@ -24,6 +26,7 @@ export class Article {
     this.text = text;
     this.id = id;
     this.elapsed = elapsed;
+    this.createDate = createDate;
     this.likes = likes;
     this.numOfLikes = numOfLikes;
   }

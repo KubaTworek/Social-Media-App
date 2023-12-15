@@ -177,6 +177,7 @@ export class DataStorageService {
     articles.map(article => ({
       ...article,
       elapsed: this.getTimeElapsed(article.timestamp),
+      createDate: this.formatDateTime(article.timestamp),
       numOfLikes: article.likes.users.length,
     }));
 
@@ -203,5 +204,28 @@ export class DataStorageService {
       const weeks = Math.floor(timeDiff / 604800000);
       return weeks + "w";
     }
+  }
+
+  private formatDateTime(inputDateString: Date): string {
+    const date = new Date(inputDateString);
+
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const day = date.getDate();
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+
+    const formattedTime = this.formatTime(hour, minute);
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    return `${formattedTime} · ${formattedDate}`;
+  }
+
+  private formatTime(hour: number, minute: number): string {
+    const isPM = hour >= 12;
+    const formattedHour = hour % 12 || 12;
+    const period = isPM ? 'PM' : 'AM';
+
+    return `${formattedHour}:${minute.toString().padStart(2, '0')} ${period}`;
   }
 }

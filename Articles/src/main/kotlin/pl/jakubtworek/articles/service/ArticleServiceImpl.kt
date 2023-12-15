@@ -62,7 +62,7 @@ class ArticleServiceImpl(
         val article = articleRepository.findById(theId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
         if (article.authorId == userDetails.authorId) {
-            val updatedArticle = updateArticle(theArticle, theId, jwt)
+            val updatedArticle = updateArticle(theArticle, article, jwt)
             articleRepository.save(updatedArticle)
         } else {
             throw UnauthorizedException("You are not authorized to delete this article!")
@@ -93,13 +93,13 @@ class ArticleServiceImpl(
         )
     }
 
-    private fun updateArticle(request: ArticleRequest, idToUpdate: Int, jwt: String): Article {
+    private fun updateArticle(request: ArticleRequest, articleToUpdate: Article, jwt: String): Article {
         val userDetails = authorizationService.getUserDetails(jwt)
 
         return Article(
-            id = idToUpdate,
-            date = getCurrentDate(),
-            timestamp = Timestamp(System.currentTimeMillis()),
+            id = articleToUpdate.id,
+            date = articleToUpdate.date,
+            timestamp = articleToUpdate.timestamp,
             text = request.text,
             authorId = userDetails.authorId
         )
