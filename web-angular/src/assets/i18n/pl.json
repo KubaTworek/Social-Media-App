@@ -1,0 +1,22 @@
+{
+  "LANGUAGE": "EN",
+  "HOME": "Główna",
+  "NOTIFICATIONS": "Powiadomienia",
+  "SIGN_UP": "Zarejestruj się",
+  "LOGIN": "Zaloguj się",
+  "LOGOUT": "Wyloguj się",
+  "SEARCH": "Szukaj",
+  "SAVE": "Zapisz",
+  "CANCEL": "Anuluj",
+  "SEND": "Wyślij",
+  "POST_PLACEHOLDER": "Co się dzieje?",
+  "DELETE": "Usuń",
+  "DELETE_ASK": "Usunąć wpis?",
+  "DELETE_INFORMATION": "Tej czynności nie można cofnąć. Wpis zostanie usunięty z Twojego profilu, z osi czasu kont, które Cię obserwują, oraz z wyników wyszukiwania.",
+  "FIRST_NAME": "Imię",
+  "LAST_NAME": "Nazwisko",
+  "USERNAME": "Nazwa użytkownika",
+  "PASSWORD": "Hasło",
+  "ASK_FOR_LOGIN": "Masz już konto?",
+  "ASK_FOR_REGISTER": "Nie masz jeszcze konta?"
+}

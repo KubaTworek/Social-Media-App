@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthorizationService} from "../auth/service/authorization.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'navigation-board',

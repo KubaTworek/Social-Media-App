@@ -19,8 +19,8 @@
     <a (click)="close()" class="article-details__exit-button">❌</a>
     <a (click)="openOptionsList()" class="article-details__more-button" *ngIf="canModify()" >⋯</a>
     <div class="article-details__more-options" *ngIf="showOptions">
-      <a (click)="openDeleteModal()" *ngIf="canModify()" class="article-details__delete-link">Delete</a>
-      <a (click)="save()" *ngIf="canModify()" class="article-details__edit-link">Save</a>
+      <a (click)="openDeleteModal()" *ngIf="canModify()" class="article-details__delete-link">{{ 'DELETE' | translate }}</a>
+      <a (click)="save()" *ngIf="canModify()" class="article-details__edit-link">{{ 'SAVE' | translate }}</a>
     </div>
   </div>
 </article>

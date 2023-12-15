@@ -5,7 +5,7 @@
     {{ errorMessage }}
   </div>
   <div>
-    <label for="first-name">First Name</label>
+    <label for="first-name">{{ 'FIRST_NAME' | translate }}</label>
     <input
       id="first-name"
       name="first-name"
@@ -15,7 +15,7 @@
     />
   </div>
   <div>
-    <label for="last-name">Last Name</label>
+    <label for="last-name">{{ 'LAST_NAME' | translate }}</label>
     <input
       id="last-name"
       name="last-name"
@@ -25,7 +25,7 @@
     />
   </div>
   <div>
-    <label for="username">Username</label>
+    <label for="username">{{ 'USERNAME' | translate }}</label>
     <input
       id="username"
       name="username"
@@ -35,7 +35,7 @@
     />
   </div>
   <div>
-    <label for="password">Password</label>
+    <label for="password">{{ 'PASSWORD' | translate }}</label>
     <input
       id="password"
       minlength="6"
@@ -49,10 +49,10 @@
     <button
       type="submit"
     >
-      Sign up
+      {{ 'SIGN_UP' | translate }}
     </button>
   </div>
   <div class="login-link">
-    <p>Already has an account? <a href="/auth/login">Login</a></p>
+    <p>{{ 'ASK_FOR_LOGIN' | translate }} <a routerLink="/auth/login">{{ 'LOGIN' | translate }}</a></p>
   </div>
 </form>

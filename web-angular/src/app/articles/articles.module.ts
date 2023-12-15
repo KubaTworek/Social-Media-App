@@ -8,6 +8,7 @@ import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {ArticleDetailsComponent} from "./article-list/article-card/article-details/article-details.component";
+import {TranslateModule} from "@ngx-translate/core";
 
 @NgModule({
   declarations: [
@@ -18,13 +19,14 @@ import {ArticleDetailsComponent} from "./article-list/article-card/article-detai
     ArticleDeleteComponent,
     ArticleDetailsComponent
   ],
-  imports: [
-    FormsModule,
-    SharedModule,
-    RouterModule.forChild([
-      {path: '', component: ArticlesComponent},
-    ])
-  ]
+    imports: [
+        FormsModule,
+        SharedModule,
+        RouterModule.forChild([
+            {path: '', component: ArticlesComponent},
+        ]),
+        TranslateModule
+    ]
 })
 export class ArticlesModule {
 }

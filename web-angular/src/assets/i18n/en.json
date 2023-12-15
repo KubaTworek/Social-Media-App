@@ -1,0 +1,22 @@
+{
+  "LANGUAGE": "PL",
+  "HOME": "Home",
+  "NOTIFICATIONS": "Notifications",
+  "SIGN_UP": "Sign up",
+  "LOGIN": "Login",
+  "LOGOUT": "Logout",
+  "SEARCH": "Search",
+  "SAVE": "Save",
+  "CANCEL": "Cancel",
+  "SEND": "Send",
+  "POST_PLACEHOLDER": "What's happening?",
+  "DELETE": "Delete",
+  "DELETE_ASK": "Delete Article?",
+  "DELETE_INFORMATION": "This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.",
+  "FIRST_NAME": "First name",
+  "LAST_NAME": "Last name",
+  "USERNAME": "Username",
+  "PASSWORD": "Password",
+  "ASK_FOR_LOGIN": "Already has an account?",
+  "ASK_FOR_REGISTER": "Don't have an account?"
+}

@@ -1,12 +1,12 @@
 <a class="article-delete__modal" #modal>
   <div class="article-delete__modal-content">
-    <h4>Delete Article?</h4>
+    <h4>{{ 'DELETE_ASK' | translate }}</h4>
     <p>
-      This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results.
+      {{ 'DELETE_INFORMATION' | translate }}
     </p>
     <div class="article-delete__actions">
-      <button (click)="confirm()" class="article-delete__btn article-delete__btn-confirm">Delete</button>
-      <button (click)="cancel()" class="article-delete__btn article-delete__btn-cancel">Cancel</button>
+      <button (click)="confirm()" class="article-delete__btn article-delete__btn-confirm">{{ 'DELETE' | translate }}</button>
+      <button (click)="cancel()" class="article-delete__btn article-delete__btn-cancel">{{ 'CANCEL' | translate }}</button>
     </div>
   </div>
 </a>

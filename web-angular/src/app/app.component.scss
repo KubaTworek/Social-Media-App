@@ -31,6 +31,23 @@
   }
 }
 
+#language-button {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background-color: red;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#language-button:hover {
+  background-color: #cc0000;
+}
+
 /* Style dla większych ekranów (desktop) */
 
 @media screen and (min-width: 860px) {

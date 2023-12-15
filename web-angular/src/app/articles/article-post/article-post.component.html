@@ -1,4 +1,4 @@
 <div class="article-post">
-  <textarea [(ngModel)]="articleContent" class="article-post__content" placeholder="What's happening?"></textarea>
-  <button (click)="createArticle()" class="article-post__send-button">SEND</button>
+  <textarea [(ngModel)]="articleContent" class="article-post__content" placeholder="{{ 'POST_PLACEHOLDER' | translate }}"></textarea>
+  <button (click)="createArticle()" class="article-post__send-button">{{ 'SEND' | translate }}</button>
 </div>
