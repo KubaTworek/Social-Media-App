@@ -23,16 +23,15 @@ export class DataStorageService {
   ) {
   }
 
-  fetchArticles() {
+  fetchArticles(page: number, size: number) {
     const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/`;
-
+    const endpoint = `${this.apiUrl}/articles/api/?page=${page}&size=${size}`;
+    console.log(endpoint)
     return this.http
       .get<Article[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(this.mapArticleData),
-        tap(this.updateArticleService)
+        map(this.mapArticleData)
       );
   }
 
@@ -44,7 +43,7 @@ export class DataStorageService {
       .put<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError(this.handleHttpError),
-        tap(() => this.fetchArticles().subscribe())
+        tap(() => this.articleService.updateArticle(id, request.text))
       )
       .subscribe();
   }
@@ -52,12 +51,15 @@ export class DataStorageService {
   storeArticle(request: ArticleRequest) {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;
-    console.log(request)
+
     return this.http
       .post<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError(this.handleHttpError),
-        tap(() => this.fetchArticles().subscribe())
+        tap(() => this.fetchArticles(0, 5)
+          .pipe(
+          tap(this.updateArticleService)
+        ).subscribe())
       )
       .subscribe();
   }
@@ -181,8 +183,8 @@ export class DataStorageService {
       numOfLikes: article.likes.users.length,
     }));
 
-  private updateArticleService = (articles: Article[]) =>
-    this.articleService.setArticles(articles);
+  updateArticleService = (articles: Article[]) =>
+    this.articleService.setArticlesAndNotify(articles);
 
   private getTimeElapsed(timestamp: Date): string {
     const now = new Date();

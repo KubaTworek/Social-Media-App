@@ -3,6 +3,7 @@ import {ArticleService} from '../service/article.service';
 import {Article} from '../dto/article.type';
 import {Subscription} from "rxjs";
 import {SearchService} from "../../search-board/service/search.service";
+import {DataStorageService} from "../../shared/data-storage.service";
 
 @Component({
   selector: 'article-list',
@@ -14,8 +15,10 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   keyword: string = '';
   private keywordSubscription: Subscription = new Subscription();
   private articlesSubscription: Subscription = new Subscription();
+  private currentPage = 0;
 
   constructor(
+    private dataStorageService: DataStorageService,
     private articleService: ArticleService,
     private searchService: SearchService
   ) {
@@ -35,11 +38,23 @@ export class ArticleListComponent implements OnInit, OnDestroy {
           this.articles = articles;
         }
       );
-    this.articles = this.articleService.getArticles();
   }
 
   ngOnDestroy(): void {
     this.keywordSubscription.unsubscribe();
     this.articlesSubscription.unsubscribe();
+  }
+
+  loadMoreArticles() {
+    this.currentPage++;
+    this.dataStorageService.fetchArticles(this.currentPage, 5).subscribe(
+      (newArticles: Article[]) => {
+        this.articles.push(...newArticles);
+        this.articleService.setArticles(this.articles)
+      },
+      (error) => {
+        console.error('Error fetching more articles:', error);
+      }
+    );
   }
 }

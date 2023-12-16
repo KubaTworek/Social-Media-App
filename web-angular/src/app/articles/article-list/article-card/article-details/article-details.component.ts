@@ -62,6 +62,7 @@ export class ArticleDetailsComponent {
     if (textareaElement) {
       const request = new ArticleRequest(textareaElement.value)
       this.dataStorage.updateArticle(this.article.id, request)
+      this.close();
     }
   }
 

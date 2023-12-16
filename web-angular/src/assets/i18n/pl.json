@@ -18,5 +18,6 @@
   "USERNAME": "Nazwa użytkownika",
   "PASSWORD": "Hasło",
   "ASK_FOR_LOGIN": "Masz już konto?",
-  "ASK_FOR_REGISTER": "Nie masz jeszcze konta?"
+  "ASK_FOR_REGISTER": "Nie masz jeszcze konta?",
+  "MORE_ARTICLES": "Pokaż więcej.."
 }

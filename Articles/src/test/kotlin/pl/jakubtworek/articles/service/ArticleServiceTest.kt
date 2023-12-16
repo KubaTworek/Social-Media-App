@@ -11,6 +11,9 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import pl.jakubtworek.articles.client.service.AuthorizationApiService
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
@@ -57,12 +60,15 @@ class ArticleServiceTest {
             Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Article 2", 2),
             Article(3, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 3", 1)
         )
-        `when`(articleRepository.findAll(any<Sort>())).thenReturn(articles)
+        val pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "timestamp"))
+        val articlesPage: Page<Article> = PageImpl(articles, pageRequest, articles.size.toLong())
+
+        `when`(articleRepository.findAll(any<PageRequest>())).thenReturn(articlesPage)
         `when`(authorService.getAuthorById(any(Int::class.java))).thenReturn(author)
         `when`(likeRepository.countLikesByArticleId(any(Int::class.java))).thenReturn(5)
 
         // When
-        val result = articleService.findAllOrderByCreatedTimeDesc()
+        val result = articleService.findAllOrderByCreatedTimeDesc(0, 5)
 
         // Then
         assertEquals(3, result.size)

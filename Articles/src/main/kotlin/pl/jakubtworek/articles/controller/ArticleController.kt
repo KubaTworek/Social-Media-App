@@ -14,8 +14,12 @@ class ArticleController(private val articleService: ArticleService) {
 
     // EXTERNAL
     @GetMapping("/")
-    fun getArticlesOrderByDateDesc(): List<ArticleResponse> =
-        articleService.findAllOrderByCreatedTimeDesc()
+    fun getArticlesOrderByDateDesc(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "5") size: Int
+    ): List<ArticleResponse> {
+        return articleService.findAllOrderByCreatedTimeDesc(page, size)
+    }
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)

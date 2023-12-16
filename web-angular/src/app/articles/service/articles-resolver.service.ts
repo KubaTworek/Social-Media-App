@@ -4,6 +4,7 @@ import {Article} from "../dto/article.type";
 import {DataStorageService} from "../../shared/data-storage.service";
 import {ArticleService} from "./article.service";
 import {Observable} from "rxjs";
+import {tap} from "rxjs/operators";
 
 @Injectable({providedIn: 'root'})
 export class ArticlesResolverService implements Resolve<Article[]> {
@@ -17,7 +18,10 @@ export class ArticlesResolverService implements Resolve<Article[]> {
     const articles = this.articlesService.getArticles();
 
     if (articles.length === 0) {
-      return this.dataStorageService.fetchArticles();
+      return this.dataStorageService.fetchArticles(0, 5)
+        .pipe(
+          tap(this.dataStorageService.updateArticleService)
+        );
     } else {
       return articles;
     }

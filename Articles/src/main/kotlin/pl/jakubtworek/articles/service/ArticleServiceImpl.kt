@@ -1,6 +1,7 @@
 package pl.jakubtworek.articles.service
 
 import jakarta.transaction.Transactional
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import pl.jakubtworek.articles.client.service.AuthorizationApiService
@@ -25,9 +26,12 @@ class ArticleServiceImpl(
     private val authorizationService: AuthorizationApiService
 ) : ArticleService {
 
-    override fun findAllOrderByCreatedTimeDesc(): List<ArticleResponse> =
-        articleRepository.findAll(Sort.by(Sort.Direction.DESC, "Timestamp"))
-            .map { createResponse(it) }
+    override fun findAllOrderByCreatedTimeDesc(page: Int, size: Int): List<ArticleResponse> {
+        val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"))
+        val articlePage = articleRepository.findAll(pageRequest)
+
+        return articlePage.content.map { createResponse(it) }
+    }
 
     override fun findById(articleId: Int): ArticleDTO {
         val article = articleRepository.findById(articleId).orElse(null)

@@ -18,5 +18,6 @@
   "USERNAME": "Username",
   "PASSWORD": "Password",
   "ASK_FOR_LOGIN": "Already has an account?",
-  "ASK_FOR_REGISTER": "Don't have an account?"
+  "ASK_FOR_REGISTER": "Don't have an account?",
+  "MORE_ARTICLES": "Show more.."
 }

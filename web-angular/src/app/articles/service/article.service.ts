@@ -7,9 +7,13 @@ export class ArticleService {
   articlesChanged = new Subject<Article[]>();
   private articles: Article[] = [];
 
-  setArticles(articles: Article[]): void {
+  setArticlesAndNotify(articles: Article[]): void {
     this.articles = articles;
     this.notifyArticlesChanged();
+  }
+
+  setArticles(articles: Article[]): void {
+    this.articles = articles;
   }
 
   getArticles(): Article[] {
@@ -19,6 +23,17 @@ export class ArticleService {
   getArticlesByKeyword(keyword: string): Article[] {
     const lowerKeyword = keyword.toLowerCase();
     return this.articles.filter(article => article.text.toLowerCase().includes(lowerKeyword));
+  }
+
+  updateArticle(articleId: any, text: string) {
+    const article = this.findArticleById(articleId);
+
+    if (!article) {
+      console.error(`Article with ID ${articleId} not found`);
+      return;
+    }
+
+    article.text = text;
   }
 
   deleteArticle(articleId: string): void {
