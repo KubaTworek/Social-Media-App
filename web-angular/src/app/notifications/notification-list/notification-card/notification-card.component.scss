@@ -1,8 +1,10 @@
+@import '../../../../colors.scss';
+
 .notification-card {
-  background-color: #111;
+  background-color: $twitter-black;
   border: 1px solid #444;
   box-sizing: border-box;
-  color: #eee;
+  color: $twitter-white;
   display: block;
   padding: 0 0.8rem;
   margin-bottom: 1rem;
@@ -10,7 +12,7 @@
 
   &:last-child {
     margin-bottom: 0;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid $twitter-dark-gray
   }
 
   &__message {
@@ -24,6 +26,6 @@
 
   &__content {
     text-align: justify;
-    color: #666;
+    color: $twitter-dark-gray;
   }
 }

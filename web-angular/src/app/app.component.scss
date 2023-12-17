@@ -1,4 +1,4 @@
-/* Domyślne style dla małych ekranów (mobile) */
+@import '../colors.scss';
 
 #background {
   margin: 0;
@@ -10,10 +10,9 @@
 
   navigation-board {
     top: 2rem;
-    left: 0;
+    left: -4rem;
     position: fixed;
-    width: 5rem;
-    padding-left: 1rem;
+    margin-right: 2rem;
   }
 
   main#main-board {
@@ -36,8 +35,8 @@
   top: 0;
   left: 0;
   z-index: 2;
-  background-color: red;
-  color: #fff;
+  background-color: $twitter-blue;
+  color: $twitter-white;
   padding: 8px 12px;
   border: none;
   border-radius: 5px;
@@ -45,7 +44,7 @@
 }
 
 #language-button:hover {
-  background-color: #cc0000;
+  background-color: $twitter-blue-hover;
 }
 
 /* Style dla większych ekranów (desktop) */
@@ -69,7 +68,7 @@
       max-width: 40rem;
 
       articles {
-        flex-direction: row; /* lub inną kierunkowość */
+        flex-direction: row;
       }
 
       search-board {

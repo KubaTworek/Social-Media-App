@@ -1,6 +1,8 @@
+@import '../../../colors.scss';
+
 .show-more-articles-btn {
-  background-color: red;
-  color: #fff;
+  background-color: $twitter-blue;
+  color: $twitter-white;
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
@@ -11,6 +13,6 @@
 }
 
 .show-more-articles-btn:hover {
-  background-color: #cc0000;
+  background-color: $twitter-blue-hover;
 }
 

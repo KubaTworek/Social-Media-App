@@ -1,10 +1,12 @@
+@import '../../../../colors.scss';
+
 .article-card {
   position: relative;
-  background-color: #111;
-  border-bottom: 1px solid #444;
+  background-color: $twitter-black;
+  border-bottom: 1px solid $twitter-dark-gray;
   border-top: none;
   box-sizing: border-box;
-  color: #eee;
+  color: $twitter-white;
   display: block;
   padding: 0.8rem;
   width: 100%;
@@ -13,7 +15,7 @@
 }
 
 .article-card:hover {
-  background-color: #1a1a1a;
+  background-color: $twitter-black-hover;
 }
 
 .article-card__author-name {
@@ -23,7 +25,7 @@
 }
 
 .article-card__author-username {
-  color: #666;
+  color: $twitter-dark-gray;
   font-weight: 500;
   text-align: left;
 }
@@ -33,7 +35,7 @@
   width: 80%;
   border: none;
   box-sizing: border-box;
-  color: #eee;
+  color: $twitter-white;
   font-size: 1rem;
   outline: none;
   resize: none;
@@ -57,11 +59,11 @@
 
 .article-card__like-container:hover {
   filter: grayscale(0%);
-  color: red;
+  color: $twitter-red;
 }
 
 .article-card__likes:hover {
-  color: red;
+  color: $twitter-red;
   transition: color 0.5s ease;
 }
 
@@ -76,7 +78,7 @@
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
-  color: #fff;
+  color: $twitter-white;
   font-size: 12px;
   padding: 6px;
   border-radius: 4px;

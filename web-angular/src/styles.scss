@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'colors.scss';
+
 * {
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
@@ -6,7 +7,7 @@
 
 body {
   font-size: 16px;
-  color: #222;
-  background-color: #111;
+  color: $twitter-dark-gray;
+  background-color: $twitter-black;
   padding-top: 2rem;
 }

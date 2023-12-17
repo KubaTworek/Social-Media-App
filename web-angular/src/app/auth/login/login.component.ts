@@ -45,7 +45,6 @@ export class LoginComponent implements OnDestroy {
 
     this.dataStorageService.login(loginRequest).subscribe(
       () => {
-        alert()
         this.loading = false;
       },
       () => {

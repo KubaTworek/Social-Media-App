@@ -31,7 +31,7 @@
 }
 
 form {
-  background-color: $twitter-black;
+  background-color: $twitter-black-hover;
   color: $twitter-white;
   padding: 1.5rem;
   border-radius: 0.625rem;
@@ -74,7 +74,7 @@ form {
     margin: 0 auto;
 
     &:hover {
-      background-color: darken($twitter-blue, 10%);
+      background-color: $twitter-blue-hover;
     }
   }
 
@@ -93,7 +93,7 @@ form {
     display: inline-block;
 
     &:hover {
-      color: darken($twitter-blue, 10%);
+      color: $twitter-blue-hover;
     }
   }
 

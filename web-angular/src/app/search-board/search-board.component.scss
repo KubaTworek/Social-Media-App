@@ -1,8 +1,10 @@
+@import '../../colors.scss';
+
 #search-input {
   width: 100%;
   padding: 0.5rem 1rem;
   height: 2rem;
-  color: #eee;
+  color: $twitter-white;
   background-color: #444;
   border: 1px solid #444;
   border-radius: 8px;

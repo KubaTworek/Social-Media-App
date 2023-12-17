@@ -1,12 +1,14 @@
+@import '../../../../../colors.scss';
+
 .article-details {
   position: fixed;
   top: 16%;
   left: 47.85%;
   transform: translate(-50%, -50%);
-  background-color: #111;
+  background-color: $twitter-black;
   border: 1px solid #444;
   box-sizing: border-box;
-  color: #eee;
+  color: $twitter-white;
   padding: 0 0.8rem;
   width: 100%;
   max-width: 544px;
@@ -21,7 +23,7 @@
 
 .article-details__date-create {
   font-size: 0.9rem;
-  color: #666;
+  color: $twitter-dark-gray;
 }
 
 .article-details__exit-button {
@@ -53,7 +55,7 @@
   width: 0;
   height: 0;
   border-radius: 50%;
-  background-color: red;
+  background-color: $twitter-red;
   opacity: 0;
   transition: all 0.3s ease;
 }
@@ -74,17 +76,17 @@
   position: absolute;
   top: 5rem;
   right: 0;
-  background-color: #111;
-  border: 1px solid #444;
+  background-color: $twitter-black;
+  border: 1px solid $twitter-dark-gray;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px $twitter-black-alpha;
   display: flex;
   flex-direction: column;
   z-index: 10;
 }
 
 .article-details__more-options a {
-  color: #eee;
+  color: $twitter-white;
   text-decoration: none;
   padding: 8px;
   transition: background-color 0.3s;
@@ -101,7 +103,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 10, 10, 0.7);
+  background: $twitter-black-alpha;
   display: none;
   z-index: 1;
 }

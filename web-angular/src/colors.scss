@@ -1,5 +1,9 @@
 $twitter-blue: #1DA1F2;
+$twitter-blue-hover: darken($twitter-blue, 10%);
 $twitter-white: #FFFFFF;
 $twitter-black: #14171A;
+$twitter-black-hover: lighten($twitter-black, 2%);
 $twitter-black-alpha: rgba(20, 23, 26, 0.8);
 $twitter-dark-gray: #657786;
+$twitter-red: red;
+$twitter-red-hover: darken($twitter-red, 10%);
