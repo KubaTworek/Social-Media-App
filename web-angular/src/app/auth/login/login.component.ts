@@ -1,9 +1,9 @@
 import {Component, OnDestroy} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {DataStorageService} from "../../shared/data-storage.service";
-import {LoginRequest} from "../dto/login-request.type";
 import {Subscription} from "rxjs";
 import {AuthorizationService} from "../service/authorization.service";
+import {LoginRequest} from "../shared/login-request.type";
 
 @Component({
   selector: 'login',
@@ -13,13 +13,15 @@ import {AuthorizationService} from "../service/authorization.service";
 export class LoginComponent implements OnDestroy {
   errorMessage: string = '';
   loginErrorSubscription: Subscription;
+  loading: boolean = false;
 
   constructor(
     private dataStorageService: DataStorageService,
-    private authorizationService: AuthorizationService,
+    private authorizationService: AuthorizationService
   ) {
     this.loginErrorSubscription = this.authorizationService.getLoginError().subscribe(error => {
       this.errorMessage = error;
+      this.loading = false;
     });
   }
 
@@ -35,12 +37,21 @@ export class LoginComponent implements OnDestroy {
     const username = form.value.username;
     const password = form.value.password;
 
-    const loginRequest: LoginRequest = {
-      username: username,
-      password: password
-    };
+    const loginRequest: LoginRequest = new LoginRequest(
+      username, password
+    );
 
-    this.dataStorageService.login(loginRequest)
+    this.loading = true;
+
+    this.dataStorageService.login(loginRequest).subscribe(
+      () => {
+        alert()
+        this.loading = false;
+      },
+      () => {
+        this.loading = false;
+      }
+    );
 
     form.reset();
   }

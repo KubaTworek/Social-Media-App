@@ -19,5 +19,11 @@
   "PASSWORD": "Password",
   "ASK_FOR_LOGIN": "Already has an account?",
   "ASK_FOR_REGISTER": "Don't have an account?",
-  "MORE_ARTICLES": "Show more.."
+  "MORE_ARTICLES": "Show more..",
+  "USERNAME_NOT_EXISTS": "User with that username does not exist",
+  "INVALID_CREDENTIALS": "Invalid credentials. Please check your username and password.",
+  "USERNAME_ALREADY_EXISTS": "User with that username already exists. Please choose a different one.",
+  "REQUIRED_FIELD": "This field is required",
+  "PASSWORD_LENGTH": "Password must be at least 6 characters long",
+  "PASSWORD_COMPLEXITY": "Password must contain at least one uppercase letter, one lowercase letter, and one digit"
 }

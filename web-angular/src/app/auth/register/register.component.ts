@@ -1,9 +1,9 @@
 import {Component, OnDestroy} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {DataStorageService} from "../../shared/data-storage.service";
-import {RegisterRequest} from "../dto/register-request.type";
 import {Subscription} from "rxjs";
 import {AuthorizationService} from "../service/authorization.service";
+import {RegisterRequest} from "../shared/register-request.type";
 
 @Component({
   selector: 'register',
@@ -14,13 +14,15 @@ export class RegisterComponent implements OnDestroy {
 
   errorMessage: string = '';
   registerErrorSubscription: Subscription;
+  loading: boolean = false;
 
   constructor(
     private authorizationService: AuthorizationService,
-    private dataStorageService: DataStorageService,
+    private dataStorageService: DataStorageService
   ) {
     this.registerErrorSubscription = this.authorizationService.getRegisterError().subscribe(error => {
       this.errorMessage = error;
+      this.loading = false;
     });
   }
 
@@ -38,15 +40,20 @@ export class RegisterComponent implements OnDestroy {
     const firstName = form.value['first-name'];
     const lastName = form.value['last-name'];
 
-    const registerRequest: RegisterRequest = {
-      username: email,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      role: 'ROLE_USER',
-    };
+    const registerRequest: RegisterRequest = new RegisterRequest(
+      email, password, firstName, lastName, 'ROLE_USER'
+    );
 
-    this.dataStorageService.register(registerRequest);
+    this.loading = true;
+
+    this.dataStorageService.register(registerRequest).subscribe(
+      () => {
+        this.loading = false;
+      },
+      () => {
+        this.loading = false;
+      }
+    );
 
     form.reset();
   }

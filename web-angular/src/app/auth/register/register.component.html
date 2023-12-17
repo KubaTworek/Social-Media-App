@@ -1,58 +1,49 @@
-<div class="overlay"></div>
-
-<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="auth-form">
+  <div *ngIf="loading" class="overlay"></div>
   <div>
     <label for="first-name">{{ 'FIRST_NAME' | translate }}</label>
-    <input
-      id="first-name"
-      name="first-name"
-      ngModel
-      required
-      type="text"
-    />
+    <input id="first-name" name="first-name" ngModel required type="text"/>
+    <div
+      *ngIf="authForm.controls['first-name'].invalid && (authForm.controls['first-name'].dirty || authForm.controls['first-name'].touched)">
+      <div *ngIf="authForm.controls['first-name'].hasError('required')"
+           class="error-message">{{ 'REQUIRED_FIELD' | translate }}</div>
+    </div>
   </div>
   <div>
     <label for="last-name">{{ 'LAST_NAME' | translate }}</label>
-    <input
-      id="last-name"
-      name="last-name"
-      ngModel
-      required
-      type="text"
-    />
+    <input id="last-name" name="last-name" ngModel required type="text"/>
+    <div
+      *ngIf="authForm.controls['last-name'].invalid && (authForm.controls['last-name'].dirty || authForm.controls['last-name'].touched)">
+      <div *ngIf="authForm.controls['last-name'].hasError('required')"
+           class="error-message">{{ 'REQUIRED_FIELD' | translate }}</div>
+    </div>
   </div>
   <div>
     <label for="username">{{ 'USERNAME' | translate }}</label>
-    <input
-      id="username"
-      name="username"
-      ngModel
-      required
-      type="text"
-    />
+    <input id="username" name="username" ngModel required type="text"/>
+    <div
+      *ngIf="authForm.controls['username'].invalid && (authForm.controls['username'].dirty || authForm.controls['username'].touched)">
+      <div *ngIf="authForm.controls['username'].hasError('required')"
+           class="error-message">{{ 'REQUIRED_FIELD' | translate }}</div>
+    </div>
   </div>
   <div>
     <label for="password">{{ 'PASSWORD' | translate }}</label>
-    <input
-      id="password"
-      minlength="6"
-      name="password"
-      ngModel
-      required
-      type="text"
-    />
+    <input #passwordInput="ngModel" id="password" minlength="6" name="password" ngModel
+           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$" required type="password"/>
+    <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)">
+      <div *ngIf="passwordInput.hasError('required')" class="error-message">{{ 'REQUIRED_FIELD' | translate }}</div>
+      <div *ngIf="passwordInput.hasError('minlength')" class="error-message">{{ 'PASSWORD_LENGTH' | translate }}</div>
+      <div *ngIf="passwordInput.hasError('pattern')" class="error-message">{{ 'PASSWORD_COMPLEXITY' | translate }}</div>
+    </div>
   </div>
-  <div>
-    <button
-      type="submit"
-    >
-      {{ 'SIGN_UP' | translate }}
-    </button>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
-  <div class="login-link">
+  <div class="submit-button-container">
+    <button type="submit">{{ 'SIGN_UP' | translate }}</button>
+  </div>
+  <div class="link">
     <p>{{ 'ASK_FOR_LOGIN' | translate }} <a routerLink="/auth/login">{{ 'LOGIN' | translate }}</a></p>
   </div>
 </form>

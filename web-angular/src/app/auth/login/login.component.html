@@ -1,38 +1,20 @@
-<div class="overlay"></div>
-
-<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-  <div *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
+<form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="auth-form">
+  <div *ngIf="loading" class="overlay"></div>
   <div>
     <label for="username">{{ 'USERNAME' | translate }}</label>
-    <input
-      id="username"
-      name="username"
-      ngModel
-      required
-      type="text"
-    />
+    <input id="username" name="username" ngModel type="text"/>
   </div>
   <div>
     <label for="password">{{ 'PASSWORD' | translate }}</label>
-    <input
-      id="password"
-      minlength="6"
-      name="password"
-      ngModel
-      required
-      type="text"
-    />
+    <input id="password" minlength="6" name="password" ngModel type="password"/>
   </div>
-  <div>
-    <button
-      type="submit"
-    >
-      {{ 'LOGIN' | translate }}
-    </button>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
-  <div class="signup-link">
+  <div class="submit-button-container">
+    <button type="submit">{{ 'LOGIN' | translate }}</button>
+  </div>
+  <div class="link">
     <p>{{ 'ASK_FOR_REGISTER' | translate }} <a routerLink="/auth/register">{{ 'SIGN_UP' | translate }}</a></p>
   </div>
 </form>

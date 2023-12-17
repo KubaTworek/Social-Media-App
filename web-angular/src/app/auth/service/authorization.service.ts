@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import {BehaviorSubject, Observable} from "rxjs";
-import {UserData} from "../dto/user-data-type";
+import {UserData} from "../shared/user-data-type";
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthorizationService {
   private loginErrorSubject = new BehaviorSubject<string>('');
   private registerErrorSubject = new BehaviorSubject<string>('');
@@ -70,7 +71,7 @@ export class AuthorizationService {
 
   private isSessionExpired() {
     const userDataJson = sessionStorage.getItem("userData");
-    const logoutTime = userDataJson ? Number(JSON.parse(userDataJson).expirationTime) : null;
+    const logoutTime = userDataJson ? Number(JSON.parse(userDataJson).tokenExpirationDate) : null;
 
     return logoutTime !== null && logoutTime <= new Date().getTime();
   }

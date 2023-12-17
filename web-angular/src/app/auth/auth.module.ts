@@ -10,16 +10,16 @@ import {TranslateModule} from "@ngx-translate/core";
     LoginComponent,
     RegisterComponent
   ],
-    imports: [
-        SharedModule,
-        RouterModule.forChild([
-            {path: 'login', component: LoginComponent},
-        ]),
-        RouterModule.forChild([
-            {path: 'register', component: RegisterComponent},
-        ]),
-        TranslateModule
-    ]
+  imports: [
+    SharedModule,
+    RouterModule.forChild([
+      {path: 'login', component: LoginComponent},
+    ]),
+    RouterModule.forChild([
+      {path: 'register', component: RegisterComponent},
+    ]),
+    TranslateModule
+  ]
 })
 export class AuthModule {
 }

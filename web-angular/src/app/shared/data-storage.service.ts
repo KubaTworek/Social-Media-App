@@ -8,8 +8,9 @@ import {AuthorizationService} from "../auth/service/authorization.service";
 import {Article} from "../articles/dto/article.type";
 import {ArticleRequest} from "../articles/dto/article-request.type";
 import {Notification} from "../notifications/dto/notification.type";
-import {RegisterRequest} from "../auth/dto/register-request.type";
-import {LoginRequest} from "../auth/dto/login-request.type";
+import {RegisterRequest} from "../auth/shared/register-request.type";
+import {LoginRequest} from "../auth/shared/login-request.type";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable({providedIn: 'root' })
 export class DataStorageService {
@@ -20,6 +21,7 @@ export class DataStorageService {
     private articleService: ArticleService,
     private notificationService: NotificationService,
     private authorizationService: AuthorizationService,
+    private translateService: TranslateService,
   ) {
   }
 
@@ -116,10 +118,10 @@ export class DataStorageService {
       .pipe(
         catchError((error) => {
           if (error.status === 404) {
-            const errorMessage = "User does not exist!";
+            const errorMessage = this.translateService.instant('USERNAME_NOT_EXISTS');
             this.authorizationService.handleLoginError(errorMessage);
           } else if (error.status === 401) {
-            const errorMessage = "Invalid credentials!";
+            const errorMessage = this.translateService.instant('INVALID_CREDENTIALS');
             this.authorizationService.handleLoginError(errorMessage);
           } else {
             console.error(error);
@@ -127,8 +129,7 @@ export class DataStorageService {
           return throwError(error);
         }),
         tap(userData => this.authorizationService.handleLogin(userData))
-      )
-      .subscribe();
+      );
   }
 
   register(request: RegisterRequest) {
@@ -139,7 +140,7 @@ export class DataStorageService {
       .pipe(
         catchError((error) => {
           if (error.status === 400) {
-            const errorMessage = "Username already exist!";
+            const errorMessage = this.translateService.instant('USERNAME_ALREADY_EXISTS');
             this.authorizationService.handleRegisterError(errorMessage);
           } else {
             console.error(error);
@@ -147,20 +148,17 @@ export class DataStorageService {
           return throwError(error);
         }),
         tap(() => this.authorizationService.handleRegister())
-      )
-      .subscribe();
+      );
   }
 
   private createHeaders(): HttpHeaders {
     const userData = this.authorizationService.getUserData();
 
     if (userData) {
-      const token = userData.token;
-
       return new HttpHeaders({
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': token
+        'Authorization': userData.token
       });
     } else {
       return new HttpHeaders({

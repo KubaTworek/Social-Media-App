@@ -19,5 +19,11 @@
   "PASSWORD": "Hasło",
   "ASK_FOR_LOGIN": "Masz już konto?",
   "ASK_FOR_REGISTER": "Nie masz jeszcze konta?",
-  "MORE_ARTICLES": "Pokaż więcej.."
+  "MORE_ARTICLES": "Pokaż więcej..",
+  "USERNAME_NOT_EXISTS": "Użytkownik o podanej nazwie nie istnieje",
+  "INVALID_CREDENTIALS": "Nieprawidłowe dane uwierzytelniające. Sprawdź nazwę użytkownika i hasło.",
+  "USERNAME_ALREADY_EXISTS": "Ta nazwa użytkownika jest już zajęta. Wybierz inną.",
+  "REQUIRED_FIELD": "To pole jest wymagane",
+  "PASSWORD_LENGTH": "Hasło musi mieć co najmniej 6 znaków",
+  "PASSWORD_COMPLEXITY": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę i jedną cyfrę"
 }
