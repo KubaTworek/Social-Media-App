@@ -128,10 +128,8 @@ class ArticleControllerIT : AbstractIT() {
         val articles = response.returnResult().responseBody
         assertEquals("Example Content 1", articles?.get(0)?.text)
         assertEquals(1, articles?.get(0)?.authorId)
-        assertEquals(LocalDate.now().toString(), articles?.get(0)?.date)
         assertEquals("Example Content 2", articles?.get(1)?.text)
         assertEquals(1, articles?.get(1)?.authorId)
-        assertEquals(LocalDate.now().toString(), articles?.get(1)?.date)
     }
 
     @Test

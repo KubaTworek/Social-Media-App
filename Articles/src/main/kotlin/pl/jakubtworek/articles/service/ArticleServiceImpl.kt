@@ -27,7 +27,7 @@ class ArticleServiceImpl(
 ) : ArticleService {
 
     override fun findAllOrderByCreatedTimeDesc(page: Int, size: Int): List<ArticleResponse> {
-        val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "timestamp"))
+        val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"))
         val articlePage = articleRepository.findAll(pageRequest)
 
         return articlePage.content.map { createResponse(it) }
@@ -58,7 +58,7 @@ class ArticleServiceImpl(
     }
 
     override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> =
-        articleRepository.findAllByAuthorIdOrderByDate(authorId)
+        articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)
             .map { mapArticleToDTO(it) }
 
     override fun update(theArticle: ArticleRequest, theId: Int, jwt: String) {
@@ -79,9 +79,8 @@ class ArticleServiceImpl(
     private fun mapArticleToDTO(article: Article): ArticleDTO =
         ArticleDTO(
             id = article.id,
-            date = article.date,
-            timestamp = article.timestamp.toString(),
-            text = article.text,
+            timestamp = article.createAt.toString(),
+            text = article.content,
             authorId = article.authorId
         )
 
@@ -90,9 +89,8 @@ class ArticleServiceImpl(
 
         return Article(
             id = 0,
-            date = getCurrentDate(),
-            timestamp = Timestamp(System.currentTimeMillis()),
-            text = request.text,
+            createAt = Timestamp(System.currentTimeMillis()),
+            content = request.text,
             authorId = userDetails.authorId
         )
     }
@@ -102,9 +100,8 @@ class ArticleServiceImpl(
 
         return Article(
             id = articleToUpdate.id,
-            date = articleToUpdate.date,
-            timestamp = articleToUpdate.timestamp,
-            text = request.text,
+            createAt = articleToUpdate.createAt,
+            content = request.text,
             authorId = userDetails.authorId
         )
     }
@@ -122,8 +119,8 @@ class ArticleServiceImpl(
 
         return ArticleResponse(
             id = theArticle.id,
-            text = theArticle.text,
-            timestamp = theArticle.timestamp,
+            text = theArticle.content,
+            timestamp = theArticle.createAt,
             author = AuthorResponse(
                 username = author.username,
                 firstName = author.firstName,
@@ -133,9 +130,5 @@ class ArticleServiceImpl(
                 users = likerFullNames
             )
         )
-    }
-
-    private fun getCurrentDate(): String {
-        return LocalDate.now().toString()
     }
 }

@@ -23,7 +23,7 @@ class NotificationServiceImpl(
         val articles = articleService.getArticlesByAuthor(userDetails.authorId)
 
         val notifications = articles.flatMap { article ->
-            notificationRepository.findAllByArticleIdOrderByTimestampDesc(article.id)
+            notificationRepository.findAllByArticleIdOrderByCreateAtDesc(article.id)
                 .map { mapToNotificationResponse(it) }
         }
 
@@ -44,7 +44,7 @@ class NotificationServiceImpl(
             id = 0,
             articleId = likeMessage.articleId,
             authorId = likeMessage.authorId,
-            timestamp = likeMessage.timestamp,
+            createAt = likeMessage.timestamp,
             type = "LIKE"
         )
         notificationRepository.save(notification)

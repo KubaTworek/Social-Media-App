@@ -1,9 +1,9 @@
 package pl.jakubtworek.authorization.service
 
 import io.jsonwebtoken.Claims
-import pl.jakubtworek.authorization.entity.Authorities
+import pl.jakubtworek.authorization.entity.User
 
 interface JwtService {
-    fun buildJwt(username: String, authorities: List<Authorities>, expirationDate: Long): String
+    fun buildJwt(user: User, expirationDate: Long): String
     fun parseJwtClaims(jwt: String): Claims
 }

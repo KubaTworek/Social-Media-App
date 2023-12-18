@@ -4,20 +4,20 @@ import jakarta.persistence.*
 import org.hibernate.Hibernate
 
 @Entity
-@Table(name = "AuthorPost")
+@Table(name = "AUTHORS")
 data class Author(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "AUTHOR_ID")
     val id: Int,
 
-    @Column(name = "firstname")
+    @Column(name = "FIRST_NAME")
     val firstName: String,
 
-    @Column(name = "lastname")
+    @Column(name = "LAST_NAME")
     val lastName: String,
 
-    @Column(name = "username")
+    @Column(name = "USERNAME")
     val username: String,
 ) {
     constructor() : this(

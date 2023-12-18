@@ -1,12 +1,17 @@
-DROP TABLE IF EXISTS `Author_Post`;
-CREATE TABLE IF NOT EXISTS Author_Post (
-                             Id integer NOT NULL CONSTRAINT Author_pk PRIMARY KEY,
-                             firstname varchar(40) NOT NULL,
-                             lastname varchar(40) NOT NULL,
-                             username varchar(40) NOT NULL
+DROP TABLE IF EXISTS `AUTHORS`;
+CREATE TABLE IF NOT EXISTS AUTHORS (
+    AUTHOR_ID integer AUTO_INCREMENT,
+    FIRST_NAME varchar(40) NOT NULL,
+    LAST_NAME varchar(40) NOT NULL,
+    USERNAME varchar(40) NOT NULL,
+    PRIMARY KEY (AUTHOR_ID)
 );
 
-INSERT INTO `Author_Post`(`Id`, `firstname`, `lastname`, `username`) VALUES (1000, 'Anna', 'Kowalska', 'anna_k');
-INSERT INTO `Author_Post`(`Id`, `firstname`, `lastname`, `username`) VALUES (1001, 'Tomasz', 'Nowak', 'tomek_nowak');
-INSERT INTO `Author_Post`(`Id`, `firstname`, `lastname`, `username`) VALUES (1002, 'Katarzyna', 'Wiśniewska', 'kasia_w');
-INSERT INTO `Author_Post`(`Id`, `firstname`, `lastname`, `username`) VALUES (1003, 'Jan', 'Kowalski', 'j_kowalski');
+ALTER TABLE `AUTHORS`
+    ADD CONSTRAINT UK_AUTHORS__USERNAME UNIQUE (USERNAME);
+
+INSERT INTO `AUTHORS`(`AUTHOR_ID`, `FIRST_NAME`, `LAST_NAME`, `USERNAME`) VALUES (999, 'admin', 'admin', 'admin');
+INSERT INTO `AUTHORS`(`AUTHOR_ID`, `FIRST_NAME`, `LAST_NAME`, `USERNAME`) VALUES (1000, 'Anna', 'Kowalska', 'anna_k');
+INSERT INTO `AUTHORS`(`AUTHOR_ID`, `FIRST_NAME`, `LAST_NAME`, `USERNAME`) VALUES (1001, 'Tomasz', 'Nowak', 'tomek_nowak');
+INSERT INTO `AUTHORS`(`AUTHOR_ID`, `FIRST_NAME`, `LAST_NAME`, `USERNAME`) VALUES (1002, 'Katarzyna', 'Wiśniewska', 'kasia_w');
+INSERT INTO `AUTHORS`(`AUTHOR_ID`, `FIRST_NAME`, `LAST_NAME`, `USERNAME`) VALUES (1003, 'Jan', 'Kowalski', 'j_kowalski');

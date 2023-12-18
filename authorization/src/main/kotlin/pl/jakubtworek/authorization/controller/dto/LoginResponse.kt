@@ -4,6 +4,7 @@ data class LoginResponse(
     val username: String,
     val firstName: String,
     val lastName: String,
+    val role: String,
     val token: String,
     val tokenExpirationDate: Long
 )

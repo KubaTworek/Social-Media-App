@@ -7,20 +7,17 @@ import pl.jakubtworek.authorization.controller.dto.AuthorRequest
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
-import pl.jakubtworek.authorization.entity.Authorities
 import pl.jakubtworek.authorization.entity.User
 import pl.jakubtworek.authorization.entity.UserDetailsDTO
 import pl.jakubtworek.authorization.exception.UserNotFoundException
 import pl.jakubtworek.authorization.exception.UsernameAlreadyExistsException
 import pl.jakubtworek.authorization.exception.WrongCredentialsException
-import pl.jakubtworek.authorization.repository.AuthoritiesRepository
 import pl.jakubtworek.authorization.repository.UserRepository
 import java.time.Instant
 
 @Service
 class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
-    private val authoritiesRepository: AuthoritiesRepository,
     private val authorApiService: AuthorApiService,
     private val jwtService: JwtService
 ) : AuthorizationService {
@@ -32,8 +29,7 @@ class AuthorizationServiceImpl(
         val role = registerRequest.role
 
         validateUserWithThatUsernameDoesNotExist(username)
-        val authority = getAuthority(role)
-        val newUser = buildUser(username, password, authority)
+        val newUser = buildUser(username, password, role)
         userRepository.save(newUser)
         val authorRequest = AuthorRequest(
             firstName,
@@ -56,14 +52,9 @@ class AuthorizationServiceImpl(
         val user = getUserByUsername(username)
         validPasswords(password, user.password)
 
-        val authority = Authorities()
-        authority.authority = user.authorities.authority
-        val authorities = listOf(
-            authority
-        )
 
         val expirationDate = Instant.now().toEpochMilli() + 180000
-        val token = jwtService.buildJwt(username, authorities, expirationDate)
+        val token = jwtService.buildJwt(user, expirationDate)
         val author = authorApiService.getAuthorByUsername(username)
 
         return LoginResponse(
@@ -71,6 +62,7 @@ class AuthorizationServiceImpl(
             firstName = author.firstName,
             lastName = author.lastName,
             token = token,
+            role = user.role,
             tokenExpirationDate = expirationDate
         )
     }
@@ -78,7 +70,7 @@ class AuthorizationServiceImpl(
     override fun getUserDetails(jwt: String): UserDetailsDTO {
         val claims = jwtService.parseJwtClaims(jwt)
         val username = claims["username"].toString()
-        val authorities = claims["authorities"].toString()
+        val role = claims["role"].toString()
         val author = authorApiService.getAuthorByUsername(username)
 
         return UserDetailsDTO(
@@ -86,15 +78,15 @@ class AuthorizationServiceImpl(
             firstName = author.firstName,
             lastName = author.lastName,
             username = username,
-            role = authorities
+            role = role
         )
     }
 
-    private fun buildUser(username: String, password: String, authority: Authorities) =
+    private fun buildUser(username: String, password: String, role: String) =
         User(
             username,
             password,
-            authority
+            role
         )
 
     private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
@@ -112,9 +104,4 @@ class AuthorizationServiceImpl(
     private fun getUserByUsername(username: String) =
         userRepository.findUserByUsername(username)
             ?: throw UserNotFoundException("No user registered with this username!")
-
-    private fun getAuthority(authority: String) =
-        authoritiesRepository.findAuthoritiesByAuthority(authority)
-            ?: authoritiesRepository.findAuthoritiesByAuthority("ROLE_USER")
-            ?: throw RuntimeException("No authorities found!")
 }

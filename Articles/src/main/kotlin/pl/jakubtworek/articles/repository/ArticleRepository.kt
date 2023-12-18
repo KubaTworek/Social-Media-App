@@ -7,7 +7,7 @@ import pl.jakubtworek.articles.model.entity.Article
 
 @Repository
 interface ArticleRepository : JpaRepository<Article, Int> {
-    fun findAllByAuthorIdOrderByDate(authorId: Int): List<Article>
+    fun findAllByAuthorIdOrderByCreateAt(authorId: Int): List<Article>
 
     @Transactional
     fun deleteAllByAuthorId(authorId: Int)

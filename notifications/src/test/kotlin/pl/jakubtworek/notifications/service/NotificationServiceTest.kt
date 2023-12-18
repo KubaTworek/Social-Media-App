@@ -1,6 +1,5 @@
 package pl.jakubtworek.notifications.service
 
-import pl.jakubtworek.notifications.exception.NotificationBadRequestException
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -49,8 +48,8 @@ class NotificationServiceTest {
         // Given
         val jwt = "jwt"
         val authorId = 1
-        val article1 = ArticleDTO(1, "2023-06-27", Timestamp(System.currentTimeMillis()).toString(), "Article 1", authorId)
-        val article2 = ArticleDTO(2, "2023-06-26", Timestamp(System.currentTimeMillis()).toString(), "Article 2", authorId)
+        val article1 = ArticleDTO(1, Timestamp(System.currentTimeMillis()).toString(), "Article 1", authorId)
+        val article2 = ArticleDTO(2, Timestamp(System.currentTimeMillis()).toString(), "Article 2", authorId)
         val notification1 = Notification(1, 1, authorId, Timestamp.from(Instant.now()), type = "LIKE")
         val notification2 = Notification(2, 2, authorId, Timestamp.from(Instant.now()), type = "LIKE")
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
@@ -60,8 +59,8 @@ class NotificationServiceTest {
 
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleService.getArticlesByAuthor(authorId)).thenReturn(articles)
-        `when`(notificationRepository.findAllByArticleIdOrderByTimestampDesc(1)).thenReturn(listOf(notification1))
-        `when`(notificationRepository.findAllByArticleIdOrderByTimestampDesc(2)).thenReturn(listOf(notification2))
+        `when`(notificationRepository.findAllByArticleIdOrderByCreateAtDesc(1)).thenReturn(listOf(notification1))
+        `when`(notificationRepository.findAllByArticleIdOrderByCreateAtDesc(2)).thenReturn(listOf(notification2))
         `when`(notificationResponseFactory.createResponse(notification1)).thenReturn(expectedResponse1)
         `when`(notificationResponseFactory.createResponse(notification2)).thenReturn(expectedResponse2)
 
@@ -72,8 +71,8 @@ class NotificationServiceTest {
         assertEquals(2, result.size)
         assertEquals(expectedResponse1, result[0])
         assertEquals(expectedResponse2, result[1])
-        verify(notificationRepository, times(1)).findAllByArticleIdOrderByTimestampDesc(1)
-        verify(notificationRepository, times(1)).findAllByArticleIdOrderByTimestampDesc(2)
+        verify(notificationRepository, times(1)).findAllByArticleIdOrderByCreateAtDesc(1)
+        verify(notificationRepository, times(1)).findAllByArticleIdOrderByCreateAtDesc(2)
         verify(notificationResponseFactory, times(1)).createResponse(notification1)
         verify(notificationResponseFactory, times(1)).createResponse(notification2)
     }

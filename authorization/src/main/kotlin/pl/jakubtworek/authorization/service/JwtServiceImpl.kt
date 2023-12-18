@@ -4,19 +4,19 @@ import io.jsonwebtoken.*
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Service
 import pl.jakubtworek.authorization.constants.SecurityConstants
-import pl.jakubtworek.authorization.entity.Authorities
+import pl.jakubtworek.authorization.entity.User
 import java.nio.charset.StandardCharsets
 import java.util.*
 
 @Service
 class JwtServiceImpl : JwtService {
 
-    override fun buildJwt(username: String, authorities: List<Authorities>, expirationDate: Long): String =
+    override fun buildJwt(user: User, expirationDate: Long): String =
         Jwts.builder()
             .setIssuer("Social Media")
             .setSubject("JWT Token")
-            .claim("username", username)
-            .claim("authorities", populateAuthorities(authorities))
+            .claim("username", user.username)
+            .claim("role", user.role)
             .setIssuedAt(Date())
             .setExpiration(Date(expirationDate))
             .signWith(createSecretKey())
@@ -30,9 +30,6 @@ class JwtServiceImpl : JwtService {
             .parseClaimsJws(jwtWithoutBearer)
             .body
     }
-
-    private fun populateAuthorities(collection: Collection<Authorities>) =
-        collection.joinToString(separator = ",") { it.authority }
 
     private fun createSecretKey() = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.toByteArray(StandardCharsets.UTF_8))
 }

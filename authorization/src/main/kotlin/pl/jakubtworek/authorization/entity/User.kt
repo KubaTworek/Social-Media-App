@@ -5,22 +5,21 @@ import lombok.Builder
 
 @Builder
 @Entity
-@Table(name = "userX")
+@Table(name = "USERS")
 data class User(
     @Id
-    @Column(name = "username")
+    @Column(name = "USERNAME")
     val username: String,
 
-    @Column(name = "password")
+    @Column(name = "PASSWORD")
     val password: String,
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    val authorities: Authorities
+    @Column(name = "ROLE")
+    val role: String
 ) {
     constructor() : this(
         "username",
         "password",
-        Authorities()
+        "ROLE_USER"
     )
 }

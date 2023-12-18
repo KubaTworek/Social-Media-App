@@ -1,8 +1,6 @@
 package pl.jakubtworek.articles.service
 
 import pl.jakubtworek.articles.client.service.AuthorApiService
-import pl.jakubtworek.articles.exception.ArticleNotFoundException
-import pl.jakubtworek.articles.exception.UnauthorizedException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
@@ -56,9 +54,9 @@ class ArticleServiceTest {
         // Given
         val author = AuthorDTO(1, "firstName", "lastName", "Username")
         val articles = listOf(
-            Article(1, "2023-06-27", Timestamp(System.currentTimeMillis()), "Article 1", 1),
-            Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Article 2", 2),
-            Article(3, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 3", 1)
+            Article(1, Timestamp(System.currentTimeMillis()), "Article 1", 1),
+            Article(2, Timestamp(System.currentTimeMillis()), "Article 2", 2),
+            Article(3, Timestamp(System.currentTimeMillis()), "Article 3", 1)
         )
         val pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "timestamp"))
         val articlesPage: Page<Article> = PageImpl(articles, pageRequest, articles.size.toLong())
@@ -81,7 +79,7 @@ class ArticleServiceTest {
     fun `findById should return the article with the given ID`() {
         // Given
         val articleId = 1
-        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val article = Article(1, Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
         // When
@@ -110,7 +108,7 @@ class ArticleServiceTest {
         val articleRequest = ArticleRequest("Text")
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val expectedArticle = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val expectedArticle = Article(1, Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.save(any())).thenReturn(expectedArticle)
 
@@ -127,7 +125,7 @@ class ArticleServiceTest {
         val articleId = 1
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 1)
+        val article = Article(1, Timestamp(System.currentTimeMillis()), "Article 1", 1)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
@@ -163,7 +161,7 @@ class ArticleServiceTest {
         val articleId = 1
         val jwt = "dummy-jwt"
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
-        val article = Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", 2)
+        val article = Article(1, Timestamp(System.currentTimeMillis()), "Article 1", 2)
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleRepository.findById(articleId)).thenReturn(Optional.of(article))
 
@@ -180,10 +178,10 @@ class ArticleServiceTest {
         // Given
         val authorId = 1
         val articles = listOf(
-            Article(1, "2023-06-25", Timestamp(System.currentTimeMillis()), "Article 1", authorId),
-            Article(2, "2023-06-26", Timestamp(System.currentTimeMillis()), "Article 2", authorId)
+            Article(1, Timestamp(System.currentTimeMillis()), "Article 1", authorId),
+            Article(2, Timestamp(System.currentTimeMillis()), "Article 2", authorId)
         )
-        `when`(articleRepository.findAllByAuthorIdOrderByDate(authorId)).thenReturn(articles)
+        `when`(articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)).thenReturn(articles)
 
         // When
         val result = articleService.findAllByAuthorId(authorId)

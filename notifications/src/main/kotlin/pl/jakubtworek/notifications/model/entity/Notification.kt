@@ -4,23 +4,23 @@ import jakarta.persistence.*
 import java.sql.Timestamp
 
 @Entity
-@Table(name = "Notification")
+@Table(name = "NOTIFICATIONS")
 data class Notification(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "NOTIFICATION_ID")
     val id: Int,
 
-    @Column(name = "Article_Id")
+    @Column(name = "ARTICLE_ID")
     val articleId: Int,
 
-    @Column(name = "Author_Id")
+    @Column(name = "AUTHOR_ID")
     val authorId: Int,
 
-    @Column(name = "Timestamp")
-    val timestamp: Timestamp,
+    @Column(name = "CREATE_AT")
+    val createAt: Timestamp,
 
-    @Column(name = "Type")
+    @Column(name = "TYPE")
     val type: String
 ) {
     constructor() : this(

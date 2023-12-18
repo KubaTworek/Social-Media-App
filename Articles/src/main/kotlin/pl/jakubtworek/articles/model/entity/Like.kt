@@ -4,27 +4,28 @@ import jakarta.persistence.*
 import java.sql.Timestamp
 
 @Entity
-@Table(name = "Like_Article")
+@Table(name = "LIKES")
 data class Like(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Id")
+    @Column(name = "LIKE_ID")
     val id: Int,
 
-    @Column(name = "Timestamp")
-    val timestamp: Timestamp,
+    @Column(name = "CREATE_AT")
+    val createAt: Timestamp,
 
-    @Column(name = "Author_Id")
+    @Column(name = "AUTHOR_ID")
     val authorId: Int,
 
-    @Column(name = "Article_Id")
-    val articleId: Int,
+    @ManyToOne
+    @JoinColumn(name = "ARTICLE_ID")
+    val article: Article
 ) {
     constructor() : this(
         0,
         Timestamp(System.currentTimeMillis()),
         0,
-        0
+        Article()
     )
 
     override fun equals(other: Any?): Boolean {
