@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import pl.jakubtworek.articles.client.service.AuthorApiService
 import pl.jakubtworek.articles.client.service.AuthorizationApiService
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
@@ -22,7 +23,7 @@ import java.time.LocalDate
 class ArticleServiceImpl(
     private val articleRepository: ArticleRepository,
     private val likeRepository: LikeRepository,
-    private val authorService: pl.jakubtworek.articles.client.service.AuthorApiService,
+    private val authorService: AuthorApiService,
     private val authorizationService: AuthorizationApiService
 ) : ArticleService {
 
@@ -49,7 +50,7 @@ class ArticleServiceImpl(
         val userDetails = authorizationService.getUserDetails(jwt)
         val article = articleRepository.findById(theId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
-        if (article.authorId == userDetails.authorId) {
+        if (article.authorId == userDetails.authorId || userDetails.role == "ROLE_ADMIN") {
             likeRepository.deleteAllByArticleId(theId)
             articleRepository.deleteById(theId)
         } else {

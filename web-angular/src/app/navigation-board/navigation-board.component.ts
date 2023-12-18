@@ -23,6 +23,12 @@ export class NavigationBoardComponent implements OnInit {
     return sessionStorage.getItem('userData') !== null;
   }
 
+  isUser(): boolean {
+    const role = this.authorizationService.getRole();
+
+    return role == 'ROLE_USER';
+  }
+
   logout(): void {
     this.authorizationService.logout()
   }

@@ -152,13 +152,13 @@ export class DataStorageService {
   }
 
   private createHeaders(): HttpHeaders {
-    const userData = this.authorizationService.getUserData();
+    const token = this.authorizationService.getToken();
 
-    if (userData) {
+    if (token) {
       return new HttpHeaders({
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': userData.token
+        'Authorization': token
       });
     } else {
       return new HttpHeaders({

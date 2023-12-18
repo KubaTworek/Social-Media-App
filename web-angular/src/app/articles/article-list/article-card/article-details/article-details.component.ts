@@ -3,6 +3,7 @@ import {Article} from "../../../dto/article.type";
 import {ArticleDeleteComponent} from "../article-delete/article-delete.component";
 import {DataStorageService} from "../../../../shared/data-storage.service";
 import {ArticleRequest} from "../../../dto/article-request.type";
+import {AuthorizationService} from "../../../../auth/service/authorization.service";
 
 @Component({
   selector: 'article-details',
@@ -21,14 +22,17 @@ export class ArticleDetailsComponent {
   isOpen: boolean = false;
   showOptions: boolean = false;
 
-  constructor(private dataStorage: DataStorageService) {
+  constructor(
+    private dataStorage: DataStorageService,
+    private authorizationService: AuthorizationService
+  ) {
   }
 
   canModify() {
-    const userDataJson = sessionStorage.getItem("userData");
-    const username = userDataJson ? JSON.parse(userDataJson).username : null;
+    const username = this.authorizationService.getUsername();
+    const role = this.authorizationService.getRole();
 
-    return username !== null && username === this.article.author.username;
+    return (username !== null && username === this.article.author.username) || role == 'ROLE_ADMIN';
   }
 
   open(): void {
@@ -71,7 +75,9 @@ export class ArticleDetailsComponent {
   }
 
   likeArticle(articleId: string) {
-    this.dataStorage.likeArticle(articleId);
+    if (this.isUser()) {
+      this.dataStorage.likeArticle(articleId);
+    }
   }
 
   showLikes(articleId: string): void {
@@ -101,5 +107,11 @@ export class ArticleDetailsComponent {
 
   onArticleDeleteCancelled(): void {
     this.articleDeleteComponent.close();
+  }
+
+  private isUser(): boolean {
+    const role = this.authorizationService.getRole();
+
+    return role == 'ROLE_USER';
   }
 }

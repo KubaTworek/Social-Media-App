@@ -48,9 +48,19 @@ export class AuthorizationService {
     this.registerErrorSubject.next(errorMessage);
   }
 
-  getUserData(): UserData {
-    const userDataJson = sessionStorage.getItem("userData");
-    return userDataJson ? JSON.parse(userDataJson) : null;
+  getToken(): string | null {
+    const userDataJson = this.getUserData();
+    return userDataJson ? String(userDataJson.token) : null;
+  }
+
+  getUsername(): string | null {
+    const userDataJson = this.getUserData();
+    return userDataJson ? String(userDataJson.username) : null;
+  }
+
+  getRole(): string | null {
+    const userDataJson = this.getUserData();
+    return userDataJson ? String(userDataJson.role) : null;
   }
 
   private setupInteractionsListener() {
@@ -59,6 +69,11 @@ export class AuthorizationService {
         this.logout();
       }
     });
+  }
+
+  private getUserData(): UserData {
+    const userDataJson = sessionStorage.getItem("userData");
+    return userDataJson ? JSON.parse(userDataJson) : null;
   }
 
   private storeUserData(userData: UserData) {
@@ -70,8 +85,8 @@ export class AuthorizationService {
   }
 
   private isSessionExpired() {
-    const userDataJson = sessionStorage.getItem("userData");
-    const logoutTime = userDataJson ? Number(JSON.parse(userDataJson).tokenExpirationDate) : null;
+    const userDataJson = this.getUserData();
+    const logoutTime = userDataJson ? Number(userDataJson.tokenExpirationDate) : null;
 
     return logoutTime !== null && logoutTime <= new Date().getTime();
   }
