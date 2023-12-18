@@ -1,11 +1,11 @@
-<article class="article-card" (click)="openDetails($event)">
+<article (click)="openDetails($event)" class="article-card">
   <div class="article-card__header">
     <p class="article-card__author-name">
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
   </div>
-  <textarea class="article-card__content">{{ article.text }}</textarea>
+  <p class="article-card__content">{{ article.text }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
   <div class="article-card__actions">
     <p class="article-card__like-container" id="article-card__like-container-{{article.id}}">

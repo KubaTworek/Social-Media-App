@@ -1,10 +1,11 @@
-<article class="article-details" #modal>
+<article #modal class="article-details">
   <div class="article-details__header">
-      <span class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }}</span>
-      <br>
-      <span class="article-card__author-username">@{{ article.author.username }}</span>
+    <span class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }}</span>
+    <br>
+    <span class="article-card__author-username">@{{ article.author.username }}</span>
   </div>
-  <textarea class="article-card__content" id="content-{{article.id}}" [readonly]="!canModify()">{{ article.text }}</textarea>
+  <textarea #contentTextarea [readonly]="!canModify()" class="article-details__content"
+            id="content-{{article.id}}">{{ article.text }}</textarea>
   <p class="article-details__date-create">{{ article.createDate }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
   <div class="article-card__actions">
@@ -17,9 +18,10 @@
       <span class="article-card__likes" id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
     </p>
     <a (click)="close()" class="article-details__exit-button">❌</a>
-    <a (click)="openOptionsList()" class="article-details__more-button" *ngIf="canModify()" >⋯</a>
-    <div class="article-details__more-options" *ngIf="showOptions">
-      <a (click)="openDeleteModal()" *ngIf="canModify()" class="article-details__delete-link">{{ 'DELETE' | translate }}</a>
+    <a (click)="openOptionsList()" *ngIf="canModify()" class="article-details__more-button">⋯</a>
+    <div *ngIf="showOptions" class="article-details__more-options">
+      <a (click)="openDeleteModal()" *ngIf="canModify()"
+         class="article-details__delete-link">{{ 'DELETE' | translate }}</a>
       <a (click)="save()" *ngIf="canModify()" class="article-details__edit-link">{{ 'SAVE' | translate }}</a>
     </div>
   </div>
@@ -27,4 +29,4 @@
 <article-delete (cancelled)="onArticleDeleteCancelled()"
                 (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 
-<div (click)="close()" class="overlay" #overlay></div>
+<div #overlay (click)="close()" class="overlay"></div>

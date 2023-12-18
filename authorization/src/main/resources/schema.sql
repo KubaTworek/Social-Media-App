@@ -12,3 +12,10 @@ CREATE TABLE IF NOT EXISTS `userX` (
 
 INSERT INTO `authorities`(`id`, `authority`) values(1, 'ROLE_USER');
 INSERT INTO `authorities`(`id`, `authority`) values(2, 'ROLE_ADMIN');
+
+INSERT INTO `userX`(`username`, `password`, `role_id`) values('admin', 'admin', 2);
+
+INSERT INTO `userX`(`username`, `password`, `role_id`) VALUES ('anna_k', 'password', 1);
+INSERT INTO `userX`(`username`, `password`, `role_id`) VALUES ('tomek_nowak', 'password', 1);
+INSERT INTO `userX`(`username`, `password`, `role_id`) VALUES ('kasia_w', 'password', 1);
+INSERT INTO `userX`(`username`, `password`, `role_id`) VALUES ('j_kowalski', 'password', 1);

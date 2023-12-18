@@ -6,7 +6,7 @@
   </div>
   <div>
     <label for="password">{{ 'PASSWORD' | translate }}</label>
-    <input id="password" minlength="6" name="password" ngModel type="password"/>
+    <input id="password" name="password" ngModel type="password"/>
   </div>
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}

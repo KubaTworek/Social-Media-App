@@ -1,6 +1,5 @@
 import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
-import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
 import {DataStorageService} from "../../../shared/data-storage.service";
 import {ArticleDetailsComponent} from "./article-details/article-details.component";
 

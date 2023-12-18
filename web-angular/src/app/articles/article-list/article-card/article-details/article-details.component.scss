@@ -2,7 +2,7 @@
 
 .article-details {
   position: fixed;
-  top: 16%;
+  top: 25%;
   left: 47.85%;
   transform: translate(-50%, -50%);
   background-color: $twitter-black;
@@ -19,6 +19,19 @@
 .article-details__header {
   display: block;
   margin: 1rem 0;
+}
+
+.article-details__content {
+  background-color: inherit;
+  width: 100%;
+  min-height: 9rem;
+  border: none;
+  box-sizing: border-box;
+  color: $twitter-white;
+  font-size: 1rem;
+  outline: none;
+  resize: none;
+  cursor: pointer;
 }
 
 .article-details__date-create {

@@ -19,14 +19,14 @@ import {TranslateModule} from "@ngx-translate/core";
     ArticleDeleteComponent,
     ArticleDetailsComponent
   ],
-    imports: [
-        FormsModule,
-        SharedModule,
-        RouterModule.forChild([
-            {path: '', component: ArticlesComponent},
-        ]),
-        TranslateModule
-    ]
+  imports: [
+    FormsModule,
+    SharedModule,
+    RouterModule.forChild([
+      {path: '', component: ArticlesComponent},
+    ]),
+    TranslateModule
+  ]
 })
 export class ArticlesModule {
 }
