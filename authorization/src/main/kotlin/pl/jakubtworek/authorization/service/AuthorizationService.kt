@@ -3,7 +3,7 @@ package pl.jakubtworek.authorization.service
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
-import pl.jakubtworek.authorization.entity.UserDetailsDTO
+import pl.jakubtworek.common.model.UserDetailsDTO
 
 interface AuthorizationService {
     fun registerUser(registerRequest: RegisterRequest)

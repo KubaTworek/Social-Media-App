@@ -1,18 +1,18 @@
 package pl.jakubtworek.authorization.service
 
-import pl.jakubtworek.authorization.client.service.AuthorApiService
+import pl.jakubtworek.authorization.external.AuthorApiService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
-import pl.jakubtworek.authorization.controller.dto.AuthorRequest
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
 import pl.jakubtworek.authorization.entity.User
-import pl.jakubtworek.authorization.entity.UserDetailsDTO
 import pl.jakubtworek.authorization.exception.UserNotFoundException
 import pl.jakubtworek.authorization.exception.UsernameAlreadyExistsException
 import pl.jakubtworek.authorization.exception.WrongCredentialsException
 import pl.jakubtworek.authorization.repository.UserRepository
+import pl.jakubtworek.common.model.AuthorRequest
+import pl.jakubtworek.common.model.UserDetailsDTO
 import java.time.Instant
 
 @Service

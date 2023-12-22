@@ -1,6 +1,6 @@
 package pl.jakubtworek.authors.repository
 
-import pl.jakubtworek.authors.model.entity.Author
+import pl.jakubtworek.authors.entity.Author
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

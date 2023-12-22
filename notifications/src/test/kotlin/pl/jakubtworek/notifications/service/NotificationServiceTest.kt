@@ -5,11 +5,11 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.mockito.*
 import org.mockito.Mockito.*
-import pl.jakubtworek.notifications.client.service.ArticleApiService
-import pl.jakubtworek.notifications.client.service.AuthorizationApiService
+import pl.jakubtworek.common.model.ArticleDTO
+import pl.jakubtworek.common.model.UserDetailsDTO
+import pl.jakubtworek.notifications.external.ArticleApiService
+import pl.jakubtworek.notifications.external.AuthorizationApiService
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
-import pl.jakubtworek.notifications.model.dto.ArticleDTO
-import pl.jakubtworek.notifications.model.dto.UserDetailsDTO
 import pl.jakubtworek.notifications.model.entity.Notification
 import pl.jakubtworek.notifications.model.message.LikeMessage
 import pl.jakubtworek.notifications.repository.NotificationRepository

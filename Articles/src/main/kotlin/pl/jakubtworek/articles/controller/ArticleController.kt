@@ -5,7 +5,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
-import pl.jakubtworek.articles.model.dto.ArticleDTO
 import pl.jakubtworek.articles.service.ArticleService
 
 @RequestMapping("/api")

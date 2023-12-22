@@ -4,20 +4,19 @@ import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
-import pl.jakubtworek.articles.client.service.AuthorApiService
-import pl.jakubtworek.articles.client.service.AuthorizationApiService
+import pl.jakubtworek.articles.external.AuthorApiService
+import pl.jakubtworek.articles.external.AuthorizationApiService
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
 import pl.jakubtworek.articles.controller.dto.AuthorResponse
 import pl.jakubtworek.articles.controller.dto.LikeInfoResponse
 import pl.jakubtworek.articles.exception.ArticleNotFoundException
 import pl.jakubtworek.articles.exception.UnauthorizedException
-import pl.jakubtworek.articles.model.dto.ArticleDTO
-import pl.jakubtworek.articles.model.entity.Article
+import pl.jakubtworek.common.model.ArticleDTO
+import pl.jakubtworek.articles.entity.Article
 import pl.jakubtworek.articles.repository.ArticleRepository
 import pl.jakubtworek.articles.repository.LikeRepository
 import java.sql.Timestamp
-import java.time.LocalDate
 
 @Service
 class ArticleServiceImpl(
@@ -50,7 +49,7 @@ class ArticleServiceImpl(
         val userDetails = authorizationService.getUserDetails(jwt)
         val article = articleRepository.findById(theId).orElse(null)
             ?: throw ArticleNotFoundException("Article not found")
-        if (article.authorId == userDetails.authorId || userDetails.role == "ROLE_ADMIN") {
+        if (article.authorId == userDetails.authorId || "ROLE_ADMIN" == userDetails.role) {
             likeRepository.deleteAllByArticleId(theId)
             articleRepository.deleteById(theId)
         } else {

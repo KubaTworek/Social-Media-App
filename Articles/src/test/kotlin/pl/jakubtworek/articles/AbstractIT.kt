@@ -1,7 +1,7 @@
 package pl.jakubtworek.articles
 
-import pl.jakubtworek.articles.client.AuthorClient
-import pl.jakubtworek.articles.client.AuthorizationClient
+import pl.jakubtworek.common.client.AuthorClient
+import pl.jakubtworek.common.client.AuthorizationClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -23,9 +23,9 @@ import pl.jakubtworek.articles.controller.dto.LikeInfoResponse
 import pl.jakubtworek.articles.controller.dto.LikeResponse
 import pl.jakubtworek.articles.kafka.message.LikeMessage
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
-import pl.jakubtworek.articles.model.dto.ArticleDTO
-import pl.jakubtworek.articles.model.dto.AuthorDTO
-import pl.jakubtworek.articles.model.dto.UserDetailsDTO
+import pl.jakubtworek.common.model.ArticleDTO
+import pl.jakubtworek.common.model.AuthorDTO
+import pl.jakubtworek.common.model.UserDetailsDTO
 import java.sql.Timestamp
 import java.time.Instant
 import java.util.concurrent.CompletableFuture

@@ -1,6 +1,6 @@
 package pl.jakubtworek.authorization.service
 
-import pl.jakubtworek.authorization.client.service.AuthorApiService
+import pl.jakubtworek.authorization.external.AuthorApiService
 import io.jsonwebtoken.Jwts
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.*
@@ -8,15 +8,15 @@ import org.mockito.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
 import org.springframework.http.ResponseEntity
-import pl.jakubtworek.authorization.controller.dto.AuthorRequest
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
-import pl.jakubtworek.authorization.entity.AuthorDTO
 import pl.jakubtworek.authorization.entity.User
 import pl.jakubtworek.authorization.exception.UserNotFoundException
 import pl.jakubtworek.authorization.exception.UsernameAlreadyExistsException
 import pl.jakubtworek.authorization.exception.WrongCredentialsException
 import pl.jakubtworek.authorization.repository.UserRepository
+import pl.jakubtworek.common.model.AuthorDTO
+import pl.jakubtworek.common.model.AuthorRequest
 import java.time.Instant
 
 class AuthorizationServiceTest {

@@ -2,7 +2,7 @@ package pl.jakubtworek.articles.service
 
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
-import pl.jakubtworek.articles.model.dto.ArticleDTO
+import pl.jakubtworek.common.model.ArticleDTO
 
 interface ArticleService {
     fun findAllOrderByCreatedTimeDesc(page: Int, size: Int): List<ArticleResponse>

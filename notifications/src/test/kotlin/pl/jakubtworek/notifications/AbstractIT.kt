@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import pl.jakubtworek.notifications.client.ArticleClient
-import pl.jakubtworek.notifications.client.AuthorClient
-import pl.jakubtworek.notifications.client.AuthorizationClient
+import pl.jakubtworek.common.client.ArticleClient
+import pl.jakubtworek.common.client.AuthorClient
+import pl.jakubtworek.common.client.AuthorizationClient
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

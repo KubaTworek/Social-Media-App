@@ -1,13 +1,14 @@
 package pl.jakubtworek.notifications.service
 
 import org.springframework.stereotype.Component
-import pl.jakubtworek.notifications.client.service.AuthorApiService
+import pl.jakubtworek.notifications.external.AuthorApiService
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
+import pl.jakubtworek.notifications.external.ArticleApiService
 import pl.jakubtworek.notifications.model.entity.Notification
 
 @Component
 class NotificationResponseFactory(
-    private val articleApiService: pl.jakubtworek.notifications.client.service.ArticleApiService,
+    private val articleApiService: ArticleApiService,
     private val authorApiService: AuthorApiService
 ) {
     fun createResponse(notification: Notification): NotificationResponse {

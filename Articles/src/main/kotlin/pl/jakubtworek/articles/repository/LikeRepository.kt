@@ -3,7 +3,7 @@ package pl.jakubtworek.articles.repository
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
-import pl.jakubtworek.articles.model.entity.Like
+import pl.jakubtworek.articles.entity.Like
 
 @Repository
 interface LikeRepository : JpaRepository<Like, Int> {

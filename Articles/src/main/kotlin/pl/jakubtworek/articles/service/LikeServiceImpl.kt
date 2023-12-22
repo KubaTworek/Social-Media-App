@@ -2,14 +2,14 @@ package pl.jakubtworek.articles.service
 
 import org.bouncycastle.asn1.x500.style.RFC4519Style.l
 import org.springframework.stereotype.Service
-import pl.jakubtworek.articles.client.service.AuthorApiService
-import pl.jakubtworek.articles.client.service.AuthorizationApiService
+import pl.jakubtworek.articles.external.AuthorApiService
+import pl.jakubtworek.articles.external.AuthorizationApiService
 import pl.jakubtworek.articles.controller.dto.LikeInfoResponse
 import pl.jakubtworek.articles.controller.dto.LikeResponse
 import pl.jakubtworek.articles.exception.ArticleNotFoundException
 import pl.jakubtworek.articles.kafka.message.LikeMessage
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
-import pl.jakubtworek.articles.model.entity.Like
+import pl.jakubtworek.articles.entity.Like
 import pl.jakubtworek.articles.repository.ArticleRepository
 import pl.jakubtworek.articles.repository.LikeRepository
 import java.sql.Timestamp

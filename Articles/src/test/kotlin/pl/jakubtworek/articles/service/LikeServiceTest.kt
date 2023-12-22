@@ -1,23 +1,16 @@
 package pl.jakubtworek.articles.service
 
-import pl.jakubtworek.articles.client.service.AuthorApiService
+import pl.jakubtworek.articles.external.AuthorApiService
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.Captor
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
-import pl.jakubtworek.articles.client.service.AuthorizationApiService
+import pl.jakubtworek.articles.external.AuthorizationApiService
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
-import pl.jakubtworek.articles.model.dto.AuthorDTO
-import pl.jakubtworek.articles.model.dto.UserDetailsDTO
-import pl.jakubtworek.articles.model.entity.Like
+import pl.jakubtworek.articles.entity.Like
 import pl.jakubtworek.articles.repository.ArticleRepository
 import pl.jakubtworek.articles.repository.LikeRepository
-import java.sql.Timestamp
-import java.time.Instant
-import kotlin.test.assertEquals
 
 
 class LikeServiceTest {

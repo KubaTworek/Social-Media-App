@@ -8,22 +8,16 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="authorization" />
+        <module name="common" />
+        <module name="eureka" />
         <module name="articles" />
         <module name="gateway" />
         <module name="notifications" />
-        <module name="eureka" />
         <module name="authors" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
-      <module name="articles" target="17" />
-      <module name="authorization" target="17" />
-      <module name="authors" target="17" />
-      <module name="eureka" target="17" />
-      <module name="gateway" target="17" />
-      <module name="notifications" target="17" />
       <module name="REST-API-articles" target="11" />
-      <module name="Social-Media-App" target="1.5" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -32,6 +26,7 @@
       <module name="articles" options="-parameters" />
       <module name="authorization" options="-parameters" />
       <module name="authors" options="-parameters" />
+      <module name="common" options="" />
       <module name="eureka" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="notifications" options="-parameters" />

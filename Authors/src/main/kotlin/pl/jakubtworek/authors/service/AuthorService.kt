@@ -1,7 +1,7 @@
 package pl.jakubtworek.authors.service
 
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
-import pl.jakubtworek.authors.model.dto.AuthorDTO
+import pl.jakubtworek.common.model.AuthorDTO
 
 interface AuthorService {
     fun findById(theId: Int): AuthorDTO

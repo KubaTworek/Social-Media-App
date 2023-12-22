@@ -1,6 +1,5 @@
 package pl.jakubtworek.authorization
 
-import pl.jakubtworek.authorization.client.AuthorClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.mockito.Mockito.`when`
@@ -12,12 +11,13 @@ import org.springframework.http.*
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
-import pl.jakubtworek.authorization.controller.dto.AuthorRequest
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
-import pl.jakubtworek.authorization.entity.AuthorDTO
-import pl.jakubtworek.authorization.entity.UserDetailsDTO
+import pl.jakubtworek.common.client.AuthorClient
+import pl.jakubtworek.common.model.AuthorDTO
+import pl.jakubtworek.common.model.AuthorRequest
+import pl.jakubtworek.common.model.UserDetailsDTO
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient

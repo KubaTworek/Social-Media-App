@@ -1,13 +1,13 @@
 package pl.jakubtworek.authors.service
 
-import pl.jakubtworek.authors.client.service.ArticleApiService
+import pl.jakubtworek.authors.external.ArticleApiService
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import pl.jakubtworek.authors.exception.AuthorNotFoundException
-import pl.jakubtworek.authors.model.dto.AuthorDTO
-import pl.jakubtworek.authors.model.entity.Author
+import pl.jakubtworek.authors.entity.Author
 import pl.jakubtworek.authors.repository.AuthorRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import pl.jakubtworek.common.model.AuthorDTO
 
 @Service
 class AuthorServiceImpl(

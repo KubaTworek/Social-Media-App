@@ -3,9 +3,10 @@ package pl.jakubtworek.notifications.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
-import pl.jakubtworek.notifications.client.service.AuthorizationApiService
+import pl.jakubtworek.notifications.external.AuthorizationApiService
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 import pl.jakubtworek.notifications.exception.NotificationBadRequestException
+import pl.jakubtworek.notifications.external.ArticleApiService
 import pl.jakubtworek.notifications.model.entity.Notification
 import pl.jakubtworek.notifications.model.message.LikeMessage
 import pl.jakubtworek.notifications.repository.NotificationRepository
@@ -14,7 +15,7 @@ import pl.jakubtworek.notifications.repository.NotificationRepository
 class NotificationServiceImpl(
     private val notificationRepository: NotificationRepository,
     private val authorizationService: AuthorizationApiService,
-    private val articleService: pl.jakubtworek.notifications.client.service.ArticleApiService,
+    private val articleService: ArticleApiService,
     private val notificationResponseFactory: NotificationResponseFactory,
     private val objectMapper: ObjectMapper
 ) : NotificationService {
