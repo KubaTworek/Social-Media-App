@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class AuthorController(private val authorService: AuthorService) {
 
+    // EXTERNAL
+    @GetMapping("/")
+    fun getAuthors() =
+        authorService.findAll()
+
     // INTERNAL
     @GetMapping("/id/{authorId}")
     fun getAuthorById(@PathVariable authorId: Int) =

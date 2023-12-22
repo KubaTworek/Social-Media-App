@@ -54,8 +54,8 @@ class NotificationServiceTest {
         val notification2 = Notification(2, 2, authorId, Timestamp.from(Instant.now()), type = "LIKE")
         val userDetails = UserDetailsDTO(1, "FirstName", "LastName", "Username", "Role")
         val articles = listOf(article1, article2)
-        val expectedResponse1 = NotificationResponse("FirstName LastName", "liked your article", "LIKE")
-        val expectedResponse2 = NotificationResponse("FirstName LastName", "liked your article", "LIKE")
+        val expectedResponse1 = NotificationResponse(1, "FirstName LastName", "liked your article", "LIKE")
+        val expectedResponse2 = NotificationResponse(2, "FirstName LastName", "liked your article", "LIKE")
 
         `when`(authorizationService.getUserDetails(jwt)).thenReturn(userDetails)
         `when`(articleService.getArticlesByAuthor(authorId)).thenReturn(articles)

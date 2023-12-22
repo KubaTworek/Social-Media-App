@@ -4,5 +4,7 @@ import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 
 interface NotificationService {
     fun findAllNotificationsByUser(jwt: String): List<NotificationResponse>
+    fun update(jwt: String, notificationId: Int, authorId: Int)
     fun processLikeMessage(message: String)
+    fun findAllNotifications(jwt: String): List<NotificationResponse>
 }

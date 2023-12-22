@@ -1,3 +1,4 @@
+// notification-card.component.scss
 @import '../../../../colors.scss';
 
 .notification-card {
@@ -12,7 +13,7 @@
 
   &:last-child {
     margin-bottom: 0;
-    border-bottom: 1px solid $twitter-dark-gray
+    border-bottom: 1px solid $twitter-dark-gray;
   }
 
   &__message {
@@ -27,5 +28,26 @@
   &__content {
     text-align: justify;
     color: $twitter-dark-gray;
+  }
+
+  label {
+    color: $twitter-white;
+    margin-right: 0.5rem;
+  }
+
+  select {
+    background-color: $twitter-black;
+    color: $twitter-white;
+    border: 1px solid $twitter-dark-gray;
+    padding: 0.2rem;
+    margin-right: 0.5rem;
+  }
+
+  button {
+    background-color: $twitter-black;
+    color: $twitter-white;
+    border: 1px solid $twitter-dark-gray;
+    padding: 0.5rem;
+    cursor: pointer;
   }
 }

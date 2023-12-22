@@ -15,7 +15,7 @@ data class Notification(
     val articleId: Int,
 
     @Column(name = "AUTHOR_ID")
-    val authorId: Int,
+    var authorId: Int,
 
     @Column(name = "CREATE_AT")
     val createAt: Timestamp,

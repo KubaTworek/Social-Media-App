@@ -34,4 +34,10 @@ abstract class AbstractIT {
             .expectStatus().isOk
             .expectBodyList(NotificationResponse::class.java)
             .hasSize(expectedSize)
+
+    fun updateNotifications(notifiactionId: Int, authorId: Int) =
+        webTestClient.get().uri("/api/${notifiactionId}/author/${authorId}")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(Unit::class.java)
 }

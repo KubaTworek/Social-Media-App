@@ -23,10 +23,10 @@ class NotificationResponseFactory(
 
         val authorName = "${author.firstName} ${author.lastName}"
         val message = "liked your article"
-        return NotificationResponse(authorName, message, article.text)
+        return NotificationResponse(notification.id, authorName, message, article.text)
     }
 
     private fun createErrorResponse(): NotificationResponse {
-        return NotificationResponse("Error", "", "")
+        return NotificationResponse(0, "Error", "", "")
     }
 }

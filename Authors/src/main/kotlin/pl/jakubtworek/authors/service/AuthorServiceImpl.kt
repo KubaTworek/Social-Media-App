@@ -15,6 +15,10 @@ class AuthorServiceImpl(
     private val articleApiService: ArticleApiService
 ) : AuthorService {
 
+    override fun findAll(): List<AuthorDTO> {
+        return authorRepository.findAll().map { author -> mapAuthorToDTO(author) }.toList()
+    }
+
     override fun findById(theId: Int): AuthorDTO {
         val author = authorRepository.findByIdOrNull(theId)
             ?: throw AuthorNotFoundException("Author not found")

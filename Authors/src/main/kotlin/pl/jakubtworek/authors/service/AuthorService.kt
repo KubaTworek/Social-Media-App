@@ -8,4 +8,5 @@ interface AuthorService {
     fun findByUsername(username: String): AuthorDTO
     fun save(theAuthor: AuthorRequest)
     fun deleteById(theId: Int)
+    fun findAll(): List<AuthorDTO>
 }

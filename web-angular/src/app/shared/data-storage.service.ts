@@ -11,6 +11,7 @@ import {Notification} from "../notifications/dto/notification.type";
 import {RegisterRequest} from "../auth/shared/register-request.type";
 import {LoginRequest} from "../auth/shared/login-request.type";
 import {TranslateService} from "@ngx-translate/core";
+import {Author} from "../articles/dto/author.type";
 
 @Injectable({providedIn: 'root' })
 export class DataStorageService {
@@ -23,6 +24,29 @@ export class DataStorageService {
     private authorizationService: AuthorizationService,
     private translateService: TranslateService,
   ) {
+  }
+
+  fetchAuthors() {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/authors/api/`;
+    console.log(endpoint)
+    return this.http
+      .get<Author[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError)
+      );
+  }
+
+  updateNotification(notificationId: string, authorId: string) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/notifications/api/${notificationId}/author/${authorId}`;
+
+    return this.http
+      .put<void>(endpoint, null, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+      )
+      .subscribe();
   }
 
   fetchArticles(page: number, size: number) {
@@ -98,6 +122,21 @@ export class DataStorageService {
   fetchNotifications() {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/`;
+
+    return this.http
+      .get<Notification[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        map(notifications => notifications.map(notification => ({
+          ...notification
+        }))),
+        tap(notifications => this.notificationService.setNotifications(notifications))
+      );
+  }
+
+  fetchNotificationsAdmin() {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/notifications/api/admin`;
 
     return this.http
       .get<Notification[]>(endpoint, {headers})

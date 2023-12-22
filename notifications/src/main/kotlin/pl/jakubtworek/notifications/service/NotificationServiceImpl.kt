@@ -30,6 +30,17 @@ class NotificationServiceImpl(
         return notifications
     }
 
+    override fun update(jwt: String, notificationId: Int, authorId: Int) {
+        val userDetails = authorizationService.getUserDetails(jwt)
+        if (userDetails.role == "ROLE_ADMIN") {
+            notificationRepository.findById(notificationId)
+                .ifPresent { notification ->
+                    notification.authorId = authorId
+                    notificationRepository.save(notification)
+                }
+        }
+    }
+
     @KafkaListener(topics = ["t-like"])
     override fun processLikeMessage(message: String) {
         val likeMessage = message.deserialize()
@@ -48,6 +59,10 @@ class NotificationServiceImpl(
             type = "LIKE"
         )
         notificationRepository.save(notification)
+    }
+
+    override fun findAllNotifications(jwt: String): List<NotificationResponse> {
+        return notificationRepository.findAll().map { mapToNotificationResponse(it) }
     }
 
     private fun mapToNotificationResponse(

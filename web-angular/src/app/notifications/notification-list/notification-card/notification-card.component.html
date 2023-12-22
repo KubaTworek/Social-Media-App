@@ -1,6 +1,13 @@
 <article class="notification-card">
-  <p class="notification-card__message"><span
-    class="notification-card__name">{{ notification.name }}</span> {{ notification.message }}</p>
+  <p class="notification-card__message">
+    <span class="notification-card__name">{{ notification.name }}</span> {{ notification.message }}
+  </p>
   <p class="notification-card__content">{{ notification.content }}</p>
-</article>
 
+  <label for="authorDropdown">Select Author:</label>
+  <select id="authorDropdown" [(ngModel)]="selectedAuthorId" (click)="loadAuthors()">
+    <option *ngFor="let author of authors" [value]="author.id">{{ author.firstName + ' ' + author.lastName }}</option>
+  </select>
+
+  <button (click)="updateAuthor()">Update Author</button>
+</article>
