@@ -2,32 +2,47 @@ package pl.jakubtworek.articles.controller
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
+import pl.jakubtworek.articles.controller.dto.LikeResponse
 import pl.jakubtworek.articles.service.ArticleService
+import pl.jakubtworek.common.model.ArticleDTO
 
 @RequestMapping("/api")
 @RestController
-class ArticleController(private val articleService: ArticleService) {
+class ArticleController(
+    private val articleService: ArticleService,
+) {
 
-    // EXTERNAL
-    @GetMapping("/")
-    fun getArticlesOrderByDateDesc(
+    @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticlesOrderedByDateDesc(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "5") size: Int
-    ): List<ArticleResponse> {
-        return articleService.findAllOrderByCreatedTimeDesc(page, size)
-    }
+    ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
+            .body(articleService.findAllOrderByCreatedTimeDesc(page, size))
 
-    @PostMapping("/")
+    @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticlesByAuthor(
+        @PathVariable authorId: Int
+    ): ResponseEntity<List<ArticleDTO>> = ResponseEntity.status(HttpStatus.OK)
+        .body(articleService.findAllByAuthorId(authorId))
+
+    @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getArticleById(
+        @PathVariable articleId: Int
+    ): ResponseEntity<ArticleDTO> = ResponseEntity.status(HttpStatus.OK)
+        .body(articleService.findById(articleId))
+
+    @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun saveArticle(
         @RequestHeader("Authorization") jwt: String,
         @RequestBody theArticle: ArticleRequest
     ) = articleService.save(theArticle, jwt)
 
-    @PutMapping("/{articleId}")
+    @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun updateArticle(
         @RequestHeader("Authorization") jwt: String,
@@ -35,24 +50,24 @@ class ArticleController(private val articleService: ArticleService) {
         @PathVariable articleId: Int
     ) = articleService.update(theArticle, articleId, jwt)
 
-    @DeleteMapping("/{articleId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun deleteArticle(
+    @PostMapping("/like/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun likeArticle(
+        @RequestHeader("Authorization") jwt: String,
+        @PathVariable articleId: Int
+    ): ResponseEntity<LikeResponse> = ResponseEntity.status(HttpStatus.CREATED)
+        .body(articleService.like(articleId, jwt))
+
+    @DeleteMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteArticleById(
         @RequestHeader("Authorization") jwt: String,
         @PathVariable articleId: Int
     ) = articleService.deleteById(articleId, jwt)
 
-    // INTERNAL
-    @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticleById(@PathVariable articleId: Int) =
-        articleService.findById(articleId)
-
-    @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getArticlesByAuthor(@PathVariable authorId: Int) =
-        articleService.findAllByAuthorId(authorId)
-
-    @DeleteMapping("/authorId/{authorId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun deleteArticlesByAuthorId(@PathVariable authorId: Int) =
-        articleService.deleteByAuthorId(authorId)
+    @DeleteMapping("/authorId/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteArticlesByAuthorId(
+        @PathVariable authorId: Int
+    ) = articleService.deleteByAuthorId(authorId)
 }

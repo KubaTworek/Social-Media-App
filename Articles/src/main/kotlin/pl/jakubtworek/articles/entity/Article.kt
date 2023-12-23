@@ -2,7 +2,6 @@ package pl.jakubtworek.articles.entity
 
 import jakarta.persistence.*
 import org.hibernate.Hibernate
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import java.sql.Timestamp
 
 
@@ -23,10 +22,10 @@ data class Article(
     @Column(name = "AUTHOR_ID")
     val authorId: Int,
 
-    @OneToMany(mappedBy = "article", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val likes: MutableList<Like> = mutableListOf()
 
-    ) {
+) {
     constructor() : this(
         0,
         Timestamp(System.currentTimeMillis()),

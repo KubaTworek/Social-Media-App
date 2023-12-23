@@ -23,7 +23,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="REST-API-articles" options="-parameters" />
-      <module name="articles" options="-parameters" />
+      <module name="articles" options="" />
       <module name="authorization" options="-parameters" />
       <module name="authors" options="-parameters" />
       <module name="common" options="" />
