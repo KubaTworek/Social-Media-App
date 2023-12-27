@@ -22,7 +22,7 @@ class ArticleController(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "5") size: Int
     ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
-            .body(articleService.findAllOrderByCreatedTimeDesc(page, size))
+        .body(articleService.findAllOrderByCreatedTimeDesc(page, size))
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
