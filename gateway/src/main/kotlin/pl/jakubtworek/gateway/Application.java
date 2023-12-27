@@ -1,22 +1,17 @@
-package pl.jakubtworek.notifications;
+package pl.jakubtworek.gateway;
 
 import org.slf4j.*;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
-import org.springframework.kafka.annotation.EnableKafka;
 
 import java.util.*;
 
-@ComponentScans({
-        @ComponentScan(basePackages = "pl.jakubtworek.common.client")
-})
-@EnableFeignClients(basePackages = "pl.jakubtworek.common.client")
+@EnableDiscoveryClient
 @SpringBootApplication
-@EnableKafka
 class Application {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
