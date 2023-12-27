@@ -24,7 +24,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="REST-API-articles" options="-parameters" />
       <module name="articles" options="" />
-      <module name="authorization" options="-parameters" />
+      <module name="authorization" options="" />
       <module name="authors" options="-parameters" />
       <module name="common" options="" />
       <module name="eureka" options="-parameters" />

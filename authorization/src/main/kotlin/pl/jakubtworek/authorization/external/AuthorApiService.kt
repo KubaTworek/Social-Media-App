@@ -6,6 +6,6 @@ import pl.jakubtworek.common.model.AuthorRequest
 
 interface AuthorApiService {
     fun getAuthorByUsername(username: String): AuthorDTO
-    fun createAuthor(authorRequest: AuthorRequest): ResponseEntity<Void>
-    fun deleteAuthorById(id: Int): ResponseEntity<Void>
+    fun createAuthor(authorRequest: AuthorRequest)
+    fun deleteAuthorById(id: Int)
 }

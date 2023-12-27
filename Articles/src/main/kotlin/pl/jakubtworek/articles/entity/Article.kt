@@ -4,7 +4,6 @@ import jakarta.persistence.*
 import org.hibernate.Hibernate
 import java.sql.Timestamp
 
-
 @Entity
 @Table(name = "ARTICLES")
 data class Article(

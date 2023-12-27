@@ -13,7 +13,7 @@ import pl.jakubtworek.common.model.ArticleDTO
 @RequestMapping("/api")
 @RestController
 class ArticleController(
-    private val articleService: ArticleService,
+    private val articleService: ArticleService
 ) {
 
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])

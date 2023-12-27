@@ -2,6 +2,8 @@ package pl.jakubtworek.authorization.service
 
 import pl.jakubtworek.authorization.external.AuthorApiService
 import jakarta.transaction.Transactional
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
@@ -21,7 +23,11 @@ class AuthorizationServiceImpl(
     private val authorApiService: AuthorApiService,
     private val jwtService: JwtService
 ) : AuthorizationService {
+
+    private val logger: Logger = LoggerFactory.getLogger(AuthorizationServiceImpl::class.java)
+
     override fun registerUser(registerRequest: RegisterRequest) {
+        logger.info("Starting user registration process")
         val username = registerRequest.username
         val password = registerRequest.password
         val firstName = registerRequest.firstName
@@ -37,26 +43,22 @@ class AuthorizationServiceImpl(
             username
         )
         authorApiService.createAuthor(authorRequest)
-    }
 
-    @Transactional
-    override fun deleteUser(jwt: String) {
-        val user = getUserDetails(jwt)
-        userRepository.deleteByUsername(user.username)
-        authorApiService.deleteAuthorById(user.authorId)
+        logger.info("User registered successfully: $username")
     }
 
     override fun loginUser(loginRequest: LoginRequest): LoginResponse {
+        logger.info("Starting user login process")
         val username = loginRequest.username
         val password = loginRequest.password
         val user = getUserByUsername(username)
         validPasswords(password, user.password)
 
-
         val expirationDate = Instant.now().toEpochMilli() + 180000
         val token = jwtService.buildJwt(user, expirationDate)
         val author = authorApiService.getAuthorByUsername(username)
 
+        logger.info("User logged in successfully: $username")
         return LoginResponse(
             username = username,
             firstName = author.firstName,
@@ -68,6 +70,7 @@ class AuthorizationServiceImpl(
     }
 
     override fun getUserDetails(jwt: String): UserDetailsDTO {
+        logger.info("Starting get user details process")
         val claims = jwtService.parseJwtClaims(jwt)
         val username = claims["username"].toString()
         val role = claims["role"].toString()
@@ -82,12 +85,24 @@ class AuthorizationServiceImpl(
         )
     }
 
-    private fun buildUser(username: String, password: String, role: String) =
-        User(
-            username,
-            password,
-            role
-        )
+    @Transactional
+    override fun deleteUser(jwt: String) {
+        logger.info("Starting delete user process")
+        val user = getUserDetails(jwt)
+        userRepository.deleteByUsername(user.username)
+        authorApiService.deleteAuthorById(user.authorId)
+        logger.info("User deleted successfully: ${user.username}")
+    }
+
+    private fun buildUser(
+        username: String,
+        password: String,
+        role: String
+    ): User = User(
+        username,
+        password,
+        role
+    )
 
     private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
         if (passwordProvided != passwordRegistered) {
@@ -101,7 +116,7 @@ class AuthorizationServiceImpl(
         }
     }
 
-    private fun getUserByUsername(username: String) =
+    private fun getUserByUsername(username: String): User =
         userRepository.findUserByUsername(username)
-            ?: throw UserNotFoundException("No user registered with this username!")
+            .orElseThrow { UserNotFoundException("User not found!") }
 }

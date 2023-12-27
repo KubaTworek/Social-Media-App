@@ -142,12 +142,6 @@
                             <BP_JVM_VERSION>${java.version}</BP_JVM_VERSION>
                         </env>
                     </image>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
                 </configuration>
             </plugin>
 

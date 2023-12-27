@@ -1,9 +1,8 @@
 package pl.jakubtworek.authorization.entity
 
 import jakarta.persistence.*
-import lombok.Builder
+import org.hibernate.Hibernate
 
-@Builder
 @Entity
 @Table(name = "USERS")
 data class User(
@@ -22,4 +21,18 @@ data class User(
         "password",
         "ROLE_USER"
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as User
+
+        return username == other.username
+    }
+
+    override fun hashCode(): Int = username.hashCode()
+
+    override fun toString(): String {
+        return "User(username=$username, password=$password, role=$role)"
+    }
 }
