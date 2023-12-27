@@ -1,9 +1,9 @@
 package pl.jakubtworek.notifications.service
 
 import org.springframework.stereotype.Component
-import pl.jakubtworek.notifications.external.AuthorApiService
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 import pl.jakubtworek.notifications.external.ArticleApiService
+import pl.jakubtworek.notifications.external.AuthorApiService
 import pl.jakubtworek.notifications.model.entity.Notification
 
 @Component

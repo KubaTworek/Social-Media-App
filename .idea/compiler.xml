@@ -29,7 +29,7 @@
       <module name="common" options="" />
       <module name="eureka" options="-parameters" />
       <module name="gateway" options="-parameters" />
-      <module name="notifications" options="-parameters" />
+      <module name="notifications" options="" />
     </option>
   </component>
 </project>

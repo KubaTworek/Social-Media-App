@@ -1,6 +1,5 @@
 package pl.jakubtworek.notifications.exception
 
-import pl.jakubtworek.notifications.exception.NotificationBadRequestException
 import org.springframework.http.*
 import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.bind.annotation.*
