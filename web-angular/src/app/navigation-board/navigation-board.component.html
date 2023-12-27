@@ -1,6 +1,7 @@
 <div class="button-container">
   <button id="home-button" routerLink="/home">🏠 {{ 'HOME' | translate }}</button>
-  <button *ngIf="isLoggedIn()" id="notifications-button" routerLink="/notifications">🔔 {{ 'NOTIFICATIONS' | translate }}</button>
+  <button *ngIf="isLoggedIn()" id="notifications-button" routerLink="/notifications">
+    🔔 {{ 'NOTIFICATIONS' | translate }}</button>
   <button *ngIf="isLoggedOut()" id="login-button" routerLink="/auth/login">🔐 {{ 'LOGIN' | translate }}</button>
   <button (click)="logout()" *ngIf="isLoggedIn()" id="logout-button">🚪 {{ 'LOGOUT' | translate }}</button>
 </div>

@@ -14,7 +14,7 @@ class NotificationResponseFactory(
     fun createResponse(notification: Notification): NotificationResponse {
         return when (notification.type) {
             "LIKE" -> createLikeResponse(notification)
-            else -> createErrorResponse()
+            else -> throw IllegalStateException("Illegal state: ${notification.type}")
         }
     }
 
@@ -25,9 +25,5 @@ class NotificationResponseFactory(
         val authorName = "${author.firstName} ${author.lastName}"
         val message = "liked your article"
         return NotificationResponse(notification.id, authorName, message, article.text)
-    }
-
-    private fun createErrorResponse(): NotificationResponse {
-        return NotificationResponse(0, "Error", "", "")
     }
 }

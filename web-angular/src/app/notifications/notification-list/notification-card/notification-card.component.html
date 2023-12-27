@@ -5,7 +5,7 @@
   <p class="notification-card__content">{{ notification.content }}</p>
 
   <label for="authorDropdown">Select Author:</label>
-  <select id="authorDropdown" [(ngModel)]="selectedAuthorId" (click)="loadAuthors()">
+  <select (click)="loadAuthors()" [(ngModel)]="selectedAuthorId" id="authorDropdown">
     <option *ngFor="let author of authors" [value]="author.id">{{ author.firstName + ' ' + author.lastName }}</option>
   </select>
 

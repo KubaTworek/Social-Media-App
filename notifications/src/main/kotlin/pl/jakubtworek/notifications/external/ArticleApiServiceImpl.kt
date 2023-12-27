@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import pl.jakubtworek.common.client.ArticleClient
+import pl.jakubtworek.common.exception.AuthorizationApiException
 import pl.jakubtworek.common.model.ArticleDTO
-import pl.jakubtworek.notifications.exception.AuthorApiException
 
 @Service
 class ArticleApiServiceImpl(
@@ -32,26 +32,17 @@ class ArticleApiServiceImpl(
     }
 
     private inline fun <reified T> handleApiResponse(response: ResponseEntity<String>): T {
-        logger.info("Handling API response")
-        val responseBody: String? = response.body
+        val responseBody: String = requireNotNull(response.body) { "Article API response body is null" }
 
-        if (response.statusCode != HttpStatus.OK) {
-            logger.error("Article API request failed with status code: ${response.statusCode}")
-            throw AuthorApiException("Article API request failed with status code: ${response.statusCode}")
-        }
+        require(response.statusCode == HttpStatus.OK) { "Article API request failed with status code: ${response.statusCode}" }
 
-        if (responseBody != null) {
-            try {
-                val dto = objectMapper.readValue(responseBody, object : TypeReference<T>() {})
-                logger.debug("Deserialized response: $dto")
-                return dto
-            } catch (e: Exception) {
-                logger.error("Error deserializing response", e)
-                throw AuthorApiException("Error deserializing response", e)
-            }
-        } else {
-            logger.error("Article API response body is null")
-            throw AuthorApiException("Article API response body is null")
+        try {
+            val dto = objectMapper.readValue(responseBody, object : TypeReference<T>() {})
+            logger.debug("Deserialized response: $dto")
+            return dto
+        } catch (e: Exception) {
+            logger.error("Error deserializing response", e)
+            throw AuthorizationApiException("Error deserializing response", e)
         }
     }
 }

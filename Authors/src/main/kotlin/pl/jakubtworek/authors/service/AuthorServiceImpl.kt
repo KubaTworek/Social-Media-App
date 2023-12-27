@@ -52,19 +52,17 @@ class AuthorServiceImpl(
         logger.info("Author deleted successfully: ID $theId")
     }
 
-    private fun createAuthor(authorRequest: AuthorRequest): Author =
-        Author(
-            id = 0,
-            firstName = authorRequest.firstName,
-            lastName = authorRequest.lastName,
-            username = authorRequest.username
-        )
+    private fun createAuthor(authorRequest: AuthorRequest): Author = Author(
+        id = 0,
+        firstName = authorRequest.firstName,
+        lastName = authorRequest.lastName,
+        username = authorRequest.username
+    )
 
-    private fun mapAuthorToDTO(author: Author): AuthorDTO =
-        AuthorDTO(
-            id = author.id,
-            firstName = author.firstName,
-            lastName = author.lastName,
-            username = author.username
-        )
+    private fun mapAuthorToDTO(author: Author): AuthorDTO = AuthorDTO(
+        id = author.id,
+        firstName = author.firstName,
+        lastName = author.lastName,
+        username = author.username
+    )
 }

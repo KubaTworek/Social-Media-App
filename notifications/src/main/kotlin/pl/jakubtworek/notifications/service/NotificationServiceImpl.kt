@@ -5,6 +5,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
+import pl.jakubtworek.common.Constants.ROLE_ADMIN
+import pl.jakubtworek.common.Constants.ROLE_USER
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 import pl.jakubtworek.notifications.exception.NotificationBadRequestException
 import pl.jakubtworek.notifications.external.ArticleApiService
@@ -26,35 +28,31 @@ class NotificationServiceImpl(
 
     override fun findAllNotifications(jwt: String): List<NotificationResponse> {
         logger.info("Finding all notifications")
-        authorizationService.getUserDetailsAndValidate(jwt, "ROLE_ADMIN")
+        authorizationService.getUserDetailsAndValidate(jwt, ROLE_ADMIN)
         return notificationRepository.findAll()
             .map { mapToNotificationResponse(it) }
     }
 
     override fun findAllNotificationsByUser(jwt: String): List<NotificationResponse> {
         logger.info("Finding all notifications by user")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, "ROLE_USER")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
         val articles = articleService.getArticlesByAuthor(userDetails.authorId)
 
-        val notifications = articles.flatMap { article ->
+        return articles.flatMap { article ->
             notificationRepository.findAllByArticleIdOrderByCreateAtDesc(article.id)
                 .map { mapToNotificationResponse(it) }
         }
-
-        return notifications
     }
 
     override fun update(jwt: String, notificationId: Int, authorId: Int) {
         logger.info("Updating notification with ID: $notificationId")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, "ROLE_ADMIN")
-        if (userDetails.role == "ROLE_ADMIN") {
-            notificationRepository.findById(notificationId)
-                .ifPresent { notification ->
-                    notification.authorId = authorId
-                    notificationRepository.save(notification)
-                    logger.info("Notification updated successfully")
-                }
-        }
+        authorizationService.getUserDetailsAndValidate(jwt, ROLE_ADMIN)
+        notificationRepository.findById(notificationId)
+            .ifPresent { notification ->
+                notification.authorId = authorId
+                notificationRepository.save(notification)
+                logger.info("Notification updated successfully")
+            }
     }
 
     @KafkaListener(topics = ["t-like"])

@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import pl.jakubtworek.common.client.AuthorizationClient
+import pl.jakubtworek.common.exception.AuthorizationApiException
+import pl.jakubtworek.common.exception.UnauthorizedException
 import pl.jakubtworek.common.model.UserDetailsDTO
-import pl.jakubtworek.notifications.exception.AuthorizationApiException
-import pl.jakubtworek.notifications.exception.UnauthorizedException
 
 @Service
 class AuthorizationApiServiceImpl(

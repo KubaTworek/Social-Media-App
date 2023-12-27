@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import pl.jakubtworek.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
@@ -54,7 +55,7 @@ class AuthorizationServiceImpl(
         val user = getUserByUsername(username)
         validPasswords(password, user.password)
 
-        val expirationDate = Instant.now().toEpochMilli() + 180000
+        val expirationDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
         val token = jwtService.buildJwt(user, expirationDate)
         val author = authorApiService.getAuthorByUsername(username)
 

@@ -8,6 +8,7 @@ import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
 import pl.jakubtworek.articles.controller.dto.LikeResponse
 import pl.jakubtworek.articles.service.ArticleService
+import pl.jakubtworek.common.Constants.AUTHORIZATION_HEADER
 import pl.jakubtworek.common.model.ArticleDTO
 
 @RequestMapping("/api")
@@ -41,14 +42,14 @@ class ArticleController(
     @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun saveArticle(
-        @RequestHeader("Authorization") jwt: String,
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @RequestBody theArticle: ArticleRequest
     ) = articleService.save(theArticle, jwt)
 
     @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun updateArticle(
-        @RequestHeader("Authorization") jwt: String,
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @RequestBody theArticle: ArticleRequest,
         @PathVariable articleId: Int
     ) = articleService.update(theArticle, articleId, jwt)
@@ -56,7 +57,7 @@ class ArticleController(
     @PostMapping("/like/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun likeArticle(
-        @RequestHeader("Authorization") jwt: String,
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
     ): ResponseEntity<LikeResponse> = ResponseEntity.status(HttpStatus.CREATED)
         .body(articleService.like(articleId, jwt))
@@ -64,7 +65,7 @@ class ArticleController(
     @DeleteMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteArticleById(
-        @RequestHeader("Authorization") jwt: String,
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
     ) = articleService.deleteById(articleId, jwt)
 

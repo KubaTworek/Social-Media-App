@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
-import { Notification } from "../../dto/notification.type";
-import { DataStorageService } from "../../../shared/data-storage.service";
-import { Author } from "../../../articles/dto/author.type";
+import {Component, Input, OnInit, ViewEncapsulation} from "@angular/core";
+import {Notification} from "../../dto/notification.type";
+import {DataStorageService} from "../../../shared/data-storage.service";
+import {Author} from "../../../articles/dto/author.type";
 
 @Component({
   selector: 'notification-card',
@@ -15,7 +15,8 @@ export class NotificationCardComponent implements OnInit {
   selectedAuthorId: string = '';
   authorsLoaded: boolean = false;
 
-  constructor(private dataStorageService: DataStorageService) { }
+  constructor(private dataStorageService: DataStorageService) {
+  }
 
   ngOnInit() {
     this.loadAuthors();

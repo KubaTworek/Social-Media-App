@@ -13,7 +13,7 @@ import {LoginRequest} from "../auth/shared/login-request.type";
 import {TranslateService} from "@ngx-translate/core";
 import {Author} from "../articles/dto/author.type";
 
-@Injectable({providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class DataStorageService {
   private apiUrl = 'http://localhost:3000';
 
@@ -84,8 +84,8 @@ export class DataStorageService {
         catchError(this.handleHttpError),
         tap(() => this.fetchArticles(0, 5)
           .pipe(
-          tap(this.updateArticleService)
-        ).subscribe())
+            tap(this.updateArticleService)
+          ).subscribe())
       )
       .subscribe();
   }
@@ -190,6 +190,9 @@ export class DataStorageService {
       );
   }
 
+  updateArticleService = (articles: Article[]) =>
+    this.articleService.setArticlesAndNotify(articles);
+
   private createHeaders(): HttpHeaders {
     const token = this.authorizationService.getToken();
 
@@ -220,9 +223,6 @@ export class DataStorageService {
       numOfLikes: article.likes.users.length,
     }));
 
-  updateArticleService = (articles: Article[]) =>
-    this.articleService.setArticlesAndNotify(articles);
-
   private getTimeElapsed(timestamp: Date): string {
     const now = new Date();
     const timeDiff = now.getTime() - new Date(timestamp).getTime();
@@ -251,7 +251,7 @@ export class DataStorageService {
     const hour = date.getHours();
     const minute = date.getMinutes();
     const day = date.getDate();
-    const month = date.toLocaleString('en-US', { month: 'short' });
+    const month = date.toLocaleString('en-US', {month: 'short'});
     const year = date.getFullYear();
 
     const formattedTime = this.formatTime(hour, minute);

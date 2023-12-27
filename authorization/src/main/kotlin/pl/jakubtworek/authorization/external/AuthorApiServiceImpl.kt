@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import pl.jakubtworek.authorization.exception.AuthorizationApiException
 import pl.jakubtworek.common.client.AuthorClient
+import pl.jakubtworek.common.exception.AuthorApiException
 import pl.jakubtworek.common.model.AuthorDTO
 import pl.jakubtworek.common.model.AuthorRequest
 
@@ -22,7 +22,6 @@ class AuthorApiServiceImpl(
     override fun getAuthorByUsername(username: String): AuthorDTO {
         logger.info("Getting author by username: $username")
         val response = authorClient.getAuthorByUsername(username)
-
         return deserializeAuthor(response)
     }
 
@@ -39,24 +38,17 @@ class AuthorApiServiceImpl(
     }
 
     private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO {
-        val responseBody: String? = response.body
-        if (response.statusCode != HttpStatus.OK) {
-            logger.error("Author API request failed with status code: ${response.statusCode}")
-            throw AuthorizationApiException("Author API request failed with status code: ${response.statusCode}")
-        }
+        val responseBody: String = requireNotNull(response.body) { "Author API response body is null" }
 
-        if (responseBody != null) {
-            try {
-                val authorDTO = objectMapper.readValue(responseBody, AuthorDTO::class.java)
-                logger.debug("Deserialized author: $authorDTO")
-                return authorDTO
-            } catch (e: Exception) {
-                logger.error("Error deserializing AuthorDTO", e)
-                throw e
-            }
-        } else {
-            logger.error("Author API response body is null")
-            throw IllegalStateException("Author API response body is null")
+        require(response.statusCode == HttpStatus.OK) { "Author API request failed with status code: ${response.statusCode}" }
+
+        try {
+            val authorDTO = objectMapper.readValue(responseBody, AuthorDTO::class.java)
+            logger.debug("Deserialized author: $authorDTO")
+            return authorDTO
+        } catch (e: Exception) {
+            logger.error("Error deserializing AuthorDTO", e)
+            throw AuthorApiException("Error deserializing AuthorDTO", e)
         }
     }
 }

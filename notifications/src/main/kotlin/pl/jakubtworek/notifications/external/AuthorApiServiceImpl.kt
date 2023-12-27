@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import pl.jakubtworek.common.client.AuthorClient
+import pl.jakubtworek.common.exception.AuthorApiException
 import pl.jakubtworek.common.model.AuthorDTO
-import pl.jakubtworek.notifications.exception.AuthorApiException
 
 @Service
 class AuthorApiServiceImpl(
@@ -25,24 +25,17 @@ class AuthorApiServiceImpl(
     }
 
     private fun deserializeAuthor(response: ResponseEntity<String>): AuthorDTO {
-        val responseBody: String? = response.body
-        if (response.statusCode != HttpStatus.OK) {
-            logger.error("Author API request failed with status code: ${response.statusCode}")
-            throw AuthorApiException("Author API request failed with status code: ${response.statusCode}")
-        }
+        val responseBody: String = requireNotNull(response.body) { "Author API response body is null" }
 
-        if (responseBody != null) {
-            try {
-                val authorDTO = objectMapper.readValue(responseBody, AuthorDTO::class.java)
-                logger.debug("Deserialized author: $authorDTO")
-                return authorDTO
-            } catch (e: Exception) {
-                logger.error("Error deserializing AuthorDTO", e)
-                throw AuthorApiException("Error deserializing AuthorDTO", e)
-            }
-        } else {
-            logger.error("Author API response body is null")
-            throw AuthorApiException("Author API response body is null")
+        require(response.statusCode == HttpStatus.OK) { "Author API request failed with status code: ${response.statusCode}" }
+
+        try {
+            val authorDTO = objectMapper.readValue(responseBody, AuthorDTO::class.java)
+            logger.debug("Deserialized author: $authorDTO")
+            return authorDTO
+        } catch (e: Exception) {
+            logger.error("Error deserializing AuthorDTO", e)
+            throw AuthorApiException("Error deserializing AuthorDTO", e)
         }
     }
 }

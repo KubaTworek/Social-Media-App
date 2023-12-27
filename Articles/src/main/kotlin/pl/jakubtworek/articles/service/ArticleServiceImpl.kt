@@ -9,12 +9,14 @@ import pl.jakubtworek.articles.controller.dto.*
 import pl.jakubtworek.articles.entity.Article
 import pl.jakubtworek.articles.entity.Like
 import pl.jakubtworek.articles.exception.ArticleNotFoundException
-import pl.jakubtworek.articles.exception.UnauthorizedException
 import pl.jakubtworek.articles.external.AuthorApiService
 import pl.jakubtworek.articles.external.AuthorizationApiService
 import pl.jakubtworek.articles.kafka.message.LikeMessage
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
 import pl.jakubtworek.articles.repository.ArticleRepository
+import pl.jakubtworek.common.Constants.ROLE_ADMIN
+import pl.jakubtworek.common.Constants.ROLE_USER
+import pl.jakubtworek.common.exception.UnauthorizedException
 import pl.jakubtworek.common.model.ArticleDTO
 import pl.jakubtworek.common.model.UserDetailsDTO
 import java.sql.Timestamp
@@ -32,28 +34,22 @@ class ArticleServiceImpl(
     override fun findAllOrderByCreatedTimeDesc(page: Int, size: Int): List<ArticleResponse> {
         logger.info("Finding articles, page: $page, size: $size")
         val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"))
-        val articlePage = articleRepository.findAll(pageRequest)
-
-        val articles = articlePage.content.map { createResponse(it) }
-        logger.info("Found ${articles.size} articles.")
-        return articles
+        return articleRepository.findAll(pageRequest)
+            .content
+            .map { createResponse(it) }
     }
 
     override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> {
         logger.info("Finding articles by author ID: $authorId")
-        val articles = articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)
+        return articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)
             .map { mapArticleToDTO(it) }
-        logger.info("Found ${articles.size} articles by author ID: $authorId")
-        return articles
     }
 
     override fun findById(articleId: Int): ArticleDTO {
         logger.info("Finding article by ID: $articleId")
-        val article = articleRepository.findById(articleId)
+        return articleRepository.findById(articleId)
+            .map { mapArticleToDTO(it) }
             .orElseThrow { ArticleNotFoundException("Article not found") }
-        val articleDTO = mapArticleToDTO(article)
-        logger.info("Found article: $articleDTO")
-        return articleDTO
     }
 
     override fun save(theArticle: ArticleRequest, jwt: String) {
@@ -188,9 +184,4 @@ class ArticleServiceImpl(
             content = request.text,
             authorId = userDetails.authorId
         )
-
-    companion object {
-        private const val ROLE_USER = "ROLE_USER"
-        private const val ROLE_ADMIN = "ROLE_ADMIN"
-    }
 }

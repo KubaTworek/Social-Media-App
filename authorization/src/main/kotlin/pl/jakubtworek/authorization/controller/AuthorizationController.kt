@@ -8,6 +8,7 @@ import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
 import pl.jakubtworek.authorization.service.AuthorizationService
+import pl.jakubtworek.common.Constants.AUTHORIZATION_HEADER
 import pl.jakubtworek.common.model.UserDetailsDTO
 
 @RequestMapping("/api")
@@ -32,13 +33,13 @@ class AuthorizationController(
     @GetMapping("/user-info", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getUserDetails(
-        @RequestHeader("Authorization") jwt: String
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String
     ): ResponseEntity<UserDetailsDTO> = ResponseEntity.status(HttpStatus.OK)
         .body(authorizationService.getUserDetails(jwt))
 
     @DeleteMapping("/delete", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun deleteUser(
-        @RequestHeader("Authorization") jwt: String
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String
     ) = authorizationService.deleteUser(jwt)
 }

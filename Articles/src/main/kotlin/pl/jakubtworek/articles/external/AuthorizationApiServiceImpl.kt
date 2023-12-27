@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import pl.jakubtworek.articles.exception.AuthorizationApiException
-import pl.jakubtworek.articles.exception.UnauthorizedException
 import pl.jakubtworek.common.client.AuthorizationClient
+import pl.jakubtworek.common.exception.AuthorizationApiException
+import pl.jakubtworek.common.exception.UnauthorizedException
 import pl.jakubtworek.common.model.UserDetailsDTO
 
 @Service

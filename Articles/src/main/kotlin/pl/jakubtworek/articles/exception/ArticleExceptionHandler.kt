@@ -7,6 +7,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.HttpMediaTypeNotSupportedException
 import org.springframework.web.bind.annotation.*
+import pl.jakubtworek.common.exception.UnauthorizedException
 
 @ControllerAdvice
 class ArticleExceptionHandler {
