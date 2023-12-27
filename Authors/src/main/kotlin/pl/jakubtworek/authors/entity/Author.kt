@@ -37,7 +37,6 @@ data class Author(
 
     override fun hashCode(): Int = hashCode()
 
-    @Override
     override fun toString(): String {
         return this::class.simpleName + "(id = $id , firstName = $firstName , lastName = $lastName )"
     }

@@ -1,6 +1,5 @@
 package pl.jakubtworek.authorization.external
 
-import org.springframework.http.ResponseEntity
 import pl.jakubtworek.common.model.AuthorDTO
 import pl.jakubtworek.common.model.AuthorRequest
 

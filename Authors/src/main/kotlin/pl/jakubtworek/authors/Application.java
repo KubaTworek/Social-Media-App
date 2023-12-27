@@ -1,4 +1,4 @@
-package pl.jakubtworek.authorization;
+package pl.jakubtworek.authors;
 
 import org.slf4j.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

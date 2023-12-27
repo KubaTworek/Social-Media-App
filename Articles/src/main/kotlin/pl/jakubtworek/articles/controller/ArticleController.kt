@@ -17,6 +17,7 @@ class ArticleController(
 ) {
 
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
     fun getArticlesOrderedByDateDesc(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "5") size: Int
@@ -24,12 +25,14 @@ class ArticleController(
             .body(articleService.findAllOrderByCreatedTimeDesc(page, size))
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
     fun getArticlesByAuthor(
         @PathVariable authorId: Int
     ): ResponseEntity<List<ArticleDTO>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.findAllByAuthorId(authorId))
 
     @GetMapping("/id/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
     fun getArticleById(
         @PathVariable articleId: Int
     ): ResponseEntity<ArticleDTO> = ResponseEntity.status(HttpStatus.OK)

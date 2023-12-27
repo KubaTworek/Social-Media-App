@@ -1,6 +1,5 @@
 package pl.jakubtworek.authorization.service
 
-import pl.jakubtworek.authorization.external.AuthorApiService
 import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,6 +11,7 @@ import pl.jakubtworek.authorization.entity.User
 import pl.jakubtworek.authorization.exception.UserNotFoundException
 import pl.jakubtworek.authorization.exception.UsernameAlreadyExistsException
 import pl.jakubtworek.authorization.exception.WrongCredentialsException
+import pl.jakubtworek.authorization.external.AuthorApiService
 import pl.jakubtworek.authorization.repository.UserRepository
 import pl.jakubtworek.common.model.AuthorRequest
 import pl.jakubtworek.common.model.UserDetailsDTO

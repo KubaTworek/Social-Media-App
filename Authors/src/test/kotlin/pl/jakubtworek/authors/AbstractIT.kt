@@ -1,6 +1,5 @@
 package pl.jakubtworek.authors
 
-import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import org.junit.jupiter.api.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
@@ -12,6 +11,7 @@ import org.springframework.http.*
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
+import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import pl.jakubtworek.common.client.ArticleClient
 import pl.jakubtworek.common.model.AuthorDTO
 

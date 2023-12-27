@@ -1,8 +1,8 @@
 package pl.jakubtworek.authors.controller
 
+import org.junit.jupiter.api.Test
 import pl.jakubtworek.authors.AbstractIT
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class AuthorControllerIT : AbstractIT() {

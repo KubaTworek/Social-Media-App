@@ -25,7 +25,7 @@
       <module name="REST-API-articles" options="-parameters" />
       <module name="articles" options="" />
       <module name="authorization" options="" />
-      <module name="authors" options="-parameters" />
+      <module name="authors" options="" />
       <module name="common" options="" />
       <module name="eureka" options="-parameters" />
       <module name="gateway" options="-parameters" />
