@@ -5,5 +5,7 @@ data class UserDetailsDTO(
     val firstName: String,
     val lastName: String,
     val username: String,
+    val following: Int,
+    val followers: Int,
     val role: String
 )

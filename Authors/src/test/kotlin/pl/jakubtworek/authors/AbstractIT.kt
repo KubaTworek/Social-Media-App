@@ -34,14 +34,17 @@ abstract class AbstractIT {
 
     @BeforeEach
     fun setup() {
-        val user1 = UserDetailsDTO(1, "John", "Doe", "johndoe", "ROLE_USER")
-        val user2 = UserDetailsDTO(2, "Jane", "Smith", "janesmith", "ROLE_USER")
+        val user1 = UserDetailsDTO(1, "John", "Doe", "johndoe", 0, 0, "ROLE_USER")
+        val user2 = UserDetailsDTO(2, "Jane", "Smith", "janesmith", 0, 0, "ROLE_USER")
+        val admin = UserDetailsDTO(3, "admin", "admin", "admin", 0, 0, "ROLE_ADMIN")
         `when`(articleClient.deleteArticlesByAuthorId(any(Int::class.java)))
             .thenReturn(ResponseEntity.ok(""))
         `when`(authorizationClient.getUserDetails("user1-jwt"))
             .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(user1)))
         `when`(authorizationClient.getUserDetails("user2-jwt"))
             .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(user2)))
+        `when`(authorizationClient.getUserDetails("admin-jwt"))
+            .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(admin)))
 
         val authorRequest1 = AuthorRequest("John", "Doe", "johndoe")
         val authorRequest2 = AuthorRequest("Jane", "Smith", "janesmith")
@@ -79,6 +82,27 @@ abstract class AbstractIT {
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isCreated
+
+    fun getAuthors(authorId: Int) =
+        webTestClient.get().uri("/api/")
+            .header("Authorization", "admin-jwt")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(AuthorDTO::class.java)
+
+    fun getAuthorsFollowing(authorId: Int, jwt: String) =
+        webTestClient.get().uri("/api/following")
+            .header("Authorization", jwt)
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(AuthorDTO::class.java)
+
+    fun getAuthorsFollowers(authorId: Int, jwt: String) =
+        webTestClient.get().uri("/api/followers")
+            .header("Authorization", jwt)
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(AuthorDTO::class.java)
 
     fun getAuthorById(authorId: Int) =
         webTestClient.get().uri("/api/id/$authorId")

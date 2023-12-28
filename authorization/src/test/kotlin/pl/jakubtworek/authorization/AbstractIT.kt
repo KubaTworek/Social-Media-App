@@ -33,7 +33,7 @@ abstract class AbstractIT {
     @BeforeEach
     fun setup() {
         val authorRequest = AuthorRequest("John", "Doe", "username")
-        val author = AuthorDTO(1, "John", "Doe", "username")
+        val author = AuthorDTO(1, "John", "Doe", "username", 0, 0)
         `when`(authorClient.deleteAuthorById(1))
             .thenReturn(ResponseEntity.ok().build())
         `when`(authorClient.createAuthor(authorRequest))

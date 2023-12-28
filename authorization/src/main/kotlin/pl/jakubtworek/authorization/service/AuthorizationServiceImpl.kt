@@ -82,6 +82,8 @@ class AuthorizationServiceImpl(
             firstName = author.firstName,
             lastName = author.lastName,
             username = username,
+            following = author.following,
+            followers = author.followers,
             role = role
         )
     }

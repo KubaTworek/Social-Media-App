@@ -3,6 +3,7 @@ package pl.jakubtworek.authors.controller
 import org.junit.jupiter.api.Test
 import pl.jakubtworek.authors.AbstractIT
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
+import pl.jakubtworek.common.model.AuthorDTO
 import kotlin.test.assertEquals
 
 class AuthorControllerIT : AbstractIT() {
@@ -64,23 +65,54 @@ class AuthorControllerIT : AbstractIT() {
         deleteAuthorById(authorId!!)
 
         // Then
+        val followerId = getAuthorByUsername("johndoe").returnResult().responseBody?.id
+        val followingId = getAuthorByUsername("janesmith").returnResult().responseBody?.id
+
         createAuthor(AuthorRequest("John", "Doe", "johndoe"))
     }
 
     @Test
     fun testFollowAuthor() {
         // Given
-        val followerId = getAuthorByUsername("johndoe").returnResult().responseBody?.id
-        val followingId = getAuthorByUsername("janesmith").returnResult().responseBody?.id
+        val followerId = getAuthorByUsername("johndoe").returnResult().responseBody?.id!!
+        val followingId = getAuthorByUsername("janesmith").returnResult().responseBody?.id!!
 
         // When
-        followAuthor(followingId!!, "user1-jwt")
+        followAuthor(followingId, "user1-jwt")
+
+        // Then
+        assertAuthorFollowStats(followerId, 0, 1)
+        assertAuthorFollowStats(followingId, 1, 0)
+
+        assertAuthorListSizeAndUsername(getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody, 1, "janesmith")
+        assertAuthorListSizeAndUsername(getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody, 0, null)
+
+        assertAuthorListSizeAndUsername(getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody, 1, "johndoe")
+
+        // Cleanup
         unfollowAuthor(followingId, "user1-jwt")
+
+        // Verify cleanup
+        assertAuthorFollowStats(followerId, 0, 0)
+        assertAuthorFollowStats(followingId, 0, 0)
+
+        assertAuthorListSizeAndUsername(getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody, 0, null)
     }
-    // todo: 4 endpointy
-    //  jeden zwraca folowersoo konrketnego uzytowniak, (AuthorDTO)
-    //  drugi zwraacac followingow danego uzytkownika, (AuthorDTO)
-    //  trzeci zwraca wszystkich dla admina (AuthorDTO)
-    //  czwarty unfollow
-    //  W Authorization rozszerzyc userDetails o liczbe followow i followingow
+
+    private fun assertAuthorFollowStats(authorId: Int, followers: Int, following: Int) {
+        val author = getAuthorById(authorId).returnResult().responseBody
+        assertEquals(followers, author?.followers)
+        assertEquals(following, author?.following)
+    }
+
+    private fun assertAuthorListSizeAndUsername(authors: List<AuthorDTO>?, expectedSize: Int, expectedUsername: String?) {
+        assertEquals(expectedSize, authors?.size)
+        if (expectedSize > 0) {
+            assertEquals(expectedUsername, authors?.get(0)?.username)
+        }
+    }
 }

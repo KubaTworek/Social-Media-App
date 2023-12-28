@@ -4,7 +4,9 @@ import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import pl.jakubtworek.common.model.AuthorDTO
 
 interface AuthorService {
-    fun findAll(): List<AuthorDTO>
+    fun findAll(jwt: String): List<AuthorDTO>
+    fun findFollowing(jwt: String): List<AuthorDTO>
+    fun findFollowers(jwt: String): List<AuthorDTO>
     fun findById(theId: Int): AuthorDTO
     fun findByUsername(username: String): AuthorDTO
     fun save(theAuthor: AuthorRequest)

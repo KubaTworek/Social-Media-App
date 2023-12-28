@@ -4,5 +4,7 @@ data class AuthorDTO(
     val id: Int,
     val firstName: String,
     val lastName: String,
-    val username: String
+    val username: String,
+    val following: Int,
+    val followers: Int
 )
