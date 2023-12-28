@@ -4,11 +4,13 @@
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
-    <button *ngIf="!article.author.isFollowed" class="article-card__follow-button" (click)="followAuthor(article.author.id)">
-      Follow
+    <button (click)="followAuthor(article.author.id)" *ngIf="!article.author.isFollowed"
+            class="article-card__follow-button">
+      {{ 'FOLLOW' | translate }}
     </button>
-    <button *ngIf="article.author.isFollowed" class="article-card__follow-button" (click)="unfollowAuthor(article.author.id)">
-      Unfollow
+    <button (click)="unfollowAuthor(article.author.id)" *ngIf="article.author.isFollowed"
+            class="article-card__follow-button">
+      {{ 'UNFOLLOW' | translate }}
     </button>
   </div>
   <p class="article-card__content">{{ article.text }}</p>

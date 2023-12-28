@@ -29,7 +29,7 @@ export class AuthorizationService {
     console.log(userData.following);
     if (userData) {
       this.storeUserData(userData);
-      this.userSubject.next(userData); // Emit the user value
+      this.userSubject.next(userData);
       this.router.navigate(['/home']);
     }
   }
@@ -68,6 +68,20 @@ export class AuthorizationService {
   getRole(): string | null {
     const userDataJson = this.getUserData();
     return userDataJson ? String(userDataJson.role) : null;
+  }
+
+  followAuthor() {
+    const userData = this.getUserData();
+    userData.following = String(Number(userData.following) + 1)
+    this.storeUserData(userData)
+    this.userSubject.next(userData);
+  }
+
+  unfollowAuthor() {
+    const userData = this.getUserData();
+    userData.following = String(Number(userData.following) - 1)
+    this.storeUserData(userData)
+    this.userSubject.next(userData);
   }
 
   private setupInteractionsListener() {

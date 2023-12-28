@@ -25,5 +25,9 @@
   "USERNAME_ALREADY_EXISTS": "Ta nazwa użytkownika jest już zajęta. Wybierz inną.",
   "REQUIRED_FIELD": "To pole jest wymagane",
   "PASSWORD_LENGTH": "Hasło musi mieć co najmniej 6 znaków",
-  "PASSWORD_COMPLEXITY": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę i jedną cyfrę"
+  "PASSWORD_COMPLEXITY": "Hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę i jedną cyfrę",
+  "FOLLOWING": "Obserwujesz",
+  "FOLLOWERS": "Obserwujących",
+  "FOLLOW": "Obserwuj",
+  "UNFOLLOW": "Przestań obserwować"
 }

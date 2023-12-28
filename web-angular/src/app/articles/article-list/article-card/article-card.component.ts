@@ -54,17 +54,17 @@ export class ArticleCardComponent {
     }
   }
 
-  private isUser(): boolean {
-    const role = this.authorizationService.getRole();
-
-    return role == 'ROLE_USER';
-  }
-
   followAuthor(id: string) {
     this.dataStorage.followAuthor(id);
   }
 
   unfollowAuthor(id: string) {
     this.dataStorage.unfollowAuthor(id);
+  }
+
+  private isUser(): boolean {
+    const role = this.authorizationService.getRole();
+
+    return role == 'ROLE_USER';
   }
 }

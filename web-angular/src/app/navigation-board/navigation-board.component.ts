@@ -17,7 +17,7 @@ export class NavigationBoardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorizationService.getUser().subscribe((user) => {
-      this.user = user || new UserData("","","","","","","",0);
+      this.user = user || new UserData("", "", "", "", "", "", "", 0);
     });
   }
 

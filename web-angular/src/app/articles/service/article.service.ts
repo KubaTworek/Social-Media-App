@@ -69,6 +69,22 @@ export class ArticleService {
     this.notifyArticlesChanged();
   }
 
+  followAuthor(id: string) {
+    this.articles.forEach(article => {
+      if (article.author.id === id) {
+        article.author.isFollowed = true;
+      }
+    });
+  }
+
+  unfollowAuthor(id: string) {
+    this.articles.forEach(article => {
+      if (article.author.id === id) {
+        article.author.isFollowed = false;
+      }
+    });
+  }
+
   private notifyArticlesChanged(): void {
     this.articlesChanged.next([...this.articles]);
   }

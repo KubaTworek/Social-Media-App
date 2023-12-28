@@ -82,7 +82,10 @@ export class DataStorageService {
       .put<void>(endpoint, null, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        //tap(() => this.articleService.followAuthor(id))
+        tap(() => {
+          this.articleService.followAuthor(id)
+          this.authorizationService.followAuthor()
+        })
       )
       .subscribe();
   }
@@ -95,7 +98,10 @@ export class DataStorageService {
       .put<void>(endpoint, null, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        //tap(() => this.articleService.unfollowAuthor(id))
+        tap(() => {
+          this.articleService.unfollowAuthor(id)
+          this.authorizationService.unfollowAuthor()
+        })
       )
       .subscribe();
   }

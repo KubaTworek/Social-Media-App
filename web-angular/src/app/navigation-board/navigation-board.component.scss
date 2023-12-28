@@ -17,3 +17,32 @@ button {
     background-color: $twitter-black-hover;
   }
 }
+
+.user-info-container {
+  left: -5rem;
+  width: 12rem;
+  background-color: $twitter-black;
+  color: $twitter-white;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.full-name {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.username {
+  font-size: 1.1rem;
+  margin: 0.2rem 0;
+  color: $twitter-dark-gray;
+}
+
+.follow {
+  font-size: 0.9rem;
+  margin: 0.6rem 0;
+}

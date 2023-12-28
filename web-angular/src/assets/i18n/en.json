@@ -25,5 +25,9 @@
   "USERNAME_ALREADY_EXISTS": "User with that username already exists. Please choose a different one.",
   "REQUIRED_FIELD": "This field is required",
   "PASSWORD_LENGTH": "Password must be at least 6 characters long",
-  "PASSWORD_COMPLEXITY": "Password must contain at least one uppercase letter, one lowercase letter, and one digit"
+  "PASSWORD_COMPLEXITY": "Password must contain at least one uppercase letter, one lowercase letter, and one digit",
+  "FOLLOWING": "Following",
+  "FOLLOWERS": "Followers",
+  "FOLLOW": "Follow",
+  "UNFOLLOW": "Unfollow"
 }
