@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import pl.jakubtworek.authors.service.AuthorService
+import pl.jakubtworek.common.Constants
 import pl.jakubtworek.common.model.AuthorDTO
 
 @RequestMapping("/api")
@@ -38,6 +39,20 @@ class AuthorController(
     fun saveAuthor(
         @RequestBody theAuthor: AuthorRequest
     ) = authorService.save(theAuthor)
+
+    @PutMapping("/follow/{followingId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun follow(
+        @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String,
+        @PathVariable followingId: Int
+    ) = authorService.follow(followingId, jwt)
+
+    @PutMapping("/unfollow/{followingId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun unfollow(
+        @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String,
+        @PathVariable followingId: Int
+    ) = authorService.unfollow(followingId, jwt)
 
     @DeleteMapping("/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

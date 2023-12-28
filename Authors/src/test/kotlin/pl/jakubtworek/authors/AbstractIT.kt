@@ -1,5 +1,6 @@
 package pl.jakubtworek.authors
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.*
@@ -13,7 +14,9 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters
 import pl.jakubtworek.authors.controller.dto.AuthorRequest
 import pl.jakubtworek.common.client.ArticleClient
+import pl.jakubtworek.common.client.AuthorizationClient
 import pl.jakubtworek.common.model.AuthorDTO
+import pl.jakubtworek.common.model.UserDetailsDTO
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -26,11 +29,19 @@ abstract class AbstractIT {
     @MockBean
     protected lateinit var articleClient: ArticleClient
 
+    @MockBean
+    protected lateinit var authorizationClient: AuthorizationClient
+
     @BeforeEach
     fun setup() {
+        val user1 = UserDetailsDTO(1, "John", "Doe", "johndoe", "ROLE_USER")
+        val user2 = UserDetailsDTO(2, "Jane", "Smith", "janesmith", "ROLE_USER")
         `when`(articleClient.deleteArticlesByAuthorId(any(Int::class.java)))
             .thenReturn(ResponseEntity.ok(""))
-
+        `when`(authorizationClient.getUserDetails("user1-jwt"))
+            .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(user1)))
+        `when`(authorizationClient.getUserDetails("user2-jwt"))
+            .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(user2)))
 
         val authorRequest1 = AuthorRequest("John", "Doe", "johndoe")
         val authorRequest2 = AuthorRequest("Jane", "Smith", "janesmith")
@@ -52,6 +63,20 @@ abstract class AbstractIT {
         webTestClient.post().uri("/api/")
             .contentType(MediaType.APPLICATION_JSON)
             .body(BodyInserters.fromValue(authorRequest))
+            .exchange()
+            .expectStatus().isCreated
+
+    fun followAuthor(followingId: Int, jwt: String) =
+        webTestClient.put().uri("/api/follow/$followingId")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", jwt)
+            .exchange()
+            .expectStatus().isCreated
+
+    fun unfollowAuthor(followingId: Int, jwt: String) =
+        webTestClient.put().uri("/api/unfollow/$followingId")
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", jwt)
             .exchange()
             .expectStatus().isCreated
 

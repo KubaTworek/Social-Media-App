@@ -66,4 +66,21 @@ class AuthorControllerIT : AbstractIT() {
         // Then
         createAuthor(AuthorRequest("John", "Doe", "johndoe"))
     }
+
+    @Test
+    fun testFollowAuthor() {
+        // Given
+        val followerId = getAuthorByUsername("johndoe").returnResult().responseBody?.id
+        val followingId = getAuthorByUsername("janesmith").returnResult().responseBody?.id
+
+        // When
+        followAuthor(followingId!!, "user1-jwt")
+        unfollowAuthor(followingId, "user1-jwt")
+    }
+    // todo: 4 endpointy
+    //  jeden zwraca folowersoo konrketnego uzytowniak, (AuthorDTO)
+    //  drugi zwraacac followingow danego uzytkownika, (AuthorDTO)
+    //  trzeci zwraca wszystkich dla admina (AuthorDTO)
+    //  czwarty unfollow
+    //  W Authorization rozszerzyc userDetails o liczbe followow i followingow
 }

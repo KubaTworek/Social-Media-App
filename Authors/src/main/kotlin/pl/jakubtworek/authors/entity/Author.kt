@@ -19,6 +19,12 @@ data class Author(
 
     @Column(name = "USERNAME")
     val username: String,
+
+    @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val following: MutableList<Follow> = mutableListOf(),
+
+    @OneToMany(mappedBy = "following", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val followedBy: MutableList<Follow> = mutableListOf()
 ) {
     constructor() : this(
         0,
@@ -35,9 +41,9 @@ data class Author(
         return id == other.id
     }
 
-    override fun hashCode(): Int = hashCode()
+    override fun hashCode(): Int = id.hashCode()
 
     override fun toString(): String {
-        return this::class.simpleName + "(id = $id , firstName = $firstName , lastName = $lastName )"
+        return this::class.simpleName + "(id = $id , firstName = $firstName , lastName = $lastName, username = $username)"
     }
 }

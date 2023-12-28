@@ -9,4 +9,6 @@ interface AuthorService {
     fun findByUsername(username: String): AuthorDTO
     fun save(theAuthor: AuthorRequest)
     fun deleteById(theId: Int)
+    fun follow(followingId: Int, jwt: String)
+    fun unfollow(followingId: Int, jwt: String)
 }
