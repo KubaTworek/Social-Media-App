@@ -64,6 +64,8 @@ class AuthorizationServiceImpl(
             username = username,
             firstName = author.firstName,
             lastName = author.lastName,
+            following = author.following.size,
+            followers = author.followers.size,
             token = token,
             role = user.role,
             tokenExpirationDate = expirationDate
@@ -82,8 +84,6 @@ class AuthorizationServiceImpl(
             firstName = author.firstName,
             lastName = author.lastName,
             username = username,
-            following = author.following,
-            followers = author.followers,
             role = role
         )
     }

@@ -5,3 +5,9 @@
   <button *ngIf="isLoggedOut()" id="login-button" routerLink="/auth/login">🔐 {{ 'LOGIN' | translate }}</button>
   <button (click)="logout()" *ngIf="isLoggedIn()" id="logout-button">🚪 {{ 'LOGOUT' | translate }}</button>
 </div>
+<div *ngIf="isLoggedIn()">
+  <p>{{user.firstName + " " + user.lastName}}</p>
+  <p>@{{user.username}}</p>
+  <p>Following: {{user.following}}</p>
+  <p>Followers: {{user.followers}}</p>
+</div>

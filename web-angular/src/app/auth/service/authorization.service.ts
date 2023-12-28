@@ -9,6 +9,7 @@ import {UserData} from "../shared/user-data-type";
 export class AuthorizationService {
   private loginErrorSubject = new BehaviorSubject<string>('');
   private registerErrorSubject = new BehaviorSubject<string>('');
+  private userSubject = new BehaviorSubject<UserData | null>(this.getUserData());
 
   constructor(
     private router: Router,
@@ -25,10 +26,16 @@ export class AuthorizationService {
   }
 
   handleLogin(userData: UserData) {
+    console.log(userData.following);
     if (userData) {
       this.storeUserData(userData);
+      this.userSubject.next(userData); // Emit the user value
       this.router.navigate(['/home']);
     }
+  }
+
+  getUser(): Observable<UserData | null> {
+    return this.userSubject.asObservable();
   }
 
   handleRegister() {

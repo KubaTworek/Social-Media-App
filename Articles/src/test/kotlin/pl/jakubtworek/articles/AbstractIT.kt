@@ -47,9 +47,9 @@ abstract class AbstractIT {
 
     @BeforeEach
     fun setup() {
-        val admin = UserDetailsDTO(1, "FirstName", "LastName", "Username", 0, 0, "ROLE_ADMIN")
-        val user = UserDetailsDTO(1, "FirstName", "LastName", "Username", 0, 0, "ROLE_USER")
-        val author = AuthorDTO(1, "FirstName", "LastName", "Username", 0, 0)
+        val admin = UserDetailsDTO(1, "FirstName", "LastName", "Username", "ROLE_ADMIN")
+        val user = UserDetailsDTO(1, "FirstName", "LastName", "Username", "ROLE_USER")
+        val author = AuthorDTO(1, "FirstName", "LastName", "Username", mutableListOf(), mutableListOf())
         val likeMessage = LikeMessage(Timestamp.from(Instant.now()), 1, 1)
         Mockito.`when`(authorizationClient.getUserDetails("admin-jwt"))
             .thenReturn(ResponseEntity.ok(ObjectMapper().writeValueAsString(admin)))

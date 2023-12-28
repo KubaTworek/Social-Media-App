@@ -31,12 +31,13 @@ class ArticleServiceImpl(
 
     private val logger: Logger = LoggerFactory.getLogger(ArticleServiceImpl::class.java)
 
-    override fun findAllOrderByCreatedTimeDesc(page: Int, size: Int): List<ArticleResponse> {
+    override fun findAllOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse> {
         logger.info("Finding articles, page: $page, size: $size")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
         val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"))
         return articleRepository.findAll(pageRequest)
             .content
-            .map { createResponse(it) }
+            .map { createResponse(it, userDetails.authorId) }
     }
 
     override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> {
@@ -138,7 +139,7 @@ class ArticleServiceImpl(
         logger.info("Articles deleted successfully for author ID: $authorId")
     }
 
-    private fun createResponse(theArticle: Article): ArticleResponse {
+    private fun createResponse(theArticle: Article, userId: Int): ArticleResponse {
         val author = authorService.getAuthorById(theArticle.authorId)
         val likerIds = theArticle.likes.map { it.authorId }
 
@@ -152,9 +153,11 @@ class ArticleServiceImpl(
             timestamp = theArticle.createAt,
             author = author.let {
                 AuthorResponse(
+                    id = it.id,
                     username = it.username,
                     firstName = it.firstName,
-                    lastName = it.lastName
+                    lastName = it.lastName,
+                    isFollowed = it.followers.contains(userId)
                 )
             },
             likes = LikeInfoResponse(

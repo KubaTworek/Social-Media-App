@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AuthorizationService} from "../auth/service/authorization.service";
+import {UserData} from "../auth/shared/user-data-type";
 
 @Component({
   selector: 'navigation-board',
@@ -7,12 +8,17 @@ import {AuthorizationService} from "../auth/service/authorization.service";
   styleUrls: ['./navigation-board.component.scss']
 })
 export class NavigationBoardComponent implements OnInit {
+  @Input() user!: UserData
+
   constructor(
     private authorizationService: AuthorizationService
   ) {
   }
 
   ngOnInit(): void {
+    this.authorizationService.getUser().subscribe((user) => {
+      this.user = user || new UserData("","","","","","","",0);
+    });
   }
 
   isLoggedOut(): boolean {
@@ -21,12 +27,6 @@ export class NavigationBoardComponent implements OnInit {
 
   isLoggedIn(): boolean {
     return sessionStorage.getItem('userData') !== null;
-  }
-
-  isUser(): boolean {
-    const role = this.authorizationService.getRole();
-
-    return role == 'ROLE_USER';
   }
 
   logout(): void {

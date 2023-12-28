@@ -105,8 +105,8 @@ class AuthorControllerIT : AbstractIT() {
 
     private fun assertAuthorFollowStats(authorId: Int, followers: Int, following: Int) {
         val author = getAuthorById(authorId).returnResult().responseBody
-        assertEquals(followers, author?.followers)
-        assertEquals(following, author?.following)
+        assertEquals(followers, author?.followers?.size)
+        assertEquals(following, author?.following?.size)
     }
 
     private fun assertAuthorListSizeAndUsername(authors: List<AuthorDTO>?, expectedSize: Int, expectedUsername: String?) {

@@ -34,9 +34,9 @@ abstract class AbstractIT {
 
     @BeforeEach
     fun setup() {
-        val user1 = UserDetailsDTO(1, "John", "Doe", "johndoe", 0, 0, "ROLE_USER")
-        val user2 = UserDetailsDTO(2, "Jane", "Smith", "janesmith", 0, 0, "ROLE_USER")
-        val admin = UserDetailsDTO(3, "admin", "admin", "admin", 0, 0, "ROLE_ADMIN")
+        val user1 = UserDetailsDTO(1, "John", "Doe", "johndoe", "ROLE_USER")
+        val user2 = UserDetailsDTO(2, "Jane", "Smith", "janesmith", "ROLE_USER")
+        val admin = UserDetailsDTO(3, "admin", "admin", "admin", "ROLE_ADMIN")
         `when`(articleClient.deleteArticlesByAuthorId(any(Int::class.java)))
             .thenReturn(ResponseEntity.ok(""))
         `when`(authorizationClient.getUserDetails("user1-jwt"))

@@ -5,6 +5,6 @@ data class AuthorDTO(
     val firstName: String,
     val lastName: String,
     val username: String,
-    val following: Int,
-    val followers: Int
+    val following: List<Int>,
+    val followers: List<Int>
 )

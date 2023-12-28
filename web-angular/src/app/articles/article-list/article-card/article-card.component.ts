@@ -20,7 +20,10 @@ export class ArticleCardComponent {
   openDetails(event: Event): void {
     const clickedElement = event.target as HTMLElement;
 
-    if (!clickedElement.classList.contains('article-card__like-button')) {
+    const isLikeButton = clickedElement.classList.contains('article-card__like-button');
+    const isFollowButton = clickedElement.classList.contains('article-card__follow-button');
+
+    if (!isLikeButton && !isFollowButton) {
       this.articleDetailsComponent.open();
     }
   }
@@ -55,5 +58,13 @@ export class ArticleCardComponent {
     const role = this.authorizationService.getRole();
 
     return role == 'ROLE_USER';
+  }
+
+  followAuthor(id: string) {
+    this.dataStorage.followAuthor(id);
+  }
+
+  unfollowAuthor(id: string) {
+    this.dataStorage.unfollowAuthor(id);
   }
 }

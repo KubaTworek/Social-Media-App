@@ -96,3 +96,20 @@
   visibility: visible;
   opacity: 1;
 }
+
+.article-card__follow-button {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background-color: $twitter-blue;
+  color: $twitter-white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.article-card__follow-button:hover {
+  background-color: darken($twitter-blue, 10%);
+}

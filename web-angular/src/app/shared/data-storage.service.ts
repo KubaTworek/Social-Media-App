@@ -74,6 +74,32 @@ export class DataStorageService {
       .subscribe();
   }
 
+  followAuthor(id: string) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/authors/api/follow/${id}`;
+
+    return this.http
+      .put<void>(endpoint, null, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        //tap(() => this.articleService.followAuthor(id))
+      )
+      .subscribe();
+  }
+
+  unfollowAuthor(id: string) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/authors/api/unfollow/${id}`;
+
+    return this.http
+      .put<void>(endpoint, null, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        //tap(() => this.articleService.unfollowAuthor(id))
+      )
+      .subscribe();
+  }
+
   storeArticle(request: ArticleRequest) {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;

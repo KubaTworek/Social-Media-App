@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewEncapsulation} from "@angular/core";
 import {Notification} from "../../dto/notification.type";
 import {DataStorageService} from "../../../shared/data-storage.service";
 import {Author} from "../../../articles/dto/author.type";
+import {AuthorizationService} from "../../../auth/service/authorization.service";
 
 @Component({
   selector: 'notification-card',
@@ -15,7 +16,10 @@ export class NotificationCardComponent implements OnInit {
   selectedAuthorId: string = '';
   authorsLoaded: boolean = false;
 
-  constructor(private dataStorageService: DataStorageService) {
+  constructor(
+    private dataStorageService: DataStorageService,
+    private authorizationService: AuthorizationService
+  ) {
   }
 
   ngOnInit() {
@@ -23,7 +27,7 @@ export class NotificationCardComponent implements OnInit {
   }
 
   loadAuthors() {
-    if (!this.authorsLoaded) {
+    if (!this.authorsLoaded && this.isAdmin()) {
       this.dataStorageService.fetchAuthors().subscribe(authors => {
         this.authors = authors;
         this.authorsLoaded = true;
@@ -39,5 +43,11 @@ export class NotificationCardComponent implements OnInit {
     }
 
     this.dataStorageService.updateNotification(this.notification.id, this.selectedAuthorId);
+  }
+
+  isAdmin(): boolean {
+    const role = this.authorizationService.getRole();
+
+    return role == 'ROLE_ADMIN';
   }
 }

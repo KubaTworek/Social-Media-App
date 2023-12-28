@@ -140,7 +140,7 @@ class AuthorServiceImpl(
         firstName = author.firstName,
         lastName = author.lastName,
         username = author.username,
-        following = author.following.size,
-        followers = author.followedBy.size
+        following = author.following.map {it.following.id},
+        followers = author.followedBy.map {it.follower.id}
     )
 }

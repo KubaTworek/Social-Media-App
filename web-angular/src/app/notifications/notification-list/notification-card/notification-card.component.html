@@ -4,10 +4,12 @@
   </p>
   <p class="notification-card__content">{{ notification.content }}</p>
 
-  <label for="authorDropdown">Select Author:</label>
-  <select (click)="loadAuthors()" [(ngModel)]="selectedAuthorId" id="authorDropdown">
-    <option *ngFor="let author of authors" [value]="author.id">{{ author.firstName + ' ' + author.lastName }}</option>
-  </select>
+  <div *ngIf="isAdmin()">
+    <label for="authorDropdown">Select Author:</label>
+    <select (click)="loadAuthors()" [(ngModel)]="selectedAuthorId" id="authorDropdown">
+      <option *ngFor="let author of authors" [value]="author.id">{{ author.firstName + ' ' + author.lastName }}</option>
+    </select>
 
-  <button (click)="updateAuthor()">Update Author</button>
+    <button (click)="updateAuthor()">Update Author</button>
+  </div>
 </article>
