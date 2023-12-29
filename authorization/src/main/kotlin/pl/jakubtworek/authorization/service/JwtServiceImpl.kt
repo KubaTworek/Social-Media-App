@@ -18,7 +18,7 @@ class JwtServiceImpl : JwtService {
     private val logger: Logger = LoggerFactory.getLogger(JwtServiceImpl::class.java)
 
     override fun buildJwt(user: User, expirationDate: Long): String {
-        logger.info("Building JWT for user: ${user.username}")
+        logger.info("Building token for user: ${user.username}")
         try {
             return Jwts.builder()
                 .setIssuer("Social Media")
@@ -30,7 +30,7 @@ class JwtServiceImpl : JwtService {
                 .signWith(createSecretKey())
                 .compact()
         } catch (e: Exception) {
-            logger.error("Error building JWT", e)
+            logger.error("Error building refresh token", e)
             throw e
         }
     }

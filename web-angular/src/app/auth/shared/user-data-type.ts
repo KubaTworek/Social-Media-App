@@ -7,7 +7,9 @@ export class UserData {
     public following: string,
     public followers: string,
     public token: string,
+    public refreshToken: string,
     public tokenExpirationDate: number,
+    public refreshTokenExpirationDate: number,
   ) {
   }
 }

@@ -203,6 +203,23 @@ export class DataStorageService {
       );
   }
 
+  refreshToken() {
+    const headers =  new HttpHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': this.authorizationService.getRefreshToken()
+    });
+    const endpoint = `${this.apiUrl}/auth/api/refresh-token`;
+
+    return this.http.post<any>(endpoint, null, {headers})
+      .pipe(
+        catchError((error) => {
+          return throwError(error);
+        }),
+        tap(userData => this.authorizationService.handleLogin(userData))
+      );
+  }
+
   register(request: RegisterRequest) {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/auth/api/register`;

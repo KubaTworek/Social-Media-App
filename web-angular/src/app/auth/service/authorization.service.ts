@@ -14,7 +14,6 @@ export class AuthorizationService {
   constructor(
     private router: Router,
   ) {
-    this.setupInteractionsListener();
   }
 
   getLoginError(): Observable<string> {
@@ -60,6 +59,11 @@ export class AuthorizationService {
     return userDataJson ? String(userDataJson.token) : null;
   }
 
+  getRefreshToken(): string {
+    const userDataJson = this.getUserData();
+    return String(userDataJson.refreshToken);
+  }
+
   getUsername(): string | null {
     const userDataJson = this.getUserData();
     return userDataJson ? String(userDataJson.username) : null;
@@ -84,14 +88,6 @@ export class AuthorizationService {
     this.userSubject.next(userData);
   }
 
-  private setupInteractionsListener() {
-    document.addEventListener("mousemove", () => {
-      if (this.isSessionExpired()) {
-        this.logout();
-      }
-    });
-  }
-
   private getUserData(): UserData {
     const userDataJson = sessionStorage.getItem("userData");
     return userDataJson ? JSON.parse(userDataJson) : null;
@@ -105,9 +101,16 @@ export class AuthorizationService {
     sessionStorage.removeItem('userData');
   }
 
-  private isSessionExpired() {
+  isSessionExpired() {
     const userDataJson = this.getUserData();
     const logoutTime = userDataJson ? Number(userDataJson.tokenExpirationDate) : null;
+
+    return logoutTime !== null && logoutTime <= new Date().getTime();
+  }
+
+  isRefreshTokenExpired() {
+    const userDataJson = this.getUserData();
+    const logoutTime = userDataJson ? Number(userDataJson.refreshTokenExpirationDate) : null;
 
     return logoutTime !== null && logoutTime <= new Date().getTime();
   }

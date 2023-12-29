@@ -30,6 +30,13 @@ class AuthorizationController(
     ): ResponseEntity<LoginResponse> = ResponseEntity.status(HttpStatus.OK)
         .body(authorizationService.loginUser(loginRequest))
 
+    @PostMapping("/refresh-token", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
+    fun refreshToken(
+        @RequestHeader(AUTHORIZATION_HEADER) refreshToken: String
+    ): ResponseEntity<LoginResponse> = ResponseEntity.status(HttpStatus.OK)
+        .body(authorizationService.refreshAccessToken(refreshToken))
+
     @GetMapping("/user-info", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getUserDetails(

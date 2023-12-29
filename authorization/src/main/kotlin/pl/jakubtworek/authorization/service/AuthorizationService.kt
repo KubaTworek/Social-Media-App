@@ -9,5 +9,6 @@ interface AuthorizationService {
     fun registerUser(registerRequest: RegisterRequest)
     fun deleteUser(jwt: String)
     fun loginUser(loginRequest: LoginRequest): LoginResponse
+    fun refreshAccessToken(refreshToken: String): LoginResponse
     fun getUserDetails(jwt: String): UserDetailsDTO
 }

@@ -3,8 +3,10 @@ package pl.jakubtworek.authorization.service
 import jakarta.transaction.Transactional
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import pl.jakubtworek.authorization.constants.SecurityConstants.JWT_EXPIRE_TIME
+import pl.jakubtworek.authorization.constants.SecurityConstants.REFRESH_TOKEN_EXPIRE_TIME
 import pl.jakubtworek.authorization.controller.dto.LoginRequest
 import pl.jakubtworek.authorization.controller.dto.LoginResponse
 import pl.jakubtworek.authorization.controller.dto.RegisterRequest
@@ -22,7 +24,8 @@ import java.time.Instant
 class AuthorizationServiceImpl(
     private val userRepository: UserRepository,
     private val authorApiService: AuthorApiService,
-    private val jwtService: JwtService
+    private val jwtService: JwtService,
+    private val passwordEncoder: BCryptPasswordEncoder
 ) : AuthorizationService {
 
     private val logger: Logger = LoggerFactory.getLogger(AuthorizationServiceImpl::class.java)
@@ -36,7 +39,9 @@ class AuthorizationServiceImpl(
         val role = registerRequest.role
 
         validateUserWithThatUsernameDoesNotExist(username)
-        val newUser = buildUser(username, password, role)
+
+        val hashedPassword = passwordEncoder.encode(password)
+        val newUser = buildUser(username, hashedPassword, role)
         userRepository.save(newUser)
         val authorRequest = AuthorRequest(
             firstName,
@@ -55,8 +60,10 @@ class AuthorizationServiceImpl(
         val user = getUserByUsername(username)
         validPasswords(password, user.password)
 
-        val expirationDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
-        val token = jwtService.buildJwt(user, expirationDate)
+        val expirationTokenDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
+        val expirationRefreshTokenDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
+        val token = jwtService.buildJwt(user, expirationTokenDate)
+        val refreshToken = jwtService.buildJwt(user, expirationRefreshTokenDate)
         val author = authorApiService.getAuthorByUsername(username)
 
         logger.info("User logged in successfully: $username")
@@ -67,8 +74,38 @@ class AuthorizationServiceImpl(
             following = author.following.size,
             followers = author.followers.size,
             token = token,
+            refreshToken = refreshToken,
             role = user.role,
-            tokenExpirationDate = expirationDate
+            tokenExpirationDate = expirationTokenDate,
+            refreshTokenExpirationDate = expirationRefreshTokenDate,
+        )
+    }
+
+    override fun refreshAccessToken(refreshToken: String): LoginResponse {
+        logger.info("Starting refresh token process")
+
+        val claims = jwtService.parseJwtClaims(refreshToken)
+        val username = claims["username"].toString()
+        val user = getUserByUsername(username)
+
+        val expirationTokenDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
+        val expirationRefreshTokenDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
+        val token = jwtService.buildJwt(user, expirationTokenDate)
+        val refresh = jwtService.buildJwt(user, expirationRefreshTokenDate)
+        val author = authorApiService.getAuthorByUsername(username)
+
+        logger.info("Token was refreshed successfully for: $username")
+        return LoginResponse(
+            username = username,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            following = author.following.size,
+            followers = author.followers.size,
+            token = token,
+            refreshToken = refresh,
+            role = user.role,
+            tokenExpirationDate = expirationTokenDate,
+            refreshTokenExpirationDate = expirationRefreshTokenDate,
         )
     }
 
@@ -108,7 +145,7 @@ class AuthorizationServiceImpl(
     )
 
     private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
-        if (passwordProvided != passwordRegistered) {
+        if (!passwordEncoder.matches(passwordProvided, passwordRegistered)) {
             throw WrongCredentialsException("Invalid password!")
         }
     }

@@ -8,5 +8,7 @@ data class LoginResponse(
     val followers: Int,
     val role: String,
     val token: String,
-    val tokenExpirationDate: Long
+    val refreshToken: String,
+    val tokenExpirationDate: Long,
+    val refreshTokenExpirationDate: Long
 )
