@@ -25,11 +25,17 @@ export class AuthorizationService {
   }
 
   handleLogin(userData: UserData) {
-    console.log(userData.following);
     if (userData) {
       this.storeUserData(userData);
       this.userSubject.next(userData);
       this.router.navigate(['/home']);
+    }
+  }
+
+  handleRefresh(userData: UserData) {
+    if (userData) {
+      this.storeUserData(userData);
+      this.userSubject.next(userData);
     }
   }
 
@@ -94,6 +100,7 @@ export class AuthorizationService {
   }
 
   private storeUserData(userData: UserData) {
+    console.log(userData)
     sessionStorage.setItem('userData', JSON.stringify(userData));
   }
 

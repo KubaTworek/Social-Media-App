@@ -26,6 +26,15 @@ class ArticleController(
     ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.findAllOrderByCreatedTimeDesc(page, size, jwt))
 
+    @GetMapping("/following", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
+    fun getArticlesFollowingOrderedByDateDesc(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "5") size: Int
+    ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
+        .body(articleService.findAllFollowingOrderByCreatedTimeDesc(page, size, jwt))
+
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getArticlesByAuthor(

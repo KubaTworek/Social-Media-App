@@ -1,11 +1,22 @@
 import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 @Injectable()
 export class ArticleService {
   articlesChanged = new Subject<Article[]>();
+  private isForYouActiveSubject = new BehaviorSubject<boolean>(true);
+  private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
+  isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
+  isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
+
+
   private articles: Article[] = [];
+
+  updateActiveStatus(isForYouActive: boolean, isFollowingActive: boolean) {
+    this.isForYouActiveSubject.next(isForYouActive);
+    this.isFollowingActiveSubject.next(isFollowingActive);
+  }
 
   setArticlesAndNotify(articles: Article[]): void {
     this.articles = articles;

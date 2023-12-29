@@ -15,7 +15,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   keyword: string = '';
   private keywordSubscription: Subscription = new Subscription();
   private articlesSubscription: Subscription = new Subscription();
-  private currentPage = 0;
+  private activeStatusSubscription: Subscription = new Subscription();
+  private currentForYouPage = 0;
+  private currentFollowingPage = 0;
+  isForYouActive = true;
+  isFollowingActive = false;
 
   constructor(
     private dataStorageService: DataStorageService,
@@ -38,6 +42,16 @@ export class ArticleListComponent implements OnInit, OnDestroy {
           this.articles = articles;
         }
       );
+
+    this.activeStatusSubscription = this.articleService.isForYouActive$
+      .subscribe((isForYouActive: boolean) => {
+        this.isForYouActive = isForYouActive;
+      });
+
+    this.activeStatusSubscription = this.articleService.isFollowingActive$
+      .subscribe((isFollowingActive: boolean) => {
+        this.isFollowingActive = isFollowingActive;
+      });
   }
 
   ngOnDestroy(): void {
@@ -46,15 +60,31 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   loadMoreArticles() {
-    this.currentPage++;
-    this.dataStorageService.fetchArticles(this.currentPage, 5).subscribe(
-      (newArticles: Article[]) => {
-        this.articles.push(...newArticles);
-        this.articleService.setArticles(this.articles)
-      },
-      (error) => {
-        console.error('Error fetching more articles:', error);
-      }
-    );
+    if (this.isForYouActive) {
+      this.currentFollowingPage = 0;
+      this.currentForYouPage++;
+      this.dataStorageService.fetchArticles(this.currentForYouPage, 5).subscribe(
+        (newArticles: Article[]) => {
+          this.articles.push(...newArticles);
+          this.articleService.setArticles(this.articles)
+        },
+        (error) => {
+          console.error('Error fetching more articles:', error);
+        }
+      );
+    }
+    if (this.isFollowingActive) {
+      this.currentForYouPage = 0;
+      this.currentFollowingPage++;
+      this.dataStorageService.fetchFollowingArticles(this.currentFollowingPage, 5).subscribe(
+        (newArticles: Article[]) => {
+          this.articles.push(...newArticles);
+          this.articleService.setArticles(this.articles)
+        },
+        (error) => {
+          console.error('Error fetching more articles:', error);
+        }
+      );
+    }
   }
 }

@@ -1,2 +1,6 @@
 <article-post></article-post>
+<div class="button-container">
+  <a class="for-you-button" (click)="getAllArticles()" [class.active]="isForYouActive">For You</a>
+  <a class="following-button" (click)="getFollowedArticles()" [class.active]="isFollowingActive">Following</a>
+</div>
 <article-list></article-list>

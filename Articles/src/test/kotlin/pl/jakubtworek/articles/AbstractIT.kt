@@ -61,6 +61,19 @@ abstract class AbstractIT {
             CompletableFuture.completedFuture(Mockito.mock<SendResult<String, String>>())
         }.`when`(kafkaLikeService).sendLikeMessage(likeMessage)
 
+        val articles = webTestClient.get().uri("/api/?page=0&size=50")
+            .header("Authorization", "admin-jwt")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(ArticleResponse::class.java)
+
+        val articlesId = articles.returnResult().responseBody?.map { it.id }
+
+        articlesId?.forEach { id ->
+            deleteArticleByArticleId(id)
+        }
+
+
         val headers = HttpHeaders()
         headers.set("Authorization", "dummy-jwt")
 
@@ -73,7 +86,8 @@ abstract class AbstractIT {
 
     @AfterEach
     fun clean() {
-        val articles = webTestClient.get().uri("/api/")
+        val articles = webTestClient.get().uri("/api/?page=0&size=50")
+            .header("Authorization", "admin-jwt")
             .exchange()
             .expectStatus().isOk
             .expectBodyList(ArticleResponse::class.java)
@@ -103,6 +117,7 @@ abstract class AbstractIT {
 
     fun getArticles(expectedSize: Int) =
         webTestClient.get().uri("/api/")
+            .header("Authorization", "user-jwt")
             .exchange()
             .expectStatus().isOk
             .expectBodyList(ArticleResponse::class.java)

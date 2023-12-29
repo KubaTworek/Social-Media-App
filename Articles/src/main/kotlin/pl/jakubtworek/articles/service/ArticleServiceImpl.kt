@@ -40,6 +40,16 @@ class ArticleServiceImpl(
             .map { createResponse(it, userDetails.authorId) }
     }
 
+    override fun findAllFollowingOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse> {
+        logger.info("Finding following articles, page: $page, size: $size")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
+        val author = authorService.getAuthorById(userDetails.authorId)
+        val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt"))
+        return articleRepository.findAllByAuthorIdInOrderByCreateAt(author.following, pageRequest)
+            .content
+            .map { createResponse(it, userDetails.authorId) }
+    }
+
     override fun findAllByAuthorId(authorId: Int): List<ArticleDTO> {
         logger.info("Finding articles by author ID: $authorId")
         return articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)

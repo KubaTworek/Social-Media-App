@@ -53,6 +53,19 @@ export class DataStorageService {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/?page=${page}&size=${size}`;
     console.log(endpoint)
+
+    return this.http
+      .get<Article[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        map(this.mapArticleData)
+      );
+  }
+
+  fetchFollowingArticles(page: number, size: number) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/articles/api/following?page=${page}&size=${size}`;
+    console.log(endpoint)
     return this.http
       .get<Article[]>(endpoint, {headers})
       .pipe(
@@ -204,20 +217,20 @@ export class DataStorageService {
   }
 
   refreshToken() {
-    const headers =  new HttpHeaders({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': this.authorizationService.getRefreshToken()
-    });
+    const headers = this.createHeadersForRefresh()
     const endpoint = `${this.apiUrl}/auth/api/refresh-token`;
 
     return this.http.post<any>(endpoint, null, {headers})
       .pipe(
         catchError((error) => {
+          console.log('csc')
           return throwError(error);
         }),
-        tap(userData => this.authorizationService.handleLogin(userData))
-      );
+        tap(userData => {
+          this.authorizationService.handleRefresh(userData)
+        })
+      )
+      .subscribe();
   }
 
   register(request: RegisterRequest) {
@@ -257,6 +270,14 @@ export class DataStorageService {
         'Content-Type': 'application/json'
       });
     }
+  }
+
+  private createHeadersForRefresh(): HttpHeaders {
+    return new HttpHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': this.authorizationService.getRefreshToken()
+    });
   }
 
   private handleHttpError(error: HttpErrorResponse): Observable<never> {

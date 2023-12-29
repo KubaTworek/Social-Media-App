@@ -7,6 +7,7 @@ import pl.jakubtworek.common.model.ArticleDTO
 
 interface ArticleService {
     fun findAllOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse>
+    fun findAllFollowingOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse>
     fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
     fun findById(articleId: Int): ArticleDTO
     fun save(theArticle: ArticleRequest, jwt: String)
