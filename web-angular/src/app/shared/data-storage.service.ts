@@ -11,7 +11,9 @@ import {Notification} from "../notifications/dto/notification.type";
 import {RegisterRequest} from "../auth/shared/register-request.type";
 import {LoginRequest} from "../auth/shared/login-request.type";
 import {TranslateService} from "@ngx-translate/core";
-import {Author} from "../articles/dto/author.type";
+import {AuthorDto} from "../articles/dto/author.type";
+import {AuthorsService} from "../authors/service/authors.service";
+import {Author} from "../authors/dto/author.type";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -21,6 +23,7 @@ export class DataStorageService {
     private http: HttpClient,
     private articleService: ArticleService,
     private notificationService: NotificationService,
+    private authorsService: AuthorsService,
     private authorizationService: AuthorizationService,
     private translateService: TranslateService,
   ) {
@@ -31,7 +34,7 @@ export class DataStorageService {
     const endpoint = `${this.apiUrl}/authors/api/`;
     console.log(endpoint)
     return this.http
-      .get<Author[]>(endpoint, {headers})
+      .get<AuthorDto[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError)
       );
@@ -160,6 +163,38 @@ export class DataStorageService {
           const status: 'like' | 'dislike' = response?.status;
           this.articleService.likeOrDislikeArticle(articleId, status);
         })
+      )
+      .subscribe();
+  }
+
+  fetchFollowingAuthors(author: Author) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/authors/api/following/${author.id}`;
+
+    return this.http
+      .get<Author[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        map(authors => authors.map(author => ({
+          ...author
+        }))),
+        tap(authors => this.authorsService.setAuthors(authors, author, 'following'))
+      )
+      .subscribe();
+  }
+
+  fetchFollowersAuthors(author: Author) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/authors/api/followers/${author.id}`;
+
+    return this.http
+      .get<Author[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        map(authors => authors.map(author => ({
+          ...author
+        }))),
+        tap(authors => this.authorsService.setAuthors(authors, author, 'followers'))
       )
       .subscribe();
   }

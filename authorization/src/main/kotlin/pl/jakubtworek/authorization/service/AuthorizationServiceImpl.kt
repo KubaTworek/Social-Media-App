@@ -68,6 +68,7 @@ class AuthorizationServiceImpl(
 
         logger.info("User logged in successfully: $username")
         return LoginResponse(
+            id = author.id,
             username = username,
             firstName = author.firstName,
             lastName = author.lastName,
@@ -96,6 +97,7 @@ class AuthorizationServiceImpl(
 
         logger.info("Token was refreshed successfully for: $username")
         return LoginResponse(
+            id = author.id,
             username = username,
             firstName = author.firstName,
             lastName = author.lastName,

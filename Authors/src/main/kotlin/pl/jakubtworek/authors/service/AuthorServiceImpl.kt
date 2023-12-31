@@ -35,18 +35,16 @@ class AuthorServiceImpl(
             .also { logger.info("Successfully fetched all authors") }
     }
 
-    override fun findFollowing(jwt: String): List<AuthorDTO> {
+    override fun findFollowing(theId: Int): List<AuthorDTO> {
         logger.info("Fetching following authors")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
-        return authorRepository.findAllFollowing(userDetails.authorId)
+        return authorRepository.findAllFollowing(theId)
             .map { author -> mapAuthorToDTO(author) }
             .also { logger.info("Successfully fetched following authors") }
     }
 
-    override fun findFollowers(jwt: String): List<AuthorDTO> {
+    override fun findFollowers(theId: Int): List<AuthorDTO> {
         logger.info("Fetching followed authors")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
-        return authorRepository.findAllFollowers(userDetails.authorId)
+        return authorRepository.findAllFollowers(theId)
             .map { author -> mapAuthorToDTO(author) }
             .also { logger.info("Successfully fetched followed authors") }
     }

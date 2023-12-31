@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewEncapsulation} from "@angular/core";
 import {Notification} from "../../dto/notification.type";
 import {DataStorageService} from "../../../shared/data-storage.service";
-import {Author} from "../../../articles/dto/author.type";
+import {AuthorDto} from "../../../articles/dto/author.type";
 import {AuthorizationService} from "../../../auth/service/authorization.service";
 
 @Component({
@@ -12,7 +12,7 @@ import {AuthorizationService} from "../../../auth/service/authorization.service"
 })
 export class NotificationCardComponent implements OnInit {
   @Input() notification!: Notification;
-  authors: Author[] = [];
+  authors: AuthorDto[] = [];
   selectedAuthorId: string = '';
   authorsLoaded: boolean = false;
 

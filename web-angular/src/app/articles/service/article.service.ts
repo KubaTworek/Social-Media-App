@@ -6,8 +6,8 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 export class ArticleService {
   articlesChanged = new Subject<Article[]>();
   private isForYouActiveSubject = new BehaviorSubject<boolean>(true);
-  private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
+  private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
 
 

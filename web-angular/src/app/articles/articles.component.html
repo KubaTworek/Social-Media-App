@@ -1,6 +1,6 @@
 <article-post></article-post>
 <div class="button-container">
-  <a class="for-you-button" (click)="getAllArticles()" [class.active]="isForYouActive">For You</a>
-  <a class="following-button" (click)="getFollowedArticles()" [class.active]="isFollowingActive">Following</a>
+  <a (click)="getAllArticles()" [class.active]="isForYouActive" class="for-you-button">For You</a>
+  <a (click)="getFollowedArticles()" [class.active]="isFollowingActive" class="following-button">Following</a>
 </div>
 <article-list></article-list>

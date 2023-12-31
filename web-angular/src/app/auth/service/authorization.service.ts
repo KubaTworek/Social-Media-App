@@ -94,20 +94,6 @@ export class AuthorizationService {
     this.userSubject.next(userData);
   }
 
-  private getUserData(): UserData {
-    const userDataJson = sessionStorage.getItem("userData");
-    return userDataJson ? JSON.parse(userDataJson) : null;
-  }
-
-  private storeUserData(userData: UserData) {
-    console.log(userData)
-    sessionStorage.setItem('userData', JSON.stringify(userData));
-  }
-
-  private removeUserData() {
-    sessionStorage.removeItem('userData');
-  }
-
   isSessionExpired() {
     const userDataJson = this.getUserData();
     const logoutTime = userDataJson ? Number(userDataJson.tokenExpirationDate) : null;
@@ -120,5 +106,18 @@ export class AuthorizationService {
     const logoutTime = userDataJson ? Number(userDataJson.refreshTokenExpirationDate) : null;
 
     return logoutTime !== null && logoutTime <= new Date().getTime();
+  }
+
+  private getUserData(): UserData {
+    const userDataJson = sessionStorage.getItem("userData");
+    return userDataJson ? JSON.parse(userDataJson) : null;
+  }
+
+  private storeUserData(userData: UserData) {
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+  }
+
+  private removeUserData() {
+    sessionStorage.removeItem('userData');
   }
 }

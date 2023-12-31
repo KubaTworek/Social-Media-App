@@ -13,13 +13,13 @@ import {DataStorageService} from "../../shared/data-storage.service";
 export class ArticleListComponent implements OnInit, OnDestroy {
   articles: Article[] = [];
   keyword: string = '';
+  isForYouActive = true;
+  isFollowingActive = false;
   private keywordSubscription: Subscription = new Subscription();
   private articlesSubscription: Subscription = new Subscription();
   private activeStatusSubscription: Subscription = new Subscription();
   private currentForYouPage = 0;
   private currentFollowingPage = 0;
-  isForYouActive = true;
-  isFollowingActive = false;
 
   constructor(
     private dataStorageService: DataStorageService,

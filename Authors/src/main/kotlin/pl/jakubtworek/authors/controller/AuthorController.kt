@@ -22,19 +22,19 @@ class AuthorController(
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
         .body(authorService.findAll(jwt))
 
-    @GetMapping("/following", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/following/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorsFollowing(
-        @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String
+        @PathVariable authorId: Int
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findFollowing(jwt))
+        .body(authorService.findFollowing(authorId))
 
-    @GetMapping("/followers", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/followers/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorsFollowed(
-        @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String
+        @PathVariable authorId: Int
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findFollowers(jwt))
+        .body(authorService.findFollowers(authorId))
 
     @GetMapping("/id/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

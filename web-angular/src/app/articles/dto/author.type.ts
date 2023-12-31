@@ -1,4 +1,4 @@
-export class Author {
+export class AuthorDto {
   public id: string;
   public username: string;
   public firstName: string;

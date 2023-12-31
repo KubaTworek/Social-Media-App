@@ -1,8 +1,8 @@
 import {LikesInfo} from "./likes-info.type";
-import {Author} from "./author.type";
+import {AuthorDto} from "./author.type";
 
 export class Article {
-  public author: Author;
+  public author: AuthorDto;
   public timestamp: Date;
   public text: string;
   public id: string;
@@ -12,7 +12,7 @@ export class Article {
   public numOfLikes: number;
 
   constructor(
-    author: Author,
+    author: AuthorDto,
     timestamp: Date,
     text: string,
     id: string,

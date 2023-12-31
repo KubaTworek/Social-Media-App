@@ -8,6 +8,10 @@
 <div *ngIf="isLoggedIn()" class="user-info-container">
   <p class="full-name">{{ user.firstName + " " + user.lastName }}</p>
   <p class="username">@{{ user.username }}</p>
-  <p class="follow">{{ 'FOLLOWING' | translate }}: {{ user.following }}</p>
-  <p class="follow">{{ 'FOLLOWERS' | translate }}: {{ user.followers }}</p>
+  <p (click)="refreshData('following', user)" [routerLink]="['/authors/following']" class="follow">
+    {{ 'FOLLOWING' | translate }}: {{ user.following }}
+  </p>
+  <p (click)="refreshData('followers', user)" [routerLink]="['/authors/followers']" class="follow">
+    {{ 'FOLLOWERS' | translate }}: {{ user.followers }}
+  </p>
 </div>

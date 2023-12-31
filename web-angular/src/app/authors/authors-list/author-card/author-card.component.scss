@@ -1,0 +1,34 @@
+// author-card.component.scss
+@import '../../../../colors.scss';
+
+.author-card {
+  background-color: $twitter-black;
+  border: 1px solid #444;
+  box-sizing: border-box;
+  color: $twitter-white;
+  display: block;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  &:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid #444;
+  }
+
+  .full-name {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  .username {
+    font-size: 1.1rem;
+    color: $twitter-dark-gray;
+    margin: 0.2rem 0 0.8rem;
+  }
+
+  .follow {
+    font-size: 0.9rem;
+    margin: 0.1rem 0;
+  }
+}

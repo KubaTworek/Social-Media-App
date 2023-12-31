@@ -16,7 +16,7 @@ export class AppComponent {
     private translate: TranslateService,
     private authorizationService: AuthorizationService,
     private dataStorageService: DataStorageService,
-    ) {
+  ) {
     this.translate.use(this.currentLanguage);
     this.setupInteractionsListener();
   }
@@ -33,7 +33,7 @@ export class AppComponent {
   private setupInteractionsListener() {
     document.addEventListener("mousemove", () => {
       if (this.authorizationService.isSessionExpired()) {
-        if(this.authorizationService.isRefreshTokenExpired()) {
+        if (this.authorizationService.isRefreshTokenExpired()) {
           this.authorizationService.logout();
         } else {
           this.dataStorageService.refreshToken();
