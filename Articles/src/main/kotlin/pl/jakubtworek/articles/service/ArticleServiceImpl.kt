@@ -11,6 +11,7 @@ import pl.jakubtworek.articles.entity.Like
 import pl.jakubtworek.articles.exception.ArticleNotFoundException
 import pl.jakubtworek.articles.external.AuthorApiService
 import pl.jakubtworek.articles.external.AuthorizationApiService
+import pl.jakubtworek.articles.kafka.message.ArticleMessage
 import pl.jakubtworek.articles.kafka.message.LikeMessage
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
 import pl.jakubtworek.articles.repository.ArticleRepository
@@ -67,7 +68,13 @@ class ArticleServiceImpl(
         logger.info("Saving article")
         val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
         val article = createArticle(theArticle, userDetails)
-        articleRepository.save(article)
+        val created = articleRepository.save(article)
+        val message = ArticleMessage(
+            timestamp = Timestamp(System.currentTimeMillis()),
+            articleId = created.id,
+            authorId = created.authorId
+        )
+        kafkaLikeService.sendArticleMessage(message)
         logger.info("Article saved successfully")
     }
 

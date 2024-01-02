@@ -9,6 +9,8 @@ import pl.jakubtworek.authors.entity.Follow
 import pl.jakubtworek.authors.exception.AuthorNotFoundException
 import pl.jakubtworek.authors.external.ArticleApiService
 import pl.jakubtworek.authors.external.AuthorizationApiService
+import pl.jakubtworek.authors.kafka.message.FollowMessage
+import pl.jakubtworek.authors.kafka.service.KafkaLikeService
 import pl.jakubtworek.authors.repository.AuthorRepository
 import pl.jakubtworek.authors.repository.FollowRepository
 import pl.jakubtworek.common.Constants.ROLE_ADMIN
@@ -22,7 +24,8 @@ class AuthorServiceImpl(
     private val authorRepository: AuthorRepository,
     private val followRepository: FollowRepository,
     private val articleApiService: ArticleApiService,
-    private val authorizationService: AuthorizationApiService
+    private val authorizationService: AuthorizationApiService,
+    private val kafkaLikeService: KafkaLikeService
 ) : AuthorService {
 
     private val logger: Logger = LoggerFactory.getLogger(AuthorServiceImpl::class.java)
@@ -91,6 +94,12 @@ class AuthorServiceImpl(
         )
 
         followRepository.save(follow)
+        val message = FollowMessage(
+            timestamp = Timestamp(System.currentTimeMillis()),
+            followerId = followerAuthor.id,
+            followedId = followingAuthor.id
+        )
+        kafkaLikeService.sendFollowMessage(message)
 
         logger.info(
             "Successfully created follow relationship. Follower: {}, Following: {}",
@@ -117,13 +126,17 @@ class AuthorServiceImpl(
     }
 
     private fun validateFollowRelationshipNotExist(follower: Author, following: Author) {
-        if (hasFollowRelationship(follower, following) || hasFollowRelationship(following, follower)) {
+        if (isFollow(follower, following) || isBeingFollowed(following, follower)) {
             throw IllegalStateException("Follow relationship already exists!")
         }
     }
 
-    private fun hasFollowRelationship(author1: Author, author2: Author): Boolean {
-        return author1.following.any { it.follower == author1 && it.following == author2 }
+    private fun isFollow(follower: Author, followed: Author): Boolean {
+        return follower.following.any { it.following == followed }
+    }
+
+    private fun isBeingFollowed(follower: Author, followed: Author): Boolean {
+        return followed.followedBy.any { it.follower == follower }
     }
 
     private fun createAuthor(authorRequest: AuthorRequest): Author = Author(

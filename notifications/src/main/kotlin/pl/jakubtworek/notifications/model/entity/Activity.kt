@@ -5,15 +5,15 @@ import org.hibernate.Hibernate
 import java.sql.Timestamp
 
 @Entity
-@Table(name = "NOTIFICATIONS")
-data class Notification(
+@Table(name = "ACTIVITIES")
+data class Activity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "NOTIFICATION_ID")
+    @Column(name = "ACTIVITY_ID")
     val id: Int,
 
-    @Column(name = "ARTICLE_ID")
-    val articleId: Int,
+    @Column(name = "TARGET_ID")
+    val targetId: Int,
 
     @Column(name = "AUTHOR_ID")
     var authorId: Int,
@@ -35,7 +35,7 @@ data class Notification(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Notification
+        other as Activity
 
         return id == other.id
     }
@@ -43,6 +43,6 @@ data class Notification(
     override fun hashCode(): Int = id.hashCode()
 
     override fun toString(): String {
-        return "Notification(id=$id, articleId=$articleId, authorId=$authorId, createAt=$createAt, type='$type')"
+        return "Notification(id=$id, articleId=$targetId, authorId=$authorId, createAt=$createAt, type='$type')"
     }
 }
