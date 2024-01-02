@@ -6,7 +6,7 @@
   <button (click)="logout()" *ngIf="isLoggedIn()" id="logout-button">🚪 {{ 'LOGOUT' | translate }}</button>
 </div>
 <div *ngIf="isLoggedIn()" class="user-info-container">
-  <p class="full-name">{{ user.firstName + " " + user.lastName }}</p>
+  <p [routerLink]="['/authors/', user.id]" class="full-name">{{ user.firstName + " " + user.lastName }}</p>
   <p class="username">@{{ user.username }}</p>
   <p (click)="refreshData('following', user)" [routerLink]="['/authors/following']" class="follow">
     {{ 'FOLLOWING' | translate }}: {{ user.following }}

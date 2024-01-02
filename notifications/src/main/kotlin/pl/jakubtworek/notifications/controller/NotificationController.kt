@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pl.jakubtworek.common.Constants.AUTHORIZATION_HEADER
 import pl.jakubtworek.notifications.controller.dto.ActivityResponse
+import pl.jakubtworek.notifications.controller.dto.AuthorWithActivity
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 import pl.jakubtworek.notifications.service.NotificationService
 
@@ -30,7 +31,7 @@ class NotificationController(
     @GetMapping("/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getAllActivitiesByUser(
         @PathVariable authorId: Int
-    ): ResponseEntity<List<ActivityResponse>> = ResponseEntity.status(HttpStatus.OK)
+    ): ResponseEntity<AuthorWithActivity> = ResponseEntity.status(HttpStatus.OK)
         .body(notificationService.findAllAuthorActivities(authorId))
 
     @PutMapping("/{notificationId}/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])

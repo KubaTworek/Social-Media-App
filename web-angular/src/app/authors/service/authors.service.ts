@@ -3,13 +3,16 @@ import {Subject} from 'rxjs';
 import {Author} from '../dto/author.type';
 import {AuthorizationService} from '../../auth/service/authorization.service';
 import {TranslateService} from '@ngx-translate/core';
+import {AuthorWithActivities} from "../dto/author-with-activities.type";
 
 @Injectable()
 export class AuthorsService {
 
   authorsChanged = new Subject<Author[]>();
   messageChanged = new Subject<string>();
+  activityChanged = new Subject<AuthorWithActivities>();
   private authors: Author[] = [];
+  private author: AuthorWithActivities = new AuthorWithActivities("", "", "", "", [], [], []);
   private message: string = "";
 
   constructor(
@@ -25,8 +28,17 @@ export class AuthorsService {
     this.notifyChanges();
   }
 
+  setAuthorWithActivities(author: AuthorWithActivities) {
+    this.author = author;
+    this.notifyChangesActivities();
+  }
+
   getAuthors(): Author[] {
     return [...this.authors];
+  }
+
+  getAuthorWithActivities(): AuthorWithActivities {
+    return this.author;
   }
 
   getMessage(): string {
@@ -66,5 +78,9 @@ export class AuthorsService {
   private notifyChanges() {
     this.authorsChanged.next([...this.authors]);
     this.messageChanged.next(this.message);
+  }
+
+  private notifyChangesActivities() {
+    this.activityChanged.next(this.author);
   }
 }

@@ -1,14 +1,12 @@
-// notification-card.component.scss
-@import '../../../../colors.scss';
+@import '../../../colors.scss';
 
-.notification-card {
+.activity-card {
   background-color: $twitter-black;
   border: 1px solid #444;
   box-sizing: border-box;
   color: $twitter-white;
   display: block;
   padding: 0 0.8rem;
-  margin-bottom: 1rem;
   overflow: hidden;
 
   &:last-child {
@@ -22,6 +20,11 @@
 
   &__name {
     font-weight: 700;
+    text-align: left;
+  }
+
+  &__target-name {
+    font-weight: bold;
     text-align: left;
   }
 

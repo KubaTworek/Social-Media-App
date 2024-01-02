@@ -22,8 +22,9 @@ export class ArticleCardComponent {
 
     const isLikeButton = clickedElement.classList.contains('article-card__like-button');
     const isFollowButton = clickedElement.classList.contains('article-card__follow-button');
+    const isNameButton = clickedElement.classList.contains('article-card__author-name');
 
-    if (!isLikeButton && !isFollowButton) {
+    if (!isLikeButton && !isFollowButton && !isNameButton) {
       this.articleDetailsComponent.open();
     }
   }

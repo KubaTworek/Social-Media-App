@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.coyote.http11.Constants.a
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 import pl.jakubtworek.notifications.controller.dto.ActivityResponse
 import pl.jakubtworek.common.Constants.ROLE_ADMIN
 import pl.jakubtworek.common.Constants.ROLE_USER
+import pl.jakubtworek.notifications.controller.dto.AuthorWithActivity
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 import pl.jakubtworek.notifications.exception.NotificationBadRequestException
 import pl.jakubtworek.notifications.external.ArticleApiService
@@ -40,10 +42,21 @@ class NotificationServiceImpl(
             .map { mapToNotificationResponse(it) }
     }
 
-    override fun findAllAuthorActivities(authorId: Int): List<ActivityResponse> {
+    override fun findAllAuthorActivities(authorId: Int): AuthorWithActivity {
         logger.info("Finding activities for author with ID: $authorId")
-        return notificationRepository.findAllByAuthorIdOrderByCreateAtDesc(authorId)
+        val author = authorService.getAuthorById(authorId)
+        val activities = notificationRepository.findAllByAuthorIdOrderByCreateAtDesc(authorId)
             .map { mapToActivityResponse(it) }
+            .toList()
+        return AuthorWithActivity(
+            id = author.id,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            username = author.username,
+            following = author.following,
+            followers = author.followers,
+            activities = activities
+        )
     }
 
     override fun findAllNotificationsByUser(jwt: String): List<NotificationResponse> {

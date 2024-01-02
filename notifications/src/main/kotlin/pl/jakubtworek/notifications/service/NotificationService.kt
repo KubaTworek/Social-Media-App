@@ -1,11 +1,12 @@
 package pl.jakubtworek.notifications.service
 
 import pl.jakubtworek.notifications.controller.dto.ActivityResponse
+import pl.jakubtworek.notifications.controller.dto.AuthorWithActivity
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
 
 interface NotificationService {
     fun findAllNotifications(jwt: String): List<NotificationResponse>
-    fun findAllAuthorActivities(authorId: Int): List<ActivityResponse>
+    fun findAllAuthorActivities(authorId: Int): AuthorWithActivity
     fun findAllNotificationsByUser(jwt: String): List<NotificationResponse>
     fun update(jwt: String, notificationId: Int, authorId: Int)
     fun processLikeMessage(message: String)

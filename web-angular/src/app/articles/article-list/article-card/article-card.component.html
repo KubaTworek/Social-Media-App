@@ -1,6 +1,6 @@
 <article (click)="openDetails($event)" class="article-card">
   <div class="article-card__header">
-    <p class="article-card__author-name">
+    <p [routerLink]="['/authors/', article.author.id]" class="article-card__author-name">
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>

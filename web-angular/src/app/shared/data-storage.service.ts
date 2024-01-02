@@ -14,6 +14,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {AuthorDto} from "../articles/dto/author.type";
 import {AuthorsService} from "../authors/service/authors.service";
 import {Author} from "../authors/dto/author.type";
+import {AuthorWithActivities} from "../authors/dto/author-with-activities.type";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -195,6 +196,19 @@ export class DataStorageService {
           ...author
         }))),
         tap(authors => this.authorsService.setAuthors(authors, author, 'followers'))
+      )
+      .subscribe();
+  }
+
+  fetchAuthorActivities(authorId: string) {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/notifications/api/${authorId}`;
+
+    return this.http
+      .get<AuthorWithActivities>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(author => this.authorsService.setAuthorWithActivities(author))
       )
       .subscribe();
   }
