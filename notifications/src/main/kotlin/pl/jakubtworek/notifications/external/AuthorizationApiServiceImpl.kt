@@ -1,7 +1,6 @@
 package pl.jakubtworek.notifications.external
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,7 +16,7 @@ class AuthorizationApiServiceImpl(
     private val objectMapper: ObjectMapper
 ) : AuthorizationApiService {
 
-    private val logger: Logger = LoggerFactory.getLogger(AuthorizationApiServiceImpl::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun getUserDetailsAndValidate(jwt: String, vararg roles: String): UserDetailsDTO {
         logger.info("Getting user details for JWT: $jwt")

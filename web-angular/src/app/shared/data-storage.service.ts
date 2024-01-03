@@ -30,30 +30,26 @@ export class DataStorageService {
   ) {
   }
 
-  fetchAuthors() {
+  fetchAuthors(): Observable<AuthorDto[]> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/`;
     console.log(endpoint)
     return this.http
       .get<AuthorDto[]>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError)
-      );
+      .pipe(catchError(this.handleHttpError));
   }
 
-  updateNotification(notificationId: string, authorId: string) {
+  updateNotification(notificationId: string, authorId: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/${notificationId}/author/${authorId}`;
 
-    return this.http
+    this.http
       .put<void>(endpoint, null, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-      )
+      .pipe(catchError(this.handleHttpError))
       .subscribe();
   }
 
-  fetchArticles(page: number, size: number) {
+  fetchArticles(page: number, size: number): Observable<Article[]> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/?page=${page}&size=${size}`;
     console.log(endpoint)
@@ -66,7 +62,7 @@ export class DataStorageService {
       );
   }
 
-  fetchFollowingArticles(page: number, size: number) {
+  fetchFollowingArticles(page: number, size: number): Observable<Article[]> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/following?page=${page}&size=${size}`;
     console.log(endpoint)
@@ -78,11 +74,11 @@ export class DataStorageService {
       );
   }
 
-  updateArticle(id: string, request: ArticleRequest) {
+  updateArticle(id: string, request: ArticleRequest): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/${id}`;
     console.log(request)
-    return this.http
+    this.http
       .put<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -91,11 +87,11 @@ export class DataStorageService {
       .subscribe();
   }
 
-  followAuthor(id: string) {
+  followAuthor(id: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/follow/${id}`;
 
-    return this.http
+    this.http
       .put<void>(endpoint, null, {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -107,11 +103,11 @@ export class DataStorageService {
       .subscribe();
   }
 
-  unfollowAuthor(id: string) {
+  unfollowAuthor(id: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/unfollow/${id}`;
 
-    return this.http
+    this.http
       .put<void>(endpoint, null, {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -123,11 +119,11 @@ export class DataStorageService {
       .subscribe();
   }
 
-  storeArticle(request: ArticleRequest) {
+  storeArticle(request: ArticleRequest): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/`;
 
-    return this.http
+    this.http
       .post<void>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -139,11 +135,11 @@ export class DataStorageService {
       .subscribe();
   }
 
-  deleteArticle(articleId: string) {
+  deleteArticle(articleId: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/${articleId}`;
 
-    return this.http
+    this.http
       .delete<void>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -152,11 +148,11 @@ export class DataStorageService {
       .subscribe();
   }
 
-  likeArticle(articleId: string) {
+  likeArticle(articleId: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
 
-    return this.http
+    this.http
       .post<any>(endpoint, null, {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -168,43 +164,39 @@ export class DataStorageService {
       .subscribe();
   }
 
-  fetchFollowingAuthors(author: Author) {
+  fetchFollowingAuthors(author: Author): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/following/${author.id}`;
 
-    return this.http
+    this.http
       .get<Author[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(authors => authors.map(author => ({
-          ...author
-        }))),
+        map(authors => authors.map(author => ({...author}))),
         tap(authors => this.authorsService.setAuthors(authors, author, 'following'))
       )
       .subscribe();
   }
 
-  fetchFollowersAuthors(author: Author) {
+  fetchFollowersAuthors(author: Author): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/followers/${author.id}`;
 
-    return this.http
+    this.http
       .get<Author[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(authors => authors.map(author => ({
-          ...author
-        }))),
+        map(authors => authors.map(author => ({...author}))),
         tap(authors => this.authorsService.setAuthors(authors, author, 'followers'))
       )
       .subscribe();
   }
 
-  fetchAuthorActivities(authorId: string) {
+  fetchAuthorActivities(authorId: string): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/${authorId}`;
 
-    return this.http
+    this.http
       .get<AuthorWithActivities>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
@@ -213,37 +205,35 @@ export class DataStorageService {
       .subscribe();
   }
 
-  fetchNotifications() {
+  fetchNotifications(): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/`;
 
-    return this.http
+    this.http
       .get<Notification[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(notifications => notifications.map(notification => ({
-          ...notification
-        }))),
+        map(notifications => notifications.map(notification => ({...notification}))),
         tap(notifications => this.notificationService.setNotifications(notifications))
-      );
+      )
+      .subscribe();
   }
 
-  fetchNotificationsAdmin() {
+  fetchNotificationsAdmin(): void {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/notifications/api/admin`;
 
-    return this.http
+    this.http
       .get<Notification[]>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
-        map(notifications => notifications.map(notification => ({
-          ...notification
-        }))),
+        map(notifications => notifications.map(notification => ({...notification}))),
         tap(notifications => this.notificationService.setNotifications(notifications))
-      );
+      )
+      .subscribe();
   }
 
-  login(request: LoginRequest) {
+  login(request: LoginRequest): Observable<any> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/auth/api/login`;
 
@@ -265,11 +255,11 @@ export class DataStorageService {
       );
   }
 
-  refreshToken() {
+  refreshToken(): void {
     const headers = this.createHeadersForRefresh()
     const endpoint = `${this.apiUrl}/auth/api/refresh-token`;
 
-    return this.http.post<any>(endpoint, null, {headers})
+    this.http.post<any>(endpoint, null, {headers})
       .pipe(
         catchError((error) => {
           console.log('csc')
@@ -282,7 +272,7 @@ export class DataStorageService {
       .subscribe();
   }
 
-  register(request: RegisterRequest) {
+  register(request: RegisterRequest): Observable<void> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/auth/api/register`;
 
@@ -307,25 +297,20 @@ export class DataStorageService {
   private createHeaders(): HttpHeaders {
     const token = this.authorizationService.getToken();
 
-    if (token) {
-      return new HttpHeaders({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': token
-      });
-    } else {
-      return new HttpHeaders({
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      });
-    }
-  }
-
-  private createHeadersForRefresh(): HttpHeaders {
     return new HttpHeaders({
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'Authorization': this.authorizationService.getRefreshToken()
+      'Authorization': token || ''
+    });
+  }
+
+  private createHeadersForRefresh(): HttpHeaders {
+    const token = this.authorizationService.getRefreshToken()
+
+    return new HttpHeaders({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': token || ''
     });
   }
 
@@ -334,7 +319,7 @@ export class DataStorageService {
     return throwError(error);
   }
 
-  private mapArticleData = (articles: Article[]) =>
+  private mapArticleData = (articles: Article[]): Article[] =>
     articles.map(article => ({
       ...article,
       elapsed: this.getTimeElapsed(article.timestamp),

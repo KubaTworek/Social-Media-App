@@ -1,7 +1,6 @@
 package pl.jakubtworek.authorization.external
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,7 +16,7 @@ class AuthorApiServiceImpl(
     private val objectMapper: ObjectMapper
 ) : AuthorApiService {
 
-    private val logger: Logger = LoggerFactory.getLogger(AuthorApiServiceImpl::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun getAuthorByUsername(username: String): AuthorDTO {
         logger.info("Getting author by username: $username")

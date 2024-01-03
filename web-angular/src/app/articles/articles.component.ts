@@ -3,7 +3,6 @@ import {DataStorageService} from "../shared/data-storage.service";
 import {ArticleService} from "./service/article.service";
 import {Article} from "./dto/article.type";
 
-
 @Component({
   selector: 'articles',
   templateUrl: './articles.component.html',
@@ -23,7 +22,7 @@ export class ArticlesComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getAllArticles() {
+  getAllArticles(): void {
     this.articlesService.updateActiveStatus(true, false);
     this.isForYouActive = true;
     this.isFollowingActive = false;
@@ -40,7 +39,7 @@ export class ArticlesComponent implements OnInit {
     );
   }
 
-  getFollowedArticles() {
+  getFollowedArticles(): void {
     this.articlesService.updateActiveStatus(false, true);
     this.isForYouActive = false;
     this.isFollowingActive = true;

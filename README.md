@@ -1,7 +1,8 @@
 # Articles App
 
 > This full-stack social media application allows users to create accounts, connect with friends, post updates, and
-> comment on each other's posts. The application includes user authentication and authorization, as well as a database to
+> comment on each other's posts. The application includes user authentication and authorization, as well as a database
+> to
 > store user and post data. It also allows users to search for other users or posts, and provides notifications for new
 > posts or comments. Overall, this social media application provides a platform for users to interact and share their
 > thoughts with others in a simple and intuitive way.

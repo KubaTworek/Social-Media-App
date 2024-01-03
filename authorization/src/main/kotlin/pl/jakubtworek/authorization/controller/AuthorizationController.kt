@@ -20,22 +20,22 @@ class AuthorizationController(
     @PostMapping("/register", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun registerUser(
-        @RequestBody registerRequest: RegisterRequest
-    ) = authorizationService.registerUser(registerRequest)
+        @RequestBody request: RegisterRequest
+    ) = authorizationService.registerUser(request)
 
     @PostMapping("/login", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun loginUser(
-        @RequestBody loginRequest: LoginRequest
+        @RequestBody request: LoginRequest
     ): ResponseEntity<LoginResponse> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorizationService.loginUser(loginRequest))
+        .body(authorizationService.loginUser(request))
 
     @PostMapping("/refresh-token", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun refreshToken(
-        @RequestHeader(AUTHORIZATION_HEADER) refreshToken: String
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String
     ): ResponseEntity<LoginResponse> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorizationService.refreshAccessToken(refreshToken))
+        .body(authorizationService.refreshAccessToken(jwt))
 
     @GetMapping("/user-info", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

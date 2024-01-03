@@ -6,7 +6,7 @@
 
   <div *ngIf="isAdmin()">
     <label for="authorDropdown">Select Author:</label>
-    <select (click)="loadAuthors()" [(ngModel)]="selectedAuthorId" id="authorDropdown">
+    <select (ngModelChange)="loadAuthors()" [(ngModel)]="selectedAuthorId" id="authorDropdown">
       <option *ngFor="let author of authors" [value]="author.id">{{ author.firstName + ' ' + author.lastName }}</option>
     </select>
 

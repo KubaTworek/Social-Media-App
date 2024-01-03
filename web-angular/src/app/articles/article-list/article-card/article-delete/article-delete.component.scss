@@ -18,44 +18,44 @@
   color: $twitter-white;
   padding: 20px;
   border-radius: 1rem;
-}
 
-.article-delete__modal h4 {
-  font-size: 1.4rem;
-  margin: 0 0 1rem 0;
-}
+  h4 {
+    font-size: 1.4rem;
+    margin: 0 0 1rem 0;
+  }
 
-.article-delete__actions {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-}
+  .article-delete__actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
 
-.article-delete__btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
+  .article-delete__btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
 
-.article-delete__btn-confirm {
-  background-color: $twitter-red;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: $twitter-white;
-}
+  .article-delete__btn-confirm {
+    background-color: $twitter-red;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: $twitter-white;
 
-.article-delete__btn-cancel {
-  background-color: $twitter-black;
-  color: $twitter-white;
-  font-size: 1rem;
-  border: 1px solid $twitter-dark-gray;
-}
+    &:hover {
+      background-color: $twitter-red-hover;
+    }
+  }
 
-.article-delete__btn-confirm:hover {
-  background-color: $twitter-red-hover;
+  .article-delete__btn-cancel {
+    background-color: $twitter-black;
+    color: $twitter-white;
+    font-size: 1rem;
+    border: 1px solid $twitter-dark-gray;
+  }
 }
 
 .overlay-delete {

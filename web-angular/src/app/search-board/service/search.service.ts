@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SearchService {
   private articleListUpdatedSource = new BehaviorSubject<string>('');
   articleListUpdated$ = this.articleListUpdatedSource.asObservable();

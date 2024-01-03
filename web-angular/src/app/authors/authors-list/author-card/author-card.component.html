@@ -1,8 +1,8 @@
 <article class="author-card">
   <p class="full-name">{{ author.firstName + " " + author.lastName }}</p>
   <p class="username">@{{ author.username }}</p>
-  <p (click)="refreshData('following', author)" [routerLink]="['/authors/following']"
+  <p (click)="refreshData('following')" [routerLink]="['/authors/following']"
      class="follow">{{ 'FOLLOWING' | translate }}: {{ author.following.length }}</p>
-  <p (click)="refreshData('followers', author)" [routerLink]="['/authors/followers']"
+  <p (click)="refreshData('followers')" [routerLink]="['/authors/followers']"
      class="follow">{{ 'FOLLOWERS' | translate }}: {{ author.followers.length }}</p>
 </article>

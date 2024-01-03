@@ -1,7 +1,7 @@
 <author-card
   [author]="author"
 ></author-card>
-<article class="activity-card" *ngFor="let activity of author.activities">
+<article *ngFor="let activity of author.activities" class="activity-card">
   <p class="activity-card__message">
     <span class="activity-card__name">{{ activity.name }}</span>
     <span class="activity-card__message"> {{ activity.message }} </span>

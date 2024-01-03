@@ -41,14 +41,13 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  &:hover {
+    background-color: $twitter-blue-hover;
+  }
 }
 
-#language-button:hover {
-  background-color: $twitter-blue-hover;
-}
-
-/* Style dla większych ekranów (desktop) */
-
+/* Style for larger screens (desktop) */
 @media screen and (min-width: 860px) {
   #background {
     align-items: flex-start;

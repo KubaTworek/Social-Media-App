@@ -17,62 +17,62 @@ class AuthorController(
 
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun getAuthors(
+    fun getAllAuthors(
         @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findAll(jwt))
+        .body(authorService.getAllAuthors(jwt))
 
     @GetMapping("/following/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorsFollowing(
         @PathVariable authorId: Int
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findFollowing(authorId))
+        .body(authorService.getFollowing(authorId))
 
     @GetMapping("/followers/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorsFollowed(
         @PathVariable authorId: Int
     ): ResponseEntity<List<AuthorDTO>> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findFollowers(authorId))
+        .body(authorService.getFollowers(authorId))
 
     @GetMapping("/id/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorById(
         @PathVariable authorId: Int
     ): ResponseEntity<AuthorDTO> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findById(authorId))
+        .body(authorService.getAuthorById(authorId))
 
     @GetMapping("/username/{username}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getAuthorByUsername(
         @PathVariable username: String
     ): ResponseEntity<AuthorDTO> = ResponseEntity.status(HttpStatus.OK)
-        .body(authorService.findByUsername(username))
+        .body(authorService.getAuthorByUsername(username))
 
     @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun saveAuthor(
-        @RequestBody theAuthor: AuthorRequest
-    ) = authorService.save(theAuthor)
+        @RequestBody request: AuthorRequest
+    ) = authorService.saveAuthor(request)
 
     @PutMapping("/follow/{followingId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    fun follow(
+    fun followAuthor(
         @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String,
         @PathVariable followingId: Int
-    ) = authorService.follow(followingId, jwt)
+    ) = authorService.followAuthor(followingId, jwt)
 
     @PutMapping("/unfollow/{followingId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
-    fun unfollow(
+    fun unfollowAuthor(
         @RequestHeader(Constants.AUTHORIZATION_HEADER) jwt: String,
         @PathVariable followingId: Int
-    ) = authorService.unfollow(followingId, jwt)
+    ) = authorService.unfollowAuthor(followingId, jwt)
 
     @DeleteMapping("/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun deleteAuthor(
+    fun deleteAuthorById(
         @PathVariable authorId: Int
-    ) = authorService.deleteById(authorId)
+    ) = authorService.deleteAuthorById(authorId)
 }

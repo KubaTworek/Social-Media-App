@@ -6,7 +6,9 @@ import {ArticleService} from "./article.service";
 import {Observable} from "rxjs";
 import {tap} from "rxjs/operators";
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+  providedIn: 'root'
+})
 export class ArticlesResolverService implements Resolve<Article[]> {
   constructor(
     private dataStorageService: DataStorageService,

@@ -1,11 +1,12 @@
 <div class="button-container">
   <button id="home-button" routerLink="/home">🏠 {{ 'HOME' | translate }}</button>
-  <button *ngIf="isLoggedIn()" id="notifications-button" routerLink="/notifications">
+  <button *ngIf="(isLoggedIn$ | async)" id="notifications-button" routerLink="/notifications">
     🔔 {{ 'NOTIFICATIONS' | translate }}</button>
-  <button *ngIf="isLoggedOut()" id="login-button" routerLink="/auth/login">🔐 {{ 'LOGIN' | translate }}</button>
-  <button (click)="logout()" *ngIf="isLoggedIn()" id="logout-button">🚪 {{ 'LOGOUT' | translate }}</button>
+  <button *ngIf="!(isLoggedIn$ | async)" id="login-button" routerLink="/auth/login">🔐 {{ 'LOGIN' | translate }}</button>
+  <button (click)="logout()" *ngIf="(isLoggedIn$ | async)" id="logout-button">🚪 {{ 'LOGOUT' | translate }}</button>
 </div>
-<div *ngIf="isLoggedIn()" class="user-info-container">
+
+<div *ngIf="(isLoggedIn$ | async)" class="user-info-container">
   <p [routerLink]="['/authors/', user.id]" class="full-name">{{ user.firstName + " " + user.lastName }}</p>
   <p class="username">@{{ user.username }}</p>
   <p (click)="refreshData('following', user)" [routerLink]="['/authors/following']" class="follow">

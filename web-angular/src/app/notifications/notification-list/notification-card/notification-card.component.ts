@@ -38,8 +38,7 @@ export class NotificationCardComponent implements OnInit {
   updateAuthor() {
     const selectedAuthor = this.authors.find(author => author.id == this.selectedAuthorId);
     if (selectedAuthor) {
-      const nameBox = document.querySelector('.notification-card__name') as HTMLTextAreaElement
-      nameBox!.innerText = selectedAuthor.firstName + ' ' + selectedAuthor.lastName;
+      this.notification.name = `${selectedAuthor.firstName} ${selectedAuthor.lastName}`;
     }
 
     this.dataStorageService.updateNotification(this.notification.id, this.selectedAuthorId);
@@ -47,7 +46,6 @@ export class NotificationCardComponent implements OnInit {
 
   isAdmin(): boolean {
     const role = this.authorizationService.getRole();
-
     return role == 'ROLE_ADMIN';
   }
 }

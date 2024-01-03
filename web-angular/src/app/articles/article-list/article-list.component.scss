@@ -10,9 +10,8 @@
   border-radius: 4px;
   margin-top: 20px;
   transition: background-color 0.3s ease;
-}
 
-.show-more-articles-btn:hover {
-  background-color: $twitter-blue-hover;
+  &:hover {
+    background-color: $twitter-blue-hover;
+  }
 }
-

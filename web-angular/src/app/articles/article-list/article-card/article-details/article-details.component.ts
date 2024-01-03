@@ -15,7 +15,7 @@ export class ArticleDetailsComponent {
 
   @ViewChild('modal') deleteModalRef!: ElementRef;
   @ViewChild('overlay') overlayModalRef!: ElementRef;
-  @Input() article!: Article
+  @Input() article!: Article;
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
   @Output() saved = new EventEmitter<void>();
 
@@ -28,7 +28,7 @@ export class ArticleDetailsComponent {
   ) {
   }
 
-  canModify() {
+  canModify(): boolean {
     const username = this.authorizationService.getUsername();
     const role = this.authorizationService.getRole();
 
@@ -47,7 +47,7 @@ export class ArticleDetailsComponent {
     this.articleDeleteComponent.open();
   }
 
-  openOptionsList() {
+  openOptionsList(): void {
     this.showOptions = !this.showOptions;
   }
 
@@ -60,21 +60,21 @@ export class ArticleDetailsComponent {
     overlayModal.style.display = 'none';
   }
 
-  save() {
+  save(): void {
     const textareaElement = document.querySelector(`#content-${this.article.id}`) as HTMLTextAreaElement;
 
     if (textareaElement) {
-      const request = new ArticleRequest(textareaElement.value)
-      this.dataStorage.updateArticle(this.article.id, request)
+      const request = new ArticleRequest(textareaElement.value);
+      this.dataStorage.updateArticle(this.article.id, request);
       this.close();
     }
   }
 
-  deleteArticle(articleId: string) {
+  deleteArticle(articleId: string): void {
     this.dataStorage.deleteArticle(articleId);
   }
 
-  likeArticle(articleId: string) {
+  likeArticle(articleId: string): void {
     if (this.isUser()) {
       this.dataStorage.likeArticle(articleId);
     }
@@ -82,7 +82,7 @@ export class ArticleDetailsComponent {
 
   showLikes(articleId: string): void {
     if (this.article.likes.users.length > 0) {
-      const userNames = this.article.likes.users.map((user: string) => `<div>${user}</div>`).join('');
+      const userNames = this.article.likes.users.map(user => `<div>${user}</div>`).join('');
       const tooltipContent = `<div class="article-details__like-tooltip-content">${userNames}</div>`;
       const tooltip = document.createElement('div');
       tooltip.classList.add('article-card__like-tooltip');
@@ -101,7 +101,7 @@ export class ArticleDetailsComponent {
   }
 
   onArticleDeleteConfirmed(articleId: string): void {
-    this.deleteArticle(articleId)
+    this.deleteArticle(articleId);
     this.articleDeleteComponent.close();
   }
 
@@ -111,7 +111,6 @@ export class ArticleDetailsComponent {
 
   private isUser(): boolean {
     const role = this.authorizationService.getRole();
-
     return role == 'ROLE_USER';
   }
 }

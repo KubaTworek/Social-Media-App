@@ -21,7 +21,7 @@ import {AuthorActivitiesResolverService} from "./service/author-activities-resol
     RouterModule.forChild([
       {path: 'following', component: AuthorsComponent},
       {path: 'followers', component: AuthorsComponent},
-      {path: ':id', component: AuthorActivitiesComponent, resolve: [AuthorActivitiesResolverService] }
+      {path: ':id', component: AuthorActivitiesComponent, resolve: [AuthorActivitiesResolverService]}
     ]),
     TranslateModule
   ]

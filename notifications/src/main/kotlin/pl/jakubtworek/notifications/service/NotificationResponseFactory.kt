@@ -8,8 +8,8 @@ import pl.jakubtworek.notifications.model.entity.Activity
 
 @Component
 class NotificationResponseFactory(
-    private val articleApiService: ArticleApiService,
-    private val authorApiService: AuthorApiService
+    private val articleService: ArticleApiService,
+    private val authorService: AuthorApiService
 ) {
     fun createResponse(activity: Activity): NotificationResponse {
         return when (activity.type) {
@@ -21,8 +21,8 @@ class NotificationResponseFactory(
     }
 
     private fun createLikeResponse(activity: Activity): NotificationResponse {
-        val article = articleApiService.getArticleById(activity.targetId)
-        val author = authorApiService.getAuthorById(activity.authorId)
+        val article = articleService.getArticleById(activity.targetId)
+        val author = authorService.getAuthorById(activity.authorId)
 
         val authorName = "${author.firstName} ${author.lastName}"
         val message = "liked your article"
@@ -30,8 +30,8 @@ class NotificationResponseFactory(
     }
 
     private fun createArticleResponse(activity: Activity): NotificationResponse {
-        val article = articleApiService.getArticleById(activity.targetId)
-        val author = authorApiService.getAuthorById(activity.authorId)
+        val article = articleService.getArticleById(activity.targetId)
+        val author = authorService.getAuthorById(activity.authorId)
 
         val authorName = "${author.firstName} ${author.lastName}"
         val message = "post an article"
@@ -39,7 +39,7 @@ class NotificationResponseFactory(
     }
 
     private fun createFollowResponse(activity: Activity): NotificationResponse {
-        val follower = authorApiService.getAuthorById(activity.authorId)
+        val follower = authorService.getAuthorById(activity.authorId)
 
         val authorName = "${follower.firstName} ${follower.lastName}"
         val message = "follows you"

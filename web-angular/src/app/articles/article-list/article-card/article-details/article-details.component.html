@@ -15,7 +15,7 @@
             (mouseleave)="hideLikes(article.id)"
             class="article-card__like-button"
             id="like-button-{{article.id}}">❤️</span>
-      <span class="article-card__likes" id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
+      <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
     <a (click)="close()" class="article-details__exit-button">❌</a>
     <a (click)="openOptionsList()" *ngIf="canModify()" class="article-details__more-button">⋯</a>

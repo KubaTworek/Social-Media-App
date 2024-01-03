@@ -1,7 +1,6 @@
 package pl.jakubtworek.authorization.service
 
 import jakarta.transaction.Transactional
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
@@ -16,6 +15,7 @@ import pl.jakubtworek.authorization.exception.UsernameAlreadyExistsException
 import pl.jakubtworek.authorization.exception.WrongCredentialsException
 import pl.jakubtworek.authorization.external.AuthorApiService
 import pl.jakubtworek.authorization.repository.UserRepository
+import pl.jakubtworek.common.model.AuthorDTO
 import pl.jakubtworek.common.model.AuthorRequest
 import pl.jakubtworek.common.model.UserDetailsDTO
 import java.time.Instant
@@ -28,48 +28,133 @@ class AuthorizationServiceImpl(
     private val passwordEncoder: BCryptPasswordEncoder
 ) : AuthorizationService {
 
-    private val logger: Logger = LoggerFactory.getLogger(AuthorizationServiceImpl::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun registerUser(registerRequest: RegisterRequest) {
-        logger.info("Starting user registration process")
-        val username = registerRequest.username
-        val password = registerRequest.password
-        val firstName = registerRequest.firstName
-        val lastName = registerRequest.lastName
-        val role = registerRequest.role
+    override fun registerUser(request: RegisterRequest) {
+        logger.info("Initiating user registration process")
+        validateUsernameAvailability(request.username)
 
-        validateUserWithThatUsernameDoesNotExist(username)
-
-        val hashedPassword = passwordEncoder.encode(password)
-        val newUser = buildUser(username, hashedPassword, role)
+        val hashedPassword = passwordEncoder.encode(request.password)
+        val newUser = from(
+            request = request,
+            password = hashedPassword
+        )
         userRepository.save(newUser)
-        val authorRequest = AuthorRequest(
-            firstName,
-            lastName,
-            username
+
+        val authorRequest = from(
+            request = request
         )
         authorApiService.createAuthor(authorRequest)
 
-        logger.info("User registered successfully: $username")
+        logger.info("User registered successfully: ${request.username}")
     }
 
-    override fun loginUser(loginRequest: LoginRequest): LoginResponse {
-        logger.info("Starting user login process")
-        val username = loginRequest.username
-        val password = loginRequest.password
-        val user = getUserByUsername(username)
-        validPasswords(password, user.password)
+    override fun loginUser(request: LoginRequest): LoginResponse {
+        logger.info("Initiating user login process")
+        val user = getUserByUsername(request.username)
+        validatePasswords(request.password, user.password)
+        val author = authorApiService.getAuthorByUsername(request.username)
 
-        val expirationTokenDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
-        val expirationRefreshTokenDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
-        val token = jwtService.buildJwt(user, expirationTokenDate)
-        val refreshToken = jwtService.buildJwt(user, expirationRefreshTokenDate)
+        val tokenExpirationDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
+        val refreshTokenExpirationDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
+        val token = jwtService.buildJwt(user, tokenExpirationDate)
+        val refreshToken = jwtService.buildJwt(user, refreshTokenExpirationDate)
+
+        logger.info("User logged in successfully: ${request.username}")
+        return createLoginResponse(
+            author = author,
+            user = user,
+            token = token,
+            refreshToken = refreshToken,
+            tokenExpirationDate = tokenExpirationDate,
+            refreshTokenExpirationDate = refreshTokenExpirationDate
+        )
+    }
+
+    override fun refreshAccessToken(jwt: String): LoginResponse {
+        logger.info("Initiating refresh token process")
+
+        val claims = jwtService.parseJwtClaims(jwt)
+        val username = claims["username"].toString()
+        val user = getUserByUsername(username)
         val author = authorApiService.getAuthorByUsername(username)
 
-        logger.info("User logged in successfully: $username")
-        return LoginResponse(
+        val tokenExpirationDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
+        val refreshTokenExpirationDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
+        val token = jwtService.buildJwt(user, tokenExpirationDate)
+        val refreshToken = jwtService.buildJwt(user, refreshTokenExpirationDate)
+
+        logger.info("Token refreshed successfully for: $username")
+        return createLoginResponse(
+            author = author,
+            user = user,
+            token = token,
+            refreshToken = refreshToken,
+            tokenExpirationDate = tokenExpirationDate,
+            refreshTokenExpirationDate = refreshTokenExpirationDate
+        )
+    }
+
+    override fun getUserDetails(jwt: String): UserDetailsDTO {
+        logger.info("Initiating get user details process")
+        val claims = jwtService.parseJwtClaims(jwt)
+        val username = claims["username"].toString()
+        val role = claims["role"].toString()
+        val author = authorApiService.getAuthorByUsername(username)
+
+        return createUserDetails(
+            author = author,
+            role = role
+        )
+    }
+
+    @Transactional
+    override fun deleteUser(jwt: String) {
+        logger.info("Initiating delete user process")
+        val user = getUserDetails(jwt)
+        userRepository.deleteByUsername(user.username)
+        authorApiService.deleteAuthorById(user.authorId)
+        logger.info("User deleted successfully: ${user.username}")
+    }
+
+    private fun getUserByUsername(username: String): User =
+        userRepository.findUserByUsername(username)
+            .orElseThrow { UserNotFoundException("User not found!") }
+
+    private fun from(request: RegisterRequest, password: String): User =
+        User(
+            username = request.username,
+            password = password,
+            role = request.role
+        )
+
+    private fun from(request: RegisterRequest): AuthorRequest =
+        AuthorRequest(
+            firstName = request.firstName,
+            lastName = request.lastName,
+            username = request.username
+        )
+
+    private fun createUserDetails(author: AuthorDTO, role: String): UserDetailsDTO =
+        UserDetailsDTO(
+            authorId = author.id,
+            firstName = author.firstName,
+            lastName = author.lastName,
+            username = author.username,
+            role = role
+        )
+
+    private fun createLoginResponse(
+        author: AuthorDTO,
+        user: User,
+        token: String,
+        refreshToken: String,
+        tokenExpirationDate: Long,
+        refreshTokenExpirationDate: Long
+    ): LoginResponse =
+        LoginResponse(
             id = author.id,
-            username = username,
+            username = user.username,
             firstName = author.firstName,
             lastName = author.lastName,
             following = author.following.size,
@@ -77,88 +162,19 @@ class AuthorizationServiceImpl(
             token = token,
             refreshToken = refreshToken,
             role = user.role,
-            tokenExpirationDate = expirationTokenDate,
-            refreshTokenExpirationDate = expirationRefreshTokenDate,
+            tokenExpirationDate = tokenExpirationDate,
+            refreshTokenExpirationDate = refreshTokenExpirationDate
         )
-    }
 
-    override fun refreshAccessToken(refreshToken: String): LoginResponse {
-        logger.info("Starting refresh token process")
-
-        val claims = jwtService.parseJwtClaims(refreshToken)
-        val username = claims["username"].toString()
-        val user = getUserByUsername(username)
-
-        val expirationTokenDate = Instant.now().toEpochMilli() + JWT_EXPIRE_TIME
-        val expirationRefreshTokenDate = Instant.now().toEpochMilli() + REFRESH_TOKEN_EXPIRE_TIME
-        val token = jwtService.buildJwt(user, expirationTokenDate)
-        val refresh = jwtService.buildJwt(user, expirationRefreshTokenDate)
-        val author = authorApiService.getAuthorByUsername(username)
-
-        logger.info("Token was refreshed successfully for: $username")
-        return LoginResponse(
-            id = author.id,
-            username = username,
-            firstName = author.firstName,
-            lastName = author.lastName,
-            following = author.following.size,
-            followers = author.followers.size,
-            token = token,
-            refreshToken = refresh,
-            role = user.role,
-            tokenExpirationDate = expirationTokenDate,
-            refreshTokenExpirationDate = expirationRefreshTokenDate,
-        )
-    }
-
-    override fun getUserDetails(jwt: String): UserDetailsDTO {
-        logger.info("Starting get user details process")
-        val claims = jwtService.parseJwtClaims(jwt)
-        val username = claims["username"].toString()
-        val role = claims["role"].toString()
-        val author = authorApiService.getAuthorByUsername(username)
-
-        return UserDetailsDTO(
-            authorId = author.id,
-            firstName = author.firstName,
-            lastName = author.lastName,
-            username = username,
-            role = role
-        )
-    }
-
-    @Transactional
-    override fun deleteUser(jwt: String) {
-        logger.info("Starting delete user process")
-        val user = getUserDetails(jwt)
-        userRepository.deleteByUsername(user.username)
-        authorApiService.deleteAuthorById(user.authorId)
-        logger.info("User deleted successfully: ${user.username}")
-    }
-
-    private fun buildUser(
-        username: String,
-        password: String,
-        role: String
-    ): User = User(
-        username,
-        password,
-        role
-    )
-
-    private fun validPasswords(passwordProvided: String, passwordRegistered: String) {
+    private fun validatePasswords(passwordProvided: String, passwordRegistered: String) {
         if (!passwordEncoder.matches(passwordProvided, passwordRegistered)) {
             throw WrongCredentialsException("Invalid password!")
         }
     }
 
-    private fun validateUserWithThatUsernameDoesNotExist(username: String) {
+    private fun validateUsernameAvailability(username: String) {
         if (userRepository.existsByUsername(username)) {
             throw UsernameAlreadyExistsException("User with this username already exists!")
         }
     }
-
-    private fun getUserByUsername(username: String): User =
-        userRepository.findUserByUsername(username)
-            .orElseThrow { UserNotFoundException("User not found!") }
 }

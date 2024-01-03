@@ -3,11 +3,11 @@ DROP TABLE IF EXISTS ACTIVITIES;
 
 CREATE TABLE IF NOT EXISTS ACTIVITIES
 (
-    ACTIVITY_ID  integer AUTO_INCREMENT,
-    TARGET_ID    integer     NOT NULL,
-    AUTHOR_ID    integer     NOT NULL,
-    CREATE_AT    timestamp   NOT NULL,
-    TYPE         varchar(10) NOT NULL,
+    ACTIVITY_ID integer AUTO_INCREMENT,
+    TARGET_ID   integer     NOT NULL,
+    AUTHOR_ID   integer     NOT NULL,
+    CREATE_AT   timestamp   NOT NULL,
+    TYPE        varchar(10) NOT NULL,
     PRIMARY KEY (ACTIVITY_ID)
 );
 

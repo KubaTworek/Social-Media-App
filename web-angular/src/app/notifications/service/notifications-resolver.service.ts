@@ -5,7 +5,9 @@ import {NotificationService} from "./notification.service";
 import {Notification} from "../dto/notification.type";
 import {AuthorizationService} from "../../auth/service/authorization.service";
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+  providedIn: 'root',
+})
 export class NotificationsResolverService implements Resolve<Notification[]> {
   constructor(
     private dataStorageService: DataStorageService,
@@ -14,17 +16,11 @@ export class NotificationsResolverService implements Resolve<Notification[]> {
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const notifications = this.notificationService.getNotifications();
-    console.log(notifications)
-    if (notifications.length === 0) {
-      if (this.authorizationService.getRole() == "ROLE_ADMIN") {
-        return this.dataStorageService.fetchNotificationsAdmin();
-      } else {
-        return this.dataStorageService.fetchNotifications();
-      }
-    } else {
-      return notifications;
-    }
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Notification[] {
+    this.authorizationService.getRole() === "ROLE_ADMIN"
+      ? this.dataStorageService.fetchNotificationsAdmin()
+      : this.dataStorageService.fetchNotifications();
+
+    return this.notificationService.getNotifications()
   }
 }

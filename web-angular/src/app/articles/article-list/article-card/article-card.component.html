@@ -4,13 +4,8 @@
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
-    <button (click)="followAuthor(article.author.id)" *ngIf="!article.author.isFollowed"
-            class="article-card__follow-button">
-      {{ 'FOLLOW' | translate }}
-    </button>
-    <button (click)="unfollowAuthor(article.author.id)" *ngIf="article.author.isFollowed"
-            class="article-card__follow-button">
-      {{ 'UNFOLLOW' | translate }}
+    <button (click)="followOrUnfollowAuthor(article.author.id)" class="article-card__follow-button">
+      {{ article.author.isFollowed ? ('UNFOLLOW' | translate) : ('FOLLOW' | translate) }}
     </button>
   </div>
   <p class="article-card__content">{{ article.text }}</p>
@@ -22,7 +17,7 @@
             (mouseleave)="hideLikes(article.id)"
             class="article-card__like-button"
             id="like-button-{{article.id}}">❤️</span>
-      <span class="article-card__likes" id="likes-{{article.id}}">{{ this.article.numOfLikes }}</span>
+      <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
   </div>
 </article>

@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ArticleService} from '../service/article.service';
 import {Article} from '../dto/article.type';
-import {Subscription} from "rxjs";
-import {SearchService} from "../../search-board/service/search.service";
-import {DataStorageService} from "../../shared/data-storage.service";
+import {Subscription} from 'rxjs';
+import {SearchService} from '../../search-board/service/search.service';
+import {DataStorageService} from '../../shared/data-storage.service';
 
 @Component({
   selector: 'article-list',
@@ -15,9 +15,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   keyword: string = '';
   isForYouActive = true;
   isFollowingActive = false;
-  private keywordSubscription: Subscription = new Subscription();
-  private articlesSubscription: Subscription = new Subscription();
-  private activeStatusSubscription: Subscription = new Subscription();
+  private subscriptions: Subscription[] = [];
   private currentForYouPage = 0;
   private currentFollowingPage = 0;
 
@@ -29,62 +27,42 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.keywordSubscription = this.searchService.articleListUpdated$
-      .subscribe((keyword: string) => {
-          this.keyword = keyword;
-          this.articles = this.articleService.getArticlesByKeyword(keyword);
-        }
-      );
-
-    this.articlesSubscription = this.articleService.articlesChanged
-      .subscribe(
-        (articles: Article[]) => {
-          this.articles = articles;
-        }
-      );
-
-    this.activeStatusSubscription = this.articleService.isForYouActive$
-      .subscribe((isForYouActive: boolean) => {
+    this.subscriptions.push(
+      this.searchService.articleListUpdated$.subscribe((keyword: string) => {
+        this.keyword = keyword;
+        this.articles = this.articleService.getArticlesByKeyword(keyword);
+      }),
+      this.articleService.articlesChanged.subscribe((articles: Article[]) => {
+        this.articles = articles;
+      }),
+      this.articleService.isForYouActive$.subscribe((isForYouActive: boolean) => {
         this.isForYouActive = isForYouActive;
-      });
-
-    this.activeStatusSubscription = this.articleService.isFollowingActive$
-      .subscribe((isFollowingActive: boolean) => {
+      }),
+      this.articleService.isFollowingActive$.subscribe((isFollowingActive: boolean) => {
         this.isFollowingActive = isFollowingActive;
-      });
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.keywordSubscription.unsubscribe();
-    this.articlesSubscription.unsubscribe();
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  loadMoreArticles() {
-    if (this.isForYouActive) {
-      this.currentFollowingPage = 0;
-      this.currentForYouPage++;
-      this.dataStorageService.fetchArticles(this.currentForYouPage, 5).subscribe(
-        (newArticles: Article[]) => {
-          this.articles.push(...newArticles);
-          this.articleService.setArticles(this.articles)
-        },
-        (error) => {
-          console.error('Error fetching more articles:', error);
-        }
-      );
-    }
-    if (this.isFollowingActive) {
-      this.currentForYouPage = 0;
-      this.currentFollowingPage++;
-      this.dataStorageService.fetchFollowingArticles(this.currentFollowingPage, 5).subscribe(
-        (newArticles: Article[]) => {
-          this.articles.push(...newArticles);
-          this.articleService.setArticles(this.articles)
-        },
-        (error) => {
-          console.error('Error fetching more articles:', error);
-        }
-      );
-    }
+  loadMoreArticles(): void {
+    const fetchMethod = this.isForYouActive
+      ? this.dataStorageService.fetchArticles.bind(this.dataStorageService)
+      : this.dataStorageService.fetchFollowingArticles.bind(this.dataStorageService);
+
+    const nextPage = this.isForYouActive ? ++this.currentForYouPage : ++this.currentFollowingPage;
+
+    fetchMethod(nextPage, 5).subscribe(
+      (newArticles: Article[]) => {
+        this.articles.push(...newArticles);
+        this.articleService.setArticles(this.articles);
+      },
+      (error) => {
+        console.error('Error fetching more articles:', error);
+      }
+    );
   }
 }

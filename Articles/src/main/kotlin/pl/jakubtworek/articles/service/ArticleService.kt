@@ -6,13 +6,13 @@ import pl.jakubtworek.articles.controller.dto.LikeResponse
 import pl.jakubtworek.common.model.ArticleDTO
 
 interface ArticleService {
-    fun findAllOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse>
-    fun findAllFollowingOrderByCreatedTimeDesc(page: Int, size: Int, jwt: String): List<ArticleResponse>
-    fun findAllByAuthorId(authorId: Int): List<ArticleDTO>
-    fun findById(articleId: Int): ArticleDTO
-    fun save(theArticle: ArticleRequest, jwt: String)
-    fun update(theArticle: ArticleRequest, articleId: Int, jwt: String)
-    fun like(articleId: Int, jwt: String): LikeResponse
-    fun deleteById(theId: Int, jwt: String)
-    fun deleteByAuthorId(authorId: Int)
+    fun getLatestArticles(page: Int, size: Int, jwt: String): List<ArticleResponse>
+    fun getLatestFollowingArticles(page: Int, size: Int, jwt: String): List<ArticleResponse>
+    fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO>
+    fun getArticleById(articleId: Int): ArticleDTO
+    fun saveArticle(request: ArticleRequest, jwt: String)
+    fun updateArticle(request: ArticleRequest, articleId: Int, jwt: String)
+    fun handleLikeAction(articleId: Int, jwt: String): LikeResponse
+    fun deleteArticleById(articleId: Int, jwt: String)
+    fun deleteArticlesByAuthorId(authorId: Int)
 }

@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ArticleService {
   articlesChanged = new Subject<Article[]>();
   private isForYouActiveSubject = new BehaviorSubject<boolean>(true);
@@ -10,10 +12,9 @@ export class ArticleService {
   private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
 
-
   private articles: Article[] = [];
 
-  updateActiveStatus(isForYouActive: boolean, isFollowingActive: boolean) {
+  updateActiveStatus(isForYouActive: boolean, isFollowingActive: boolean): void {
     this.isForYouActiveSubject.next(isForYouActive);
     this.isFollowingActiveSubject.next(isFollowingActive);
   }
@@ -36,7 +37,7 @@ export class ArticleService {
     return this.articles.filter(article => article.text.toLowerCase().includes(lowerKeyword));
   }
 
-  updateArticle(articleId: any, text: string) {
+  updateArticle(articleId: any, text: string): void {
     const article = this.findArticleById(articleId);
 
     if (!article) {
@@ -80,7 +81,7 @@ export class ArticleService {
     this.notifyArticlesChanged();
   }
 
-  followAuthor(id: string) {
+  followAuthor(id: string): void {
     this.articles.forEach(article => {
       if (article.author.id === id) {
         article.author.isFollowed = true;
@@ -88,7 +89,7 @@ export class ArticleService {
     });
   }
 
-  unfollowAuthor(id: string) {
+  unfollowAuthor(id: string): void {
     this.articles.forEach(article => {
       if (article.author.id === id) {
         article.author.isFollowed = false;

@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Output, ViewChild, ViewEncapsulation} from "@angular/core";
+import {Component, ElementRef, EventEmitter, Output, Renderer2, ViewChild, ViewEncapsulation} from "@angular/core";
 
 @Component({
   selector: 'article-delete',
@@ -14,20 +14,17 @@ export class ArticleDeleteComponent {
 
   isOpen: boolean = false;
 
+  constructor(private renderer: Renderer2) {
+  }
+
   open(): void {
     this.isOpen = true;
-    const deleteModal = this.deleteModalRef.nativeElement as HTMLElement;
-    const overlayModal = this.overlayModalRef.nativeElement as HTMLElement;
-    deleteModal.style.visibility = 'visible';
-    overlayModal.style.display = 'block';
+    this.toggleModalVisibility(true);
   }
 
   close(): void {
     this.isOpen = false;
-    const deleteModal = this.deleteModalRef.nativeElement as HTMLElement;
-    const overlayModal = this.overlayModalRef.nativeElement as HTMLElement;
-    deleteModal.style.visibility = 'hidden';
-    overlayModal.style.display = 'none';
+    this.toggleModalVisibility(false);
   }
 
   confirm(): void {
@@ -36,5 +33,13 @@ export class ArticleDeleteComponent {
 
   cancel(): void {
     this.cancelled.emit();
+  }
+
+  private toggleModalVisibility(visible: boolean): void {
+    const deleteModal = this.deleteModalRef.nativeElement as HTMLElement;
+    const overlayModal = this.overlayModalRef.nativeElement as HTMLElement;
+
+    this.renderer.setStyle(deleteModal, 'visibility', visible ? 'visible' : 'hidden');
+    this.renderer.setStyle(overlayModal, 'display', visible ? 'block' : 'none');
   }
 }

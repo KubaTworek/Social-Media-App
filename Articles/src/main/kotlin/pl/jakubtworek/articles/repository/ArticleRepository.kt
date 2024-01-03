@@ -33,8 +33,21 @@ interface ArticleRepository : JpaRepository<Article, Int> {
     )
     override fun findById(@Param("articleId") articleId: Int): Optional<Article>
 
-    fun findAllByAuthorIdOrderByCreateAt(authorId: Int): List<Article>
-    fun findAllByAuthorIdInOrderByCreateAt(authorIds: List<Int>, pageable: Pageable): Page<Article>
+    @Query(
+        "SELECT a FROM Article a " +
+                "LEFT JOIN FETCH a.likes " +
+                "WHERE a.authorId = :authorId " +
+                "ORDER BY a.createAt"
+    )
+    fun findAllByAuthorIdOrderByCreateAt(@Param("authorId") authorId: Int): List<Article>
+
+    @Query(
+        "SELECT a FROM Article a " +
+                "LEFT JOIN FETCH a.likes " +
+                "WHERE a.authorId IN :authorIds " +
+                "ORDER BY a.createAt"
+    )
+    fun findAllByAuthorIdInOrderByCreateAt(@Param("authorIds") authorIds: List<Int>, pageable: Pageable): Page<Article>
 
     @Transactional
     fun deleteAllByAuthorId(authorId: Int)

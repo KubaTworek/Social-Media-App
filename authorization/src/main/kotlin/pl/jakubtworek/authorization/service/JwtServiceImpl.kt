@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import pl.jakubtworek.authorization.constants.SecurityConstants
@@ -15,7 +14,7 @@ import java.util.*
 @Service
 class JwtServiceImpl : JwtService {
 
-    private val logger: Logger = LoggerFactory.getLogger(JwtServiceImpl::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun buildJwt(user: User, expirationDate: Long): String {
         logger.info("Building token for user: ${user.username}")

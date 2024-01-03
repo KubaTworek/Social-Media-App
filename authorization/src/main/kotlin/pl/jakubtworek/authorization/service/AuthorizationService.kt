@@ -6,9 +6,9 @@ import pl.jakubtworek.authorization.controller.dto.RegisterRequest
 import pl.jakubtworek.common.model.UserDetailsDTO
 
 interface AuthorizationService {
-    fun registerUser(registerRequest: RegisterRequest)
+    fun registerUser(request: RegisterRequest)
     fun deleteUser(jwt: String)
-    fun loginUser(loginRequest: LoginRequest): LoginResponse
-    fun refreshAccessToken(refreshToken: String): LoginResponse
+    fun loginUser(request: LoginRequest): LoginResponse
+    fun refreshAccessToken(jwt: String): LoginResponse
     fun getUserDetails(jwt: String): UserDetailsDTO
 }

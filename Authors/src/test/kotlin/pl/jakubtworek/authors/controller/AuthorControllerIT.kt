@@ -84,11 +84,27 @@ class AuthorControllerIT : AbstractIT() {
         assertAuthorFollowStats(followerId, 0, 1)
         assertAuthorFollowStats(followingId, 1, 0)
 
-        assertAuthorListSizeAndUsername(getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody, 1, "janesmith")
-        assertAuthorListSizeAndUsername(getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody,
+            1,
+            "janesmith"
+        )
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody,
+            0,
+            null
+        )
 
-        assertAuthorListSizeAndUsername(getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody, 0, null)
-        assertAuthorListSizeAndUsername(getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody, 1, "johndoe")
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody,
+            0,
+            null
+        )
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody,
+            1,
+            "johndoe"
+        )
 
         // Cleanup
         unfollowAuthor(followingId, "user1-jwt")
@@ -97,10 +113,26 @@ class AuthorControllerIT : AbstractIT() {
         assertAuthorFollowStats(followerId, 0, 0)
         assertAuthorFollowStats(followingId, 0, 0)
 
-        assertAuthorListSizeAndUsername(getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody, 0, null)
-        assertAuthorListSizeAndUsername(getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody, 0, null)
-        assertAuthorListSizeAndUsername(getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody, 0, null)
-        assertAuthorListSizeAndUsername(getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody, 0, null)
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowing(followerId, "user1-jwt").returnResult().responseBody,
+            0,
+            null
+        )
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowers(followerId, "user1-jwt").returnResult().responseBody,
+            0,
+            null
+        )
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowing(followingId, "user2-jwt").returnResult().responseBody,
+            0,
+            null
+        )
+        assertAuthorListSizeAndUsername(
+            getAuthorsFollowers(followingId, "user2-jwt").returnResult().responseBody,
+            0,
+            null
+        )
     }
 
     private fun assertAuthorFollowStats(authorId: Int, followers: Int, following: Int) {
@@ -109,7 +141,11 @@ class AuthorControllerIT : AbstractIT() {
         assertEquals(following, author?.following?.size)
     }
 
-    private fun assertAuthorListSizeAndUsername(authors: List<AuthorDTO>?, expectedSize: Int, expectedUsername: String?) {
+    private fun assertAuthorListSizeAndUsername(
+        authors: List<AuthorDTO>?,
+        expectedSize: Int,
+        expectedUsername: String?
+    ) {
         assertEquals(expectedSize, authors?.size)
         if (expectedSize > 0) {
             assertEquals(expectedUsername, authors?.get(0)?.username)

@@ -1,6 +1,6 @@
 package pl.jakubtworek.notifications.controller.dto
 
-data class AuthorWithActivity (
+data class AuthorWithActivityResponse(
     val id: Int,
     val firstName: String,
     val lastName: String,

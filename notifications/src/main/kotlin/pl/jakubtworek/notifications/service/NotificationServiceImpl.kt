@@ -1,25 +1,20 @@
 package pl.jakubtworek.notifications.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.apache.coyote.http11.Constants.a
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
-import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
-import pl.jakubtworek.notifications.controller.dto.ActivityResponse
+import pl.jakubtworek.common.Constants.ARTICLE_TYPE
+import pl.jakubtworek.common.Constants.FOLLOW_TYPE
+import pl.jakubtworek.common.Constants.LIKE_TYPE
 import pl.jakubtworek.common.Constants.ROLE_ADMIN
 import pl.jakubtworek.common.Constants.ROLE_USER
-import pl.jakubtworek.notifications.controller.dto.AuthorWithActivity
+import pl.jakubtworek.common.model.AuthorDTO
+import pl.jakubtworek.common.model.UserDetailsDTO
+import pl.jakubtworek.notifications.controller.dto.ActivityResponse
+import pl.jakubtworek.notifications.controller.dto.AuthorWithActivityResponse
 import pl.jakubtworek.notifications.controller.dto.NotificationResponse
-import pl.jakubtworek.notifications.exception.NotificationBadRequestException
 import pl.jakubtworek.notifications.external.ArticleApiService
 import pl.jakubtworek.notifications.external.AuthorApiService
 import pl.jakubtworek.notifications.external.AuthorizationApiService
-import pl.jakubtworek.notifications.model.entity.Activity
-import pl.jakubtworek.notifications.model.message.ArticleMessage
-import pl.jakubtworek.notifications.model.message.FollowMessage
-import pl.jakubtworek.notifications.model.message.LikeMessage
 import pl.jakubtworek.notifications.repository.NotificationRepository
 
 @Service
@@ -29,26 +24,51 @@ class NotificationServiceImpl(
     private val articleService: ArticleApiService,
     private val authorService: AuthorApiService,
     private val notificationResponseFactory: NotificationResponseFactory,
-    private val activityResponseFactory: ActivityResponseFactory,
-    private val objectMapper: ObjectMapper
+    private val activityResponseFactory: ActivityResponseFactory
 ) : NotificationService {
 
-    private val logger: Logger = LoggerFactory.getLogger(NotificationServiceImpl::class.java)
+    private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun findAllNotifications(jwt: String): List<NotificationResponse> {
-        logger.info("Finding all notifications")
+    override fun getAllNotificationsForAdmin(jwt: String): List<NotificationResponse> { // fixme: delete po obronie
+        logger.info("Fetching all notifications for admin")
         authorizationService.getUserDetailsAndValidate(jwt, ROLE_ADMIN)
-        return notificationRepository.findAllByTypeOrderByCreateAtDesc("LIKE")
-            .map { mapToNotificationResponse(it) }
+        return fetchLikeNotifications()
     }
 
-    override fun findAllAuthorActivities(authorId: Int): AuthorWithActivity {
-        logger.info("Finding activities for author with ID: $authorId")
+    override fun getAuthorActivities(authorId: Int): AuthorWithActivityResponse {
+        logger.info("Fetching activities for author with ID: $authorId")
         val author = authorService.getAuthorById(authorId)
-        val activities = notificationRepository.findAllByAuthorIdOrderByCreateAtDesc(authorId)
-            .map { mapToActivityResponse(it) }
-            .toList()
-        return AuthorWithActivity(
+        val activities = fetchAuthorActivities(authorId)
+        return createAuthorWithActivityResponse(author, activities)
+    }
+
+    override fun getAllNotificationsByUser(jwt: String): List<NotificationResponse> {
+        logger.info("Fetching all notifications by user")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
+
+        val articleNotifications = findArticleNotifications(userDetails.authorId)
+        val followNotifications = findFollowNotifications(userDetails.authorId)
+        val likeNotifications = findLikeNotifications(userDetails)
+
+        return combineAndSortNotifications(articleNotifications, followNotifications, likeNotifications)
+    }
+
+    override fun updateNotificationAuthor(jwt: String, notificationId: Int, authorId: Int) {
+        logger.info("Updating notification author with ID: $notificationId")
+        authorizationService.getUserDetailsAndValidate(jwt, ROLE_ADMIN)
+        notificationRepository.findById(notificationId)
+            .ifPresent { notification ->
+                notification.authorId = authorId
+                notificationRepository.save(notification)
+                logger.info("Notification author updated successfully")
+            }
+    }
+
+    private fun createAuthorWithActivityResponse(
+        author: AuthorDTO,
+        activities: List<ActivityResponse>
+    ): AuthorWithActivityResponse =
+        AuthorWithActivityResponse(
             id = author.id,
             firstName = author.firstName,
             lastName = author.lastName,
@@ -57,140 +77,36 @@ class NotificationServiceImpl(
             followers = author.followers,
             activities = activities
         )
-    }
 
-    override fun findAllNotificationsByUser(jwt: String): List<NotificationResponse> {
-        logger.info("Finding all notifications by user")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
+    private fun fetchLikeNotifications(): List<NotificationResponse> =
+        notificationRepository.findAllByTypeOrderByCreateAtDesc(LIKE_TYPE)
+            .map(notificationResponseFactory::createResponse)
+
+    private fun fetchAuthorActivities(authorId: Int): List<ActivityResponse> =
+        notificationRepository.findAllByAuthorIdOrderByCreateAtDesc(authorId)
+            .map(activityResponseFactory::createResponse)
+
+    private fun findArticleNotifications(authorId: Int): List<NotificationResponse> =
+        authorService.getAuthorById(authorId).following
+            .flatMap { notificationRepository.findAllByAuthorIdAndTypeOrderByCreateAtDesc(it, ARTICLE_TYPE) }
+            .map(notificationResponseFactory::createResponse)
+
+    private fun findFollowNotifications(authorId: Int): List<NotificationResponse> =
+        notificationRepository.findAllByTargetIdAndTypeOrderByCreateAtDesc(authorId, FOLLOW_TYPE)
+            .map(notificationResponseFactory::createResponse)
+
+    private fun findLikeNotifications(userDetails: UserDetailsDTO): List<NotificationResponse> {
         val articles = articleService.getArticlesByAuthor(userDetails.authorId)
-        val author = authorService.getAuthorById(userDetails.authorId)
-
-        val articleNotifications = author.following.flatMap { authorId ->
-            notificationRepository.findAllByAuthorIdAndTypeOrderByCreateAtDesc(authorId, "ARTICLE")
-                .map { mapToNotificationResponse(it) }
-        }
-        val followNotifications = notificationRepository.findAllByTargetIdAndTypeOrderByCreateAtDesc(userDetails.authorId, "FOLLOW")
-            .map { mapToNotificationResponse(it) }
-        val likeNotifications = articles.flatMap { article ->
-            notificationRepository.findAllByTargetIdAndTypeOrderByCreateAtDesc(article.id, "LIKE")
-                .map { mapToNotificationResponse(it) }
-        }
-        return articleNotifications + followNotifications + likeNotifications
-            .sortedByDescending { it.createAt }
-    }
-
-    override fun update(jwt: String, notificationId: Int, authorId: Int) {
-        logger.info("Updating notification with ID: $notificationId")
-        authorizationService.getUserDetailsAndValidate(jwt, ROLE_ADMIN)
-        notificationRepository.findById(notificationId)
-            .ifPresent { notification ->
-                notification.authorId = authorId
-                notificationRepository.save(notification)
-                logger.info("Notification updated successfully")
-            }
-    }
-
-    @KafkaListener(topics = ["t-like"])
-    override fun processLikeMessage(message: String) {
-        logger.info("Processing like message: $message")
-        try {
-            val likeMessage = message.deserializeToLike()
-            if (notificationRepository.existsByTargetIdAndAuthorIdAndType(
-                    likeMessage.articleId,
-                    likeMessage.authorId,
-                    "LIKE"
-                )
-            ) {
-                throw NotificationBadRequestException("Notification was already received")
-            }
-            val activity = Activity(
-                id = 0,
-                targetId = likeMessage.articleId,
-                authorId = likeMessage.authorId,
-                createAt = likeMessage.timestamp,
-                type = "LIKE"
-            )
-            notificationRepository.save(activity)
-            logger.info("Notification saved successfully")
-        } catch (e: Exception) {
-            logger.error("Error processing like message", e)
-            throw e
+        return articles.flatMap { article ->
+            notificationRepository.findAllByTargetIdAndTypeOrderByCreateAtDesc(article.id, LIKE_TYPE)
+                .map(notificationResponseFactory::createResponse)
         }
     }
 
-    @KafkaListener(topics = ["t-article"])
-    override fun processArticleMessage(message: String) {
-        logger.info("Processing article message: $message")
-        try {
-            val articleMessage = message.deserializeToArticle()
-            if (notificationRepository.existsByTargetIdAndType(
-                    articleMessage.articleId,
-                    "ARTICLE"
-                )
-            ) {
-                throw NotificationBadRequestException("Notification was already received")
-            }
-            val activity = Activity(
-                id = 0,
-                targetId = articleMessage.articleId,
-                authorId = articleMessage.authorId,
-                createAt = articleMessage.timestamp,
-                type = "ARTICLE"
-            )
-            notificationRepository.save(activity)
-            logger.info("Notification saved successfully")
-        } catch (e: Exception) {
-            logger.error("Error processing article message", e)
-            throw e
-        }
-    }
-
-    @KafkaListener(topics = ["t-follow"])
-    override fun processFollowMessage(message: String) {
-        logger.info("Processing follow message: $message")
-        try {
-            val followMessage = message.deserializeToFollow()
-            if (notificationRepository.existsByTargetIdAndAuthorIdAndType(
-                    followMessage.followedId,
-                    followMessage.followerId,
-                "FOLLOW"
-                )
-            ) {
-                throw NotificationBadRequestException("Notification was already received")
-            }
-            val activity = Activity(
-                id = 0,
-                targetId = followMessage.followedId,
-                authorId = followMessage.followerId,
-                createAt = followMessage.timestamp,
-                type = "FOLLOW"
-            )
-            notificationRepository.save(activity)
-            logger.info("Notification saved successfully")
-        } catch (e: Exception) {
-            logger.error("Error processing follow message", e)
-            throw e
-        }
-    }
-
-    private fun mapToNotificationResponse(
-        activity: Activity
-    ): NotificationResponse {
-        return notificationResponseFactory.createResponse(activity)
-    }
-
-    private fun mapToActivityResponse(
-        activity: Activity
-    ): ActivityResponse {
-        return activityResponseFactory.createResponse(activity)
-    }
-
-    private fun String.deserializeToLike(): LikeMessage =
-        let { objectMapper.readValue(this, LikeMessage::class.java) }
-
-    private fun String.deserializeToArticle(): ArticleMessage =
-        let { objectMapper.readValue(this, ArticleMessage::class.java) }
-
-    private fun String.deserializeToFollow(): FollowMessage =
-        let { objectMapper.readValue(this, FollowMessage::class.java) }
+    private fun combineAndSortNotifications(
+        articleNotifications: List<NotificationResponse>,
+        followNotifications: List<NotificationResponse>,
+        likeNotifications: List<NotificationResponse>
+    ): List<NotificationResponse> =
+        (articleNotifications + followNotifications + likeNotifications).sortedByDescending { it.createAt }
 }

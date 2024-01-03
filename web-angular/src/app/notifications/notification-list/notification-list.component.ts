@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+// notification-list.component.ts
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NotificationService} from "../service/notification.service";
 import {Notification} from "../dto/notification.type";
 import {Subscription} from "rxjs";
@@ -8,7 +9,7 @@ import {Subscription} from "rxjs";
   templateUrl: './notification-list.component.html',
   styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationListComponent implements OnInit {
+export class NotificationListComponent implements OnInit, OnDestroy {
   notifications: Notification[] = [];
   private notificationsSubscription: Subscription = new Subscription();
 
@@ -18,12 +19,15 @@ export class NotificationListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.notificationsSubscription = this.notificationService.notificationsChanged
+    this.notificationsSubscription = this.notificationService.notificationsChanged$
       .subscribe(
         (notifications: Notification[]) => {
           this.notifications = notifications;
         }
       );
-    this.notifications = this.notificationService.getNotifications();
+  }
+
+  ngOnDestroy(): void {
+    this.notificationsSubscription.unsubscribe();
   }
 }

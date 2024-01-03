@@ -45,6 +45,6 @@ class ActivityResponseFactory(
         val authorName = "${follower.firstName} ${follower.lastName}"
         val message = "follows"
         val targetName = "${followed.firstName} ${followed.lastName}"
-        return ActivityResponse(activity.id, authorName, targetName,  message, null, activity.createAt)
+        return ActivityResponse(activity.id, authorName, targetName, message, null, activity.createAt)
     }
 }

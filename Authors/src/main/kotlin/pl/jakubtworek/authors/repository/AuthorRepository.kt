@@ -11,7 +11,25 @@ import java.util.*
 @Repository
 interface AuthorRepository : JpaRepository<Author, Int> {
 
-    fun findAuthorByUsername(username: String): Optional<Author>
+    @Query(
+        "SELECT a FROM Author a " +
+                "LEFT JOIN FETCH a.followedBy "
+    )
+    override fun findAll(): List<Author>
+
+    @Query(
+        "SELECT a FROM Author a " +
+                "LEFT JOIN FETCH a.followedBy " +
+                "WHERE a.id = :authorId"
+    )
+    override fun findById(@Param("authorId") authorId: Int): Optional<Author>
+
+    @Query(
+        "SELECT a FROM Author a " +
+                "LEFT JOIN FETCH a.followedBy " +
+                "WHERE a.username = :username"
+    )
+    fun findAuthorByUsername(@Param("username") username: String): Optional<Author>
 
     @Query(
         "SELECT a FROM Author a " +
