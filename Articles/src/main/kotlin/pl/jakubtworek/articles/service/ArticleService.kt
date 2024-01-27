@@ -8,6 +8,7 @@ import pl.jakubtworek.common.model.ArticleDTO
 interface ArticleService {
     fun getLatestArticles(page: Int, size: Int, jwt: String): List<ArticleResponse>
     fun getLatestFollowingArticles(page: Int, size: Int, jwt: String): List<ArticleResponse>
+    fun getArticle(articleId: Int, jwt: String): ArticleResponse
     fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO>
     fun getArticleById(articleId: Int): ArticleDTO
     fun saveArticle(request: ArticleRequest, jwt: String)

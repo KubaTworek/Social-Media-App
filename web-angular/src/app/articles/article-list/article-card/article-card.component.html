@@ -1,4 +1,4 @@
-<article (click)="openDetails($event)" class="article-card">
+<article class="article-card">
   <div class="article-card__header">
     <p [routerLink]="['/authors/', article.author.id]" class="article-card__author-name">
       {{ article.author.firstName }} {{ article.author.lastName }}
@@ -8,7 +8,7 @@
       {{ article.author.isFollowed ? ('UNFOLLOW' | translate) : ('FOLLOW' | translate) }}
     </button>
   </div>
-  <p class="article-card__content">{{ article.text }}</p>
+  <p [routerLink]="['/home/', article.id]" class="article-card__content">{{ article.text }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
   <div class="article-card__actions">
     <p class="article-card__like-container" id="article-card__like-container-{{article.id}}">
@@ -19,7 +19,8 @@
             id="like-button-{{article.id}}">❤️</span>
       <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
+    <p [routerLink]="['/home/', article.id]" class="article-card__comment-container">
+        <span class="article-card__comment-button">🗨</span>
+    </p>
   </div>
 </article>
-
-<article-details [article]="article"></article-details>

@@ -12,7 +12,7 @@ export class AuthorActivitiesResolverService implements Resolve<AuthorWithActivi
   ) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AuthorWithActivities {
     const authorId = route.paramMap.get('id');
     const author = this.authorsService.getAuthorWithActivities();
 

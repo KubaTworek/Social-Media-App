@@ -7,8 +7,11 @@ import {ArticleDeleteComponent} from "./article-list/article-card/article-delete
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
-import {ArticleDetailsComponent} from "./article-list/article-card/article-details/article-details.component";
+import {ArticleDetailsComponent} from "./article-comments/article-details/article-details.component";
 import {TranslateModule} from "@ngx-translate/core";
+import {ArticleResolverService} from "./service/article-resolver.service";
+import {ArticleCommentsComponent} from "./article-comments/article-comments.component";
+
 
 @NgModule({
   declarations: [
@@ -17,13 +20,15 @@ import {TranslateModule} from "@ngx-translate/core";
     ArticleListComponent,
     ArticleCardComponent,
     ArticleDeleteComponent,
-    ArticleDetailsComponent
+    ArticleDetailsComponent,
+    ArticleCommentsComponent
   ],
   imports: [
     FormsModule,
     SharedModule,
     RouterModule.forChild([
       {path: '', component: ArticlesComponent},
+      {path: ':id', component: ArticleCommentsComponent, resolve: [ArticleResolverService]}
     ]),
     TranslateModule
   ]

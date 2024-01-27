@@ -1,7 +1,7 @@
 import {Component, Input, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
 import {DataStorageService} from "../../../shared/data-storage.service";
-import {ArticleDetailsComponent} from "./article-details/article-details.component";
+import {ArticleDetailsComponent} from "../../article-comments/article-details/article-details.component";
 import {AuthorizationService} from "../../../auth/service/authorization.service";
 
 @Component({
@@ -18,18 +18,6 @@ export class ArticleCardComponent {
     private dataStorage: DataStorageService,
     private authorizationService: AuthorizationService
   ) {
-  }
-
-  openDetails(event: Event): void {
-    const clickedElement = event.target as HTMLElement;
-    const isInteractiveElement =
-      clickedElement.classList.contains('article-card__like-button') ||
-      clickedElement.classList.contains('article-card__follow-button') ||
-      clickedElement.classList.contains('article-card__author-name');
-
-    if (!isInteractiveElement) {
-      this.articleDetailsComponent.open();
-    }
   }
 
   likeArticle(articleId: string): void {

@@ -1,23 +1,23 @@
 <article #modal class="article-details">
   <div class="article-details__header">
-    <span class="article-card__author-name">{{ article.author.firstName }} {{ article.author.lastName }}</span>
-    <br>
-    <span class="article-card__author-username">@{{ article.author.username }}</span>
+    <p [routerLink]="['/authors/', article.author.id]" class="article-details__author-name">
+      {{ article.author.firstName }} {{ article.author.lastName }}
+      <span class="article-details__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
+    </p>
   </div>
   <textarea #contentTextarea [readonly]="!canModify()" class="article-details__content"
             id="content-{{article.id}}">{{ article.text }}</textarea>
   <p class="article-details__date-create">{{ article.createDate }}</p>
-  <p class="article-card__article-id">{{ article.id }}</p>
-  <div class="article-card__actions">
-    <p class="article-card__like-container" id="article-details__like-container-{{article.id}}">
+  <p class="article-details__article-id">{{ article.id }}</p>
+  <div class="article-details__actions">
+    <p class="article-details__like-container" id="article-details__like-container-{{article.id}}">
       <span (click)="likeArticle(article.id)"
             (mouseenter)="showLikes(article.id)"
             (mouseleave)="hideLikes(article.id)"
-            class="article-card__like-button"
+            class="article-details__like-button"
             id="like-button-{{article.id}}">❤️</span>
-      <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+      <span class="article-details__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
-    <a (click)="close()" class="article-details__exit-button">❌</a>
     <a (click)="openOptionsList()" *ngIf="canModify()" class="article-details__more-button">⋯</a>
     <div *ngIf="showOptions" class="article-details__more-options">
       <a (click)="openDeleteModal()" *ngIf="canModify()"

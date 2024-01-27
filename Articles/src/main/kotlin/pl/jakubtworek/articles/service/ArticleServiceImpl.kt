@@ -55,6 +55,14 @@ class ArticleServiceImpl(
             .map { articleResponseFactory.createResponse(it, userDetails.authorId) }
     }
 
+    override fun getArticle(articleId: Int, jwt: String): ArticleResponse {
+        logger.info("Fetching article by ID: $articleId")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
+        return articleRepository.findById(articleId)
+            .map { articleResponseFactory.createResponse(it, userDetails.authorId) }
+            .orElseThrow { ArticleNotFoundException("Article not found") }
+    }
+
     override fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO> {
         logger.info("Fetching articles by author ID: $authorId")
         return articleRepository.findAllByAuthorIdOrderByCreateAt(authorId)

@@ -1,6 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {AuthorDto} from "../dto/author.type";
+import {LikesInfo} from "../dto/likes-info.type";
+import {AuthorWithActivities} from "../../authors/dto/author-with-activities.type";
+import {Author} from "../../authors/dto/author.type";
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +15,19 @@ export class ArticleService {
   isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
   private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
+  activityChanged = new Subject<Article>();
 
   private articles: Article[] = [];
+  private article: Article = new Article(
+    new AuthorDto("", "", "", "", true),
+    new Date(),
+    "",
+    "",
+    "",
+    "",
+    new LikesInfo([]),
+    0
+  );
 
   updateActiveStatus(isForYouActive: boolean, isFollowingActive: boolean): void {
     this.isForYouActiveSubject.next(isForYouActive);
@@ -30,6 +45,20 @@ export class ArticleService {
 
   getArticles(): Article[] {
     return [...this.articles];
+  }
+
+  setArticle(article: Article) {
+    console.log(article)
+    this.article = article;
+    this.notifyChangesActivities();
+  }
+
+  getArticle(): Article {
+    return this.article;
+  }
+
+  private notifyChangesActivities() {
+    this.activityChanged.next(this.article);
   }
 
   getArticlesByKeyword(keyword: string): Article[] {

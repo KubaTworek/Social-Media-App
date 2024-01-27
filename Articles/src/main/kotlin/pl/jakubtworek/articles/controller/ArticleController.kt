@@ -35,6 +35,14 @@ class ArticleController(
     ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getLatestFollowingArticles(page, size, jwt))
 
+    @GetMapping("/id/external/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.OK)
+    fun getArticle(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @PathVariable articleId: Int
+    ): ResponseEntity<ArticleResponse> = ResponseEntity.status(HttpStatus.OK)
+        .body(articleService.getArticle(articleId, jwt))
+
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getArticlesByAuthor(

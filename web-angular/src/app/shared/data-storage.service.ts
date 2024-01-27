@@ -62,6 +62,20 @@ export class DataStorageService {
       );
   }
 
+  fetchArticle(articleId: string): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/articles/api/id/external/${articleId}`;
+    console.log(endpoint)
+    this.http
+      .get<Article>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        map(this.mapArticle),
+        tap(article => this.articleService.setArticle(article))
+      )
+      .subscribe();
+  }
+
   fetchFollowingArticles(page: number, size: number): Observable<Article[]> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/articles/api/following?page=${page}&size=${size}`;
@@ -326,6 +340,13 @@ export class DataStorageService {
       createDate: this.formatDateTime(article.timestamp),
       numOfLikes: article.likes.users.length,
     }));
+
+  private mapArticle = (article: Article): Article => ({
+    ...article,
+    elapsed: this.getTimeElapsed(article.timestamp),
+    createDate: this.formatDateTime(article.timestamp),
+    numOfLikes: article.likes.users.length
+  });
 
   private getTimeElapsed(timestamp: Date): string {
     const now = new Date();

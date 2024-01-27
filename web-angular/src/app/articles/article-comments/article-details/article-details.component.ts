@@ -1,9 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation} from "@angular/core";
-import {Article} from "../../../dto/article.type";
-import {ArticleDeleteComponent} from "../article-delete/article-delete.component";
-import {DataStorageService} from "../../../../shared/data-storage.service";
-import {ArticleRequest} from "../../../dto/article-request.type";
-import {AuthorizationService} from "../../../../auth/service/authorization.service";
+import {Article} from "../../dto/article.type";
+import {ArticleDeleteComponent} from "../../article-list/article-card/article-delete/article-delete.component";
+import {DataStorageService} from "../../../shared/data-storage.service";
+import {ArticleRequest} from "../../dto/article-request.type";
+import {AuthorizationService} from "../../../auth/service/authorization.service";
 
 @Component({
   selector: 'article-details',
@@ -19,7 +19,7 @@ export class ArticleDetailsComponent {
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
   @Output() saved = new EventEmitter<void>();
 
-  isOpen: boolean = false;
+  isOpen: boolean = true;
   showOptions: boolean = false;
 
   constructor(
@@ -33,14 +33,6 @@ export class ArticleDetailsComponent {
     const role = this.authorizationService.getRole();
 
     return (username !== null && username === this.article.author.username) || role == 'ROLE_ADMIN';
-  }
-
-  open(): void {
-    this.isOpen = true;
-    const deleteModal = this.deleteModalRef.nativeElement as HTMLElement;
-    const overlayModal = this.overlayModalRef.nativeElement as HTMLElement;
-    deleteModal.style.display = 'block';
-    overlayModal.style.display = 'block';
   }
 
   openDeleteModal(): void {

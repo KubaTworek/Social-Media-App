@@ -1,0 +1,158 @@
+@import '../../../../colors';
+
+.article-details {
+  position: relative;
+  background-color: $twitter-black;
+  border: 1px solid #444;
+  box-sizing: border-box;
+  color: $twitter-white;
+  display: block;
+  padding: 0.8rem;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 1s ease-in-out;
+}
+
+.article-details:hover {
+  background-color: $twitter-black-hover;
+}
+
+.article-details__author-name {
+  font-weight: 700;
+  text-align: left;
+  margin: 0 0 1rem 0;
+}
+
+.article-details__author-username {
+  color: $twitter-dark-gray;
+  font-weight: 500;
+  text-align: left;
+}
+
+.article-details__content {
+  background-color: inherit;
+  width: 100%;
+  min-height: 9rem;
+  border: none;
+  box-sizing: border-box;
+  color: $twitter-white;
+  font-size: 1rem;
+  outline: none;
+  resize: none;
+  cursor: pointer;
+}
+
+.article-details__article-id {
+  display: none;
+}
+
+.article-details__date-create {
+  font-size: 0.9rem;
+  color: $twitter-dark-gray;
+}
+
+.article-details__like-container {
+  position: relative;
+  width: fit-content;
+  font-size: 1.2rem;
+  cursor: pointer;
+  filter: grayscale(100%);
+  color: #555;
+  transition: color 0.5s ease, filter 0.5s ease;
+}
+
+.article-details__like-container:hover {
+  filter: grayscale(0%);
+  color: $twitter-red;
+  z-index: 9;
+}
+
+.article-details__likes:hover {
+  color: $twitter-red;
+  transition: color 0.5s ease;
+}
+
+.article-details__likes {
+  font-size: 1rem;
+  margin-left: 5px;
+}
+
+.article-details__like-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: $twitter-white;
+  font-size: 12px;
+  padding: 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.article-details__like-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.article-details__like-container:hover .article-card__like-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.article-details__exit-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+  cursor: pointer;
+  filter: grayscale(100%);
+}
+
+.article-details__more-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+  cursor: pointer;
+  filter: grayscale(100%);
+  font-size: 1.5rem;
+}
+
+.article-details__more-options {
+  position: absolute;
+  top: 3rem;
+  right: 0;
+  background-color: $twitter-black;
+  border: 1px solid $twitter-dark-gray;
+  border-radius: 5px;
+  box-shadow: 0 0 10px $twitter-black-alpha;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.article-details__more-options a {
+  color: $twitter-white;
+  text-decoration: none;
+  padding: 8px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+.article-details__more-options a:hover {
+  background-color: #444;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $twitter-black-alpha;
+  display: none;
+  z-index: 1;
+}
