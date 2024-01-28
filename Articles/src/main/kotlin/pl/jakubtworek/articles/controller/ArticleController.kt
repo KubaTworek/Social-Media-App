@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pl.jakubtworek.articles.controller.dto.ArticleOneResponse
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
 import pl.jakubtworek.articles.controller.dto.LikeResponse
@@ -40,7 +41,7 @@ class ArticleController(
     fun getArticle(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
-    ): ResponseEntity<ArticleResponse> = ResponseEntity.status(HttpStatus.OK)
+    ): ResponseEntity<ArticleOneResponse> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getArticle(articleId, jwt))
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -63,6 +64,14 @@ class ArticleController(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @RequestBody request: ArticleRequest
     ) = articleService.saveArticle(request, jwt)
+
+    @PostMapping("/comment/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveComment(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @RequestBody request: ArticleRequest,
+        @PathVariable articleId: Int
+    ) = articleService.saveComment(request, articleId, jwt)
 
     @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)

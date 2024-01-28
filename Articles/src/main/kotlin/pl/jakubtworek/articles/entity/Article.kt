@@ -22,8 +22,14 @@ data class Article(
     val authorId: Int,
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val likes: MutableList<Like> = mutableListOf()
+    val likes: MutableList<Like> = mutableListOf(),
 
+    @OneToMany(mappedBy = "motherArticle", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val articles: MutableList<Article> = mutableListOf(),
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOTHER_ARTICLE_ID", insertable = false, updatable = false)
+    val motherArticle: Article? = null,
 ) {
     constructor() : this(
         0,
@@ -43,6 +49,6 @@ data class Article(
     override fun hashCode(): Int = id.hashCode()
 
     override fun toString(): String {
-        return "Article(id=$id, timestamp=$createAt, text=$content, authorId=$authorId)"
+        return "Article(id=$id, timestamp=$createAt, text=$content, authorId=$authorId, motherArticleId=${motherArticle?.id})"
     }
 }

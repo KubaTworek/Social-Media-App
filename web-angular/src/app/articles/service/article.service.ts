@@ -5,6 +5,7 @@ import {AuthorDto} from "../dto/author.type";
 import {LikesInfo} from "../dto/likes-info.type";
 import {AuthorWithActivities} from "../../authors/dto/author-with-activities.type";
 import {Author} from "../../authors/dto/author.type";
+import {ArticleWithComments} from "../dto/article-with-comments.type";
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,10 @@ export class ArticleService {
   isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
   private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
-  activityChanged = new Subject<Article>();
+  activityChanged = new Subject<ArticleWithComments>();
 
   private articles: Article[] = [];
-  private article: Article = new Article(
+  private article: ArticleWithComments = new ArticleWithComments(
     new AuthorDto("", "", "", "", true),
     new Date(),
     "",
@@ -26,7 +27,8 @@ export class ArticleService {
     "",
     "",
     new LikesInfo([]),
-    0
+    0,
+    []
   );
 
   updateActiveStatus(isForYouActive: boolean, isFollowingActive: boolean): void {
@@ -47,13 +49,13 @@ export class ArticleService {
     return [...this.articles];
   }
 
-  setArticle(article: Article) {
+  setArticle(article: ArticleWithComments) {
     console.log(article)
     this.article = article;
     this.notifyChangesActivities();
   }
 
-  getArticle(): Article {
+  getArticle(): ArticleWithComments {
     return this.article;
   }
 

@@ -15,6 +15,7 @@ import {AuthorDto} from "../articles/dto/author.type";
 import {AuthorsService} from "../authors/service/authors.service";
 import {Author} from "../authors/dto/author.type";
 import {AuthorWithActivities} from "../authors/dto/author-with-activities.type";
+import {ArticleWithComments} from "../articles/dto/article-with-comments.type";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -67,7 +68,7 @@ export class DataStorageService {
     const endpoint = `${this.apiUrl}/articles/api/id/external/${articleId}`;
     console.log(endpoint)
     this.http
-      .get<Article>(endpoint, {headers})
+      .get<ArticleWithComments>(endpoint, {headers})
       .pipe(
         catchError(this.handleHttpError),
         map(this.mapArticle),
@@ -341,11 +342,12 @@ export class DataStorageService {
       numOfLikes: article.likes.users.length,
     }));
 
-  private mapArticle = (article: Article): Article => ({
+  private mapArticle = (article: ArticleWithComments): ArticleWithComments => ({
     ...article,
     elapsed: this.getTimeElapsed(article.timestamp),
     createDate: this.formatDateTime(article.timestamp),
-    numOfLikes: article.likes.users.length
+    numOfLikes: article.likes.users.length,
+    comments: article.comments.map(comment => this.mapArticle(comment))
   });
 
   private getTimeElapsed(timestamp: Date): string {

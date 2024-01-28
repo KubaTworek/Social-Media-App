@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import pl.jakubtworek.articles.controller.dto.ArticleOneResponse
 import pl.jakubtworek.articles.controller.dto.ArticleRequest
 import pl.jakubtworek.articles.controller.dto.ArticleResponse
 import pl.jakubtworek.articles.controller.dto.LikeResponse
@@ -55,13 +56,27 @@ class ArticleServiceImpl(
             .map { articleResponseFactory.createResponse(it, userDetails.authorId) }
     }
 
-    override fun getArticle(articleId: Int, jwt: String): ArticleResponse {
+    override fun getArticle(articleId: Int, jwt: String): ArticleOneResponse {
         logger.info("Fetching article by ID: $articleId")
         val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
-        return articleRepository.findById(articleId)
-            .map { articleResponseFactory.createResponse(it, userDetails.authorId) }
+
+        // Pobranie artykułu z informacjami o lajkach
+        val articleWithLikes = articleRepository.findByIdWithLikes(articleId)
             .orElseThrow { ArticleNotFoundException("Article not found") }
-    }
+
+        // Pobranie artykułów podrzędnych
+        val articleWithArticles = articleRepository.findByIdWithArticles(articleId)
+            .orElseThrow { ArticleNotFoundException("Article not found") }
+
+        // Przygotowanie odpowiedzi
+        val response = articleResponseFactory.createResponseForOneArticle(articleWithLikes, userDetails.authorId)
+
+        // Dodanie informacji o artykułach podrzędnych
+        response.comments = articleWithArticles.articles
+            .map { articleResponseFactory.createResponseForOneArticle(it, userDetails.authorId) }
+
+        return response
+    } // todo:
 
     override fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO> {
         logger.info("Fetching articles by author ID: $authorId")
@@ -75,6 +90,10 @@ class ArticleServiceImpl(
             .map { toDTO(it) }
             .orElseThrow { ArticleNotFoundException("Article not found") }
     }
+
+    override fun saveComment(request: ArticleRequest, articleId: Int, jwt: String) {
+
+    } // todo:
 
     override fun saveArticle(request: ArticleRequest, jwt: String) {
         logger.info("Saving article")

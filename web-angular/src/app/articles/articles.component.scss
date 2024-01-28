@@ -31,10 +31,12 @@
 .for-you-button {
   border-left: 1px solid #444;
   border-right: 1px solid #444;
+  border-bottom: 1px solid #444;
 }
 
 .following-button {
   border-right: 1px solid #444;
+  border-bottom: 1px solid #444;
 }
 
 article-post {
@@ -51,7 +53,6 @@ article-post {
 
 article-list {
   width: 100%;
-  border: 1px solid #444;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

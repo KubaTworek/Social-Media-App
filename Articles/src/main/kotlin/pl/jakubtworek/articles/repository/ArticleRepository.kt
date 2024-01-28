@@ -33,6 +33,12 @@ interface ArticleRepository : JpaRepository<Article, Int> {
     )
     override fun findById(@Param("articleId") articleId: Int): Optional<Article>
 
+    @Query("SELECT a FROM Article a LEFT JOIN FETCH a.likes WHERE a.id = :articleId")
+    fun findByIdWithLikes(@Param("articleId") articleId: Int): Optional<Article>
+
+    @Query("SELECT a FROM Article a LEFT JOIN FETCH a.articles WHERE a.id = :articleId")
+    fun findByIdWithArticles(@Param("articleId") articleId: Int): Optional<Article>
+
     @Query(
         "SELECT a FROM Article a " +
                 "LEFT JOIN FETCH a.likes " +

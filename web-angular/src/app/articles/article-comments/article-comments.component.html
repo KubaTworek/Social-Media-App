@@ -1,3 +1,5 @@
 <article-details
   [article]="article"
 ></article-details>
+<article-card *ngFor="let comment of article.comments" [article]="comment">
+</article-card>
