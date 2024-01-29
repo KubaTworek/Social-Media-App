@@ -29,6 +29,23 @@
   text-align: left;
 }
 
+.article-details__follow-button {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background-color: $twitter-blue;
+  color: $twitter-white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.article-details__follow-button:hover {
+  background-color: $twitter-blue-hover;
+}
+
 .article-details__content {
   background-color: inherit;
   width: 100%;
@@ -49,6 +66,10 @@
 .article-details__date-create {
   font-size: 0.9rem;
   color: $twitter-dark-gray;
+}
+
+.article-details__actions {
+  display: flex;
 }
 
 .article-details__like-container {
@@ -100,6 +121,32 @@
 .article-details__like-container:hover .article-card__like-tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+.article-details__comment-container {
+  position: relative;
+  width: fit-content;
+  cursor: pointer;
+  filter: grayscale(100%);
+  color: #555;
+  transition: color 0.5s ease, filter 0.5s ease;
+  margin: 0.9rem 0 0 1rem;
+
+  &:hover {
+    filter: grayscale(0%);
+    color: $twitter-red;
+  }
+}
+
+.article-details__comment-button {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+}
+
+.article-details__comments {
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }
 
 .article-details__exit-button {

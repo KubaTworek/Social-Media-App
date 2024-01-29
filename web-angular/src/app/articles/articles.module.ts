@@ -3,7 +3,7 @@ import {ArticlesComponent} from "./articles.component";
 import {ArticlePostComponent} from "./article-post/article-post.component";
 import {ArticleListComponent} from "./article-list/article-list.component";
 import {ArticleCardComponent} from "./article-list/article-card/article-card.component";
-import {ArticleDeleteComponent} from "./article-list/article-card/article-delete/article-delete.component";
+import {ArticleDeleteComponent} from "./article-comments/article-details/article-delete/article-delete.component";
 import {RouterModule} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";

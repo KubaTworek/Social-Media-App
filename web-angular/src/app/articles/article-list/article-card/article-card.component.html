@@ -4,9 +4,6 @@
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-card__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
-    <button (click)="followOrUnfollowAuthor(article.author.id)" class="article-card__follow-button">
-      {{ article.author.isFollowed ? ('UNFOLLOW' | translate) : ('FOLLOW' | translate) }}
-    </button>
   </div>
   <p [routerLink]="['/home/', article.id]" class="article-card__content">{{ article.text }}</p>
   <p class="article-card__article-id">{{ article.id }}</p>
@@ -19,8 +16,10 @@
             id="like-button-{{article.id}}">❤️</span>
       <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
     </p>
+
     <p [routerLink]="['/home/', article.id]" class="article-card__comment-container">
         <span class="article-card__comment-button">🗨</span>
+        <span class="article-card__comments" id="comments-{{article.id}}">{{ article.numOfComments }}</span>
     </p>
   </div>
 </article>

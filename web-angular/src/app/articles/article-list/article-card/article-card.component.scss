@@ -95,6 +95,13 @@
 
 .article-card__comment-button {
   font-size: 1.6rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+}
+
+.article-card__comments {
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }
 
 .article-card__like-tooltip {
@@ -120,21 +127,4 @@
 .article-card__like-container:hover .article-card__like-tooltip {
   visibility: visible;
   opacity: 1;
-}
-
-.article-card__follow-button {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
-  background-color: $twitter-blue;
-  color: $twitter-white;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.article-card__follow-button:hover {
-  background-color: $twitter-blue-hover;
 }

@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
-import {Article} from "../dto/article.type";
 import {ArticleService} from "../service/article.service";
 import {ArticleWithComments} from "../dto/article-with-comments.type";
 

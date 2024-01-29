@@ -7,5 +7,6 @@ data class ArticleResponse(
     val text: String,
     val timestamp: Timestamp,
     val author: AuthorResponse,
-    val likes: LikeInfoResponse
+    val likes: LikeInfoResponse,
+    val numOfComments: Int
 )

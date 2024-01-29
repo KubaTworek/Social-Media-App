@@ -340,6 +340,7 @@ export class DataStorageService {
       elapsed: this.getTimeElapsed(article.timestamp),
       createDate: this.formatDateTime(article.timestamp),
       numOfLikes: article.likes.users.length,
+      numOfComments: article.numOfComments
     }));
 
   private mapArticle = (article: ArticleWithComments): ArticleWithComments => ({
@@ -347,6 +348,7 @@ export class DataStorageService {
     elapsed: this.getTimeElapsed(article.timestamp),
     createDate: this.formatDateTime(article.timestamp),
     numOfLikes: article.likes.users.length,
+    numOfComments: article.comments.length,
     comments: article.comments.map(comment => this.mapArticle(comment))
   });
 

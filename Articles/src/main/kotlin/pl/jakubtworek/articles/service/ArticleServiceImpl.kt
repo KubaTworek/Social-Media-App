@@ -60,23 +60,19 @@ class ArticleServiceImpl(
         logger.info("Fetching article by ID: $articleId")
         val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
 
-        // Pobranie artykułu z informacjami o lajkach
         val articleWithLikes = articleRepository.findByIdWithLikes(articleId)
             .orElseThrow { ArticleNotFoundException("Article not found") }
 
-        // Pobranie artykułów podrzędnych
         val articleWithArticles = articleRepository.findByIdWithArticles(articleId)
             .orElseThrow { ArticleNotFoundException("Article not found") }
 
-        // Przygotowanie odpowiedzi
         val response = articleResponseFactory.createResponseForOneArticle(articleWithLikes, userDetails.authorId)
 
-        // Dodanie informacji o artykułach podrzędnych
         response.comments = articleWithArticles.articles
             .map { articleResponseFactory.createResponseForOneArticle(it, userDetails.authorId) }
 
         return response
-    } // todo:
+    }
 
     override fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO> {
         logger.info("Fetching articles by author ID: $authorId")

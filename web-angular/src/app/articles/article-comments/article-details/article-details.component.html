@@ -4,6 +4,9 @@
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-details__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
+    <button *ngIf="this.article.author.username != getUsername()" (click)="followOrUnfollowAuthor(article.author.id)" class="article-details__follow-button">
+      {{ article.author.isFollowed ? ('UNFOLLOW' | translate) : ('FOLLOW' | translate) }}
+    </button>
   </div>
   <textarea #contentTextarea [readonly]="!canModify()" class="article-details__content"
             id="content-{{article.id}}">{{ article.text }}</textarea>
@@ -17,6 +20,10 @@
             class="article-details__like-button"
             id="like-button-{{article.id}}">❤️</span>
       <span class="article-details__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+    </p>
+    <p [routerLink]="['/home/', article.id]" class="article-details__comment-container">
+      <span class="article-details__comment-button">🗨</span>
+      <span class="article-details__comments" id="comments-{{article.id}}">{{ article.numOfComments }}</span>
     </p>
     <a (click)="openOptionsList()" *ngIf="canModify()" class="article-details__more-button">⋯</a>
     <div *ngIf="showOptions" class="article-details__more-options">

@@ -46,14 +46,6 @@ export class ArticleCardComponent {
     }
   }
 
-  followOrUnfollowAuthor(id: string): void {
-    if (this.article.author.isFollowed) {
-      this.dataStorage.unfollowAuthor(id);
-    } else {
-      this.dataStorage.followAuthor(id);
-    }
-  }
-
   private isUser(): boolean {
     const role = this.authorizationService.getRole();
     return role == 'ROLE_USER';

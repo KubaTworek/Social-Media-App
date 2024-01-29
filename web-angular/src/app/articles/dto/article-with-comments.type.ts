@@ -10,6 +10,7 @@ export class ArticleWithComments {
   public createDate: string;
   public likes: LikesInfo;
   public numOfLikes: number;
+  public numOfComments: number;
   public comments: ArticleWithComments[];
 
   constructor(
@@ -31,6 +32,7 @@ export class ArticleWithComments {
     this.createDate = createDate;
     this.likes = likes;
     this.numOfLikes = numOfLikes;
+    this.numOfComments = comments.length;
     this.comments = comments;
   }
 }

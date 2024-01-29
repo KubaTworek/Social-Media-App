@@ -3,8 +3,6 @@ import {Article} from '../dto/article.type';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AuthorDto} from "../dto/author.type";
 import {LikesInfo} from "../dto/likes-info.type";
-import {AuthorWithActivities} from "../../authors/dto/author-with-activities.type";
-import {Author} from "../../authors/dto/author.type";
 import {ArticleWithComments} from "../dto/article-with-comments.type";
 
 @Injectable({
@@ -100,9 +98,11 @@ export class ArticleService {
     switch (action) {
       case 'like':
         this.likeArticle(article, fullName);
+        this.likeThisArticle(articleId, fullName);
         break;
       case 'dislike':
         this.dislikeArticle(article, fullName);
+        this.dislikeThisArticle(articleId, fullName);
         break;
       default:
         console.error(`Unknown action: ${action}`);
@@ -113,19 +113,15 @@ export class ArticleService {
   }
 
   followAuthor(id: string): void {
-    this.articles.forEach(article => {
-      if (article.author.id === id) {
-        article.author.isFollowed = true;
-      }
-    });
+    if (this.article.author.id === id) {
+      this.article.author.isFollowed = true;
+    }
   }
 
   unfollowAuthor(id: string): void {
-    this.articles.forEach(article => {
-      if (article.author.id === id) {
-        article.author.isFollowed = false;
-      }
-    });
+    if (this.article.author.id === id) {
+      this.article.author.isFollowed = false;
+    }
   }
 
   private notifyArticlesChanged(): void {
@@ -155,11 +151,28 @@ export class ArticleService {
     article.likes.users.push(fullName);
   }
 
+  private likeThisArticle(articleId: string, fullName: string): void {
+    if (this.article.id == articleId) {
+      this.article.numOfLikes += 1;
+      this.article.likes.users.push(fullName);
+    }
+  }
+
   private dislikeArticle(article: Article, fullName: string): void {
     article.numOfLikes -= 1;
     const userIndex = article.likes.users.indexOf(fullName);
     if (userIndex !== -1) {
       article.likes.users.splice(userIndex, 1);
+    }
+  }
+
+  private dislikeThisArticle(articleId: string, fullName: string): void {
+    if (this.article.id == articleId) {
+      this.article.numOfLikes -= 1;
+      const userIndex = this.article.likes.users.indexOf(fullName);
+      if (userIndex !== -1) {
+        this.article.likes.users.splice(userIndex, 1);
+      }
     }
   }
 }

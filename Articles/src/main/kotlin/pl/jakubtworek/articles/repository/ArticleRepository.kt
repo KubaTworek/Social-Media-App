@@ -26,6 +26,8 @@ interface ArticleRepository : JpaRepository<Article, Int> {
     )
     override fun findAll(): List<Article>
 
+    fun countAllByMotherArticleId(motherArticleId: Int): Int
+
     @Query(
         "SELECT a FROM Article a " +
                 "LEFT JOIN FETCH a.likes " +

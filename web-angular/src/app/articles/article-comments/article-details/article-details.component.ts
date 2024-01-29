@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation} from "@angular/core";
 import {Article} from "../../dto/article.type";
-import {ArticleDeleteComponent} from "../../article-list/article-card/article-delete/article-delete.component";
+import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
 import {DataStorageService} from "../../../shared/data-storage.service";
 import {ArticleRequest} from "../../dto/article-request.type";
 import {AuthorizationService} from "../../../auth/service/authorization.service";
@@ -35,6 +35,10 @@ export class ArticleDetailsComponent {
     return (username !== null && username === this.article.author.username) || role == 'ROLE_ADMIN';
   }
 
+  getUsername(): string | null {
+    return this.authorizationService.getUsername();
+  }
+
   openDeleteModal(): void {
     this.articleDeleteComponent.open();
   }
@@ -58,7 +62,6 @@ export class ArticleDetailsComponent {
     if (textareaElement) {
       const request = new ArticleRequest(textareaElement.value);
       this.dataStorage.updateArticle(this.article.id, request);
-      this.close();
     }
   }
 
@@ -77,7 +80,7 @@ export class ArticleDetailsComponent {
       const userNames = this.article.likes.users.map(user => `<div>${user}</div>`).join('');
       const tooltipContent = `<div class="article-details__like-tooltip-content">${userNames}</div>`;
       const tooltip = document.createElement('div');
-      tooltip.classList.add('article-card__like-tooltip');
+      tooltip.classList.add('article-details__like-tooltip');
       tooltip.innerHTML = tooltipContent;
       const likeButton = document.querySelector(`#article-details__like-container-${articleId}`);
       likeButton?.appendChild(tooltip);
@@ -86,9 +89,17 @@ export class ArticleDetailsComponent {
 
   hideLikes(articleId: string): void {
     const likeButton = document.querySelector(`#article-details__like-container-${articleId}`);
-    const tooltip = likeButton?.querySelector('.article-card__like-tooltip');
+    const tooltip = likeButton?.querySelector('.article-details__like-tooltip');
     if (tooltip) {
       likeButton?.removeChild(tooltip);
+    }
+  }
+
+  followOrUnfollowAuthor(id: string): void {
+    if (this.article.author.isFollowed) {
+      this.dataStorage.unfollowAuthor(id);
+    } else {
+      this.dataStorage.followAuthor(id);
     }
   }
 

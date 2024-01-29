@@ -3,7 +3,7 @@
     <h4>{{ 'DELETE_ASK' | translate }}</h4>
     <p>{{ 'DELETE_INFORMATION' | translate }}</p>
     <div class="article-delete__actions">
-      <button (click)="confirm()"
+      <button [routerLink]="['/home']" (click)="confirm()"
               class="article-delete__btn article-delete__btn-confirm">{{ 'DELETE' | translate }}</button>
       <button (click)="cancel()"
               class="article-delete__btn article-delete__btn-cancel">{{ 'CANCEL' | translate }}</button>

@@ -10,6 +10,7 @@ export class Article {
   public createDate: string;
   public likes: LikesInfo;
   public numOfLikes: number;
+  public numOfComments: number;
 
   constructor(
     author: AuthorDto,
@@ -19,7 +20,8 @@ export class Article {
     elapsed: string,
     createDate: string,
     likes: LikesInfo,
-    numOfLikes: number
+    numOfLikes: number,
+    numOfComments: number
   ) {
     this.author = author;
     this.timestamp = timestamp;
@@ -29,5 +31,6 @@ export class Article {
     this.createDate = createDate;
     this.likes = likes;
     this.numOfLikes = numOfLikes;
+    this.numOfComments = numOfComments;
   }
 }

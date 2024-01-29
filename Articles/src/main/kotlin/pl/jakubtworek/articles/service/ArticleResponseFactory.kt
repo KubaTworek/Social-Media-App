@@ -7,10 +7,12 @@ import pl.jakubtworek.articles.controller.dto.AuthorResponse
 import pl.jakubtworek.articles.controller.dto.LikeInfoResponse
 import pl.jakubtworek.articles.entity.Article
 import pl.jakubtworek.articles.external.AuthorApiService
+import pl.jakubtworek.articles.repository.ArticleRepository
 
 @Component
 class ArticleResponseFactory(
-    private val authorService: AuthorApiService
+    private val authorService: AuthorApiService,
+    private val articleRepository: ArticleRepository
 ) {
     fun createResponse(theArticle: Article, userId: Int): ArticleResponse {
         val author = authorService.getAuthorById(theArticle.authorId)
@@ -18,6 +20,7 @@ class ArticleResponseFactory(
             val liker = authorService.getAuthorById(like.authorId)
             "${liker.firstName} ${liker.lastName}"
         }
+        val comments = articleRepository.countAllByMotherArticleId(theArticle.id);
 
         return ArticleResponse(
             id = theArticle.id,
@@ -34,7 +37,8 @@ class ArticleResponseFactory(
             },
             likes = LikeInfoResponse(
                 users = likerFullNames
-            )
+            ),
+            numOfComments = comments
         )
     }
 
