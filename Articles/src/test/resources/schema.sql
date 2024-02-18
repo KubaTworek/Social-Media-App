@@ -3,11 +3,11 @@ DROP TABLE IF EXISTS ARTICLES;
 
 CREATE TABLE IF NOT EXISTS ARTICLES
 (
-    ARTICLE_ID integer AUTO_INCREMENT,
-    CREATE_AT  timestamp     NOT NULL,
-    CONTENT    varchar(4000) NOT NULL,
-    AUTHOR_ID  integer       NOT NULL,
-    MOTHER_ARTICLE_ID   integer,
+    ARTICLE_ID        integer AUTO_INCREMENT,
+    CREATE_AT         timestamp     NOT NULL,
+    CONTENT           varchar(4000) NOT NULL,
+    AUTHOR_ID         integer       NOT NULL,
+    MOTHER_ARTICLE_ID integer,
     PRIMARY KEY (ARTICLE_ID)
 );
 

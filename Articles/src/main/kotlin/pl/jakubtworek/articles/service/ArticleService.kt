@@ -12,10 +12,9 @@ interface ArticleService {
     fun getArticle(articleId: Int, jwt: String): ArticleOneResponse
     fun getArticlesByAuthorId(authorId: Int): List<ArticleDTO>
     fun getArticleById(articleId: Int): ArticleDTO
-    fun saveArticle(request: ArticleRequest, jwt: String)
+    fun saveArticle(request: ArticleRequest, jwt: String): ArticleResponse
     fun updateArticle(request: ArticleRequest, articleId: Int, jwt: String)
     fun handleLikeAction(articleId: Int, jwt: String): LikeResponse
     fun deleteArticleById(articleId: Int, jwt: String)
     fun deleteArticlesByAuthorId(authorId: Int)
-    fun saveComment(request: ArticleRequest, articleId: Int, jwt: String)
 }

@@ -77,8 +77,8 @@ abstract class AbstractIT {
         val headers = HttpHeaders()
         headers.set("Authorization", "dummy-jwt")
 
-        val articleRequest1 = ArticleRequest("Example Content 1")
-        val articleRequest2 = ArticleRequest("Example Content 2")
+        val articleRequest1 = ArticleRequest("Example Content 1", null)
+        val articleRequest2 = ArticleRequest("Example Content 2", null)
 
         createArticle(articleRequest1)
         createArticle(articleRequest2)

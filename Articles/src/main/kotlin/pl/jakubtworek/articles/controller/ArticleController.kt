@@ -65,14 +65,6 @@ class ArticleController(
         @RequestBody request: ArticleRequest
     ) = articleService.saveArticle(request, jwt)
 
-    @PostMapping("/comment/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.CREATED)
-    fun saveComment(
-        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
-        @RequestBody request: ArticleRequest,
-        @PathVariable articleId: Int
-    ) = articleService.saveComment(request, articleId, jwt)
-
     @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun updateArticle(

@@ -10,12 +10,11 @@ import {ArticleWithComments} from "../dto/article-with-comments.type";
 })
 export class ArticleService {
   articlesChanged = new Subject<Article[]>();
+  activityChanged = new Subject<ArticleWithComments>();
   private isForYouActiveSubject = new BehaviorSubject<boolean>(true);
   isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
   private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
-  activityChanged = new Subject<ArticleWithComments>();
-
   private articles: Article[] = [];
   private article: ArticleWithComments = new ArticleWithComments(
     new AuthorDto("", "", "", "", true),
@@ -48,17 +47,12 @@ export class ArticleService {
   }
 
   setArticle(article: ArticleWithComments) {
-    console.log(article)
     this.article = article;
     this.notifyChangesActivities();
   }
 
   getArticle(): ArticleWithComments {
     return this.article;
-  }
-
-  private notifyChangesActivities() {
-    this.activityChanged.next(this.article);
   }
 
   getArticlesByKeyword(keyword: string): Article[] {
@@ -122,6 +116,21 @@ export class ArticleService {
     if (this.article.author.id === id) {
       this.article.author.isFollowed = false;
     }
+  }
+
+  addArticle(article: Article, articleMotherId: string | null) {
+    if (articleMotherId == null) {
+      this.articles.unshift(article);
+      this.notifyArticlesChanged();
+    } else {
+      const art = this.getArticle();
+      art.comments.unshift(article)
+      art.numOfComments++
+    }
+  }
+
+  private notifyChangesActivities() {
+    this.activityChanged.next(this.article);
   }
 
   private notifyArticlesChanged(): void {

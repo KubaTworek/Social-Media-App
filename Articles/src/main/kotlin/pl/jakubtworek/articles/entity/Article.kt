@@ -28,7 +28,7 @@ data class Article(
     val articles: MutableList<Article> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MOTHER_ARTICLE_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "MOTHER_ARTICLE_ID")
     val motherArticle: Article? = null,
 ) {
     constructor() : this(

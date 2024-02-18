@@ -1,7 +1,9 @@
 export class ArticleRequest {
   public text: string;
+  public articleMotherId: string | null;
 
-  constructor(text: string) {
+  constructor(text: string, articleMotherId: string | null = null) {
     this.text = text;
+    this.articleMotherId = articleMotherId;
   }
 }

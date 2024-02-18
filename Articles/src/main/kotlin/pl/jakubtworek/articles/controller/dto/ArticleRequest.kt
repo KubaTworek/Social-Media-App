@@ -1,5 +1,6 @@
 package pl.jakubtworek.articles.controller.dto
 
 data class ArticleRequest(
-    val text: String
+    val text: String,
+    val articleMotherId: Int?,
 )

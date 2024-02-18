@@ -139,13 +139,10 @@ export class DataStorageService {
     const endpoint = `${this.apiUrl}/articles/api/`;
 
     this.http
-      .post<void>(endpoint, JSON.stringify(request), {headers})
+      .post<Article>(endpoint, JSON.stringify(request), {headers})
       .pipe(
         catchError(this.handleHttpError),
-        tap(() => this.fetchArticles(0, 5)
-          .pipe(
-            tap(this.updateArticleService)
-          ).subscribe())
+        tap((newArticle: Article) => this.addArticle(newArticle, request.articleMotherId))
       )
       .subscribe();
   }
@@ -309,6 +306,11 @@ export class DataStorageService {
   updateArticleService = (articles: Article[]) =>
     this.articleService.setArticlesAndNotify(articles);
 
+  private addArticle(article: Article, articleMotherId: string | null) {
+    const mappedArticle = this.mapSingleArticleData(article)
+    this.articleService.addArticle(mappedArticle, articleMotherId)
+  }
+
   private createHeaders(): HttpHeaders {
     const token = this.authorizationService.getToken();
 
@@ -343,13 +345,23 @@ export class DataStorageService {
       numOfComments: article.numOfComments
     }));
 
+  private mapSingleArticleData(article: Article): Article {
+    return {
+      ...article,
+      elapsed: this.getTimeElapsed(article.timestamp),
+      createDate: this.formatDateTime(article.timestamp),
+      numOfLikes: article.likes.users.length,
+      numOfComments: article.numOfComments
+    };
+  }
+
   private mapArticle = (article: ArticleWithComments): ArticleWithComments => ({
     ...article,
     elapsed: this.getTimeElapsed(article.timestamp),
     createDate: this.formatDateTime(article.timestamp),
     numOfLikes: article.likes.users.length,
     numOfComments: article.comments.length,
-    comments: article.comments.map(comment => this.mapArticle(comment))
+    comments: article.comments.map(comment => this.mapSingleArticleData(comment))
   });
 
   private getTimeElapsed(timestamp: Date): string {

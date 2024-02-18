@@ -1,5 +1,5 @@
 <div class="article-post">
-  <textarea [(ngModel)]="articleContent" class="article-post__content"
-            placeholder="{{ 'POST_PLACEHOLDER' | translate }}"></textarea>
+  <textarea [(ngModel)]="articleContent" [placeholder]="placeholderText ? placeholderText : ('POST_PLACEHOLDER' | translate)"
+            class="article-post__content"></textarea>
   <button (click)="createArticle()" class="article-post__send-button">{{ 'SEND' | translate }}</button>
 </div>

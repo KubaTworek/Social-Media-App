@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {ArticleRequest} from "../dto/article-request.type";
 import {DataStorageService} from "../../shared/data-storage.service";
 
@@ -8,6 +8,8 @@ import {DataStorageService} from "../../shared/data-storage.service";
   styleUrls: ['./article-post.component.scss']
 })
 export class ArticlePostComponent {
+  @Input() placeholderText: string = '';
+  @Input() motherArticleId: string | null = null;
   articleContent = '';
 
   constructor(private dataStorageService: DataStorageService) {
@@ -19,7 +21,8 @@ export class ArticlePostComponent {
     }
 
     const request: ArticleRequest = {
-      text: this.articleContent
+      text: this.articleContent,
+      articleMotherId: this.motherArticleId
     };
 
     this.dataStorageService.storeArticle(request);

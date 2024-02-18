@@ -27,7 +27,7 @@ class ArticleControllerIT : AbstractIT() {
     @Test
     fun testSaveArticle() {
         // Given
-        val articleRequest = ArticleRequest("New content")
+        val articleRequest = ArticleRequest("New content", null)
 
         // When
         createArticle(articleRequest)
@@ -44,7 +44,7 @@ class ArticleControllerIT : AbstractIT() {
     @Test
     fun testUpdateArticle() {
         // Given
-        val articleRequest = ArticleRequest("New content")
+        val articleRequest = ArticleRequest("New content", null)
 
         // When
         createArticle(articleRequest)
@@ -59,7 +59,7 @@ class ArticleControllerIT : AbstractIT() {
 
         // UDPATED
         // Given
-        val articleRequest2 = ArticleRequest("Updated content")
+        val articleRequest2 = ArticleRequest("Updated content", null)
 
         // When
         updateArticle(articleRequest2, articles!![0].id)

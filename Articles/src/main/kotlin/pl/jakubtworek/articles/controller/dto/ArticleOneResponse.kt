@@ -8,5 +8,5 @@ data class ArticleOneResponse(
     val timestamp: Timestamp,
     val author: AuthorResponse,
     val likes: LikeInfoResponse,
-    var comments: List<ArticleOneResponse>
+    var comments: List<ArticleResponse>
 )

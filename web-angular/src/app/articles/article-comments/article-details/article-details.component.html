@@ -4,7 +4,8 @@
       {{ article.author.firstName }} {{ article.author.lastName }}
       <span class="article-details__author-username">@{{ article.author.username }} &bull; {{ article.elapsed }}</span>
     </p>
-    <button *ngIf="this.article.author.username != getUsername()" (click)="followOrUnfollowAuthor(article.author.id)" class="article-details__follow-button">
+    <button (click)="followOrUnfollowAuthor(article.author.id)" *ngIf="this.article.author.username != getUsername()"
+            class="article-details__follow-button">
       {{ article.author.isFollowed ? ('UNFOLLOW' | translate) : ('FOLLOW' | translate) }}
     </button>
   </div>
@@ -33,6 +34,8 @@
     </div>
   </div>
 </article>
+<article-post [motherArticleId]="this.article.id"
+              [placeholderText]="'Replying to @' + this.article.author.username"></article-post>
 <article-delete (cancelled)="onArticleDeleteCancelled()"
                 (confirmed)="onArticleDeleteConfirmed(article.id)"></article-delete>
 

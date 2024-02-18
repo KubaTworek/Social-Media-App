@@ -69,7 +69,7 @@ class ArticleServiceImpl(
         val response = articleResponseFactory.createResponseForOneArticle(articleWithLikes, userDetails.authorId)
 
         response.comments = articleWithArticles.articles
-            .map { articleResponseFactory.createResponseForOneArticle(it, userDetails.authorId) }
+            .map { articleResponseFactory.createResponse(it, userDetails.authorId) }
 
         return response
     }
@@ -87,20 +87,22 @@ class ArticleServiceImpl(
             .orElseThrow { ArticleNotFoundException("Article not found") }
     }
 
-    override fun saveComment(request: ArticleRequest, articleId: Int, jwt: String) {
-
-    } // todo:
-
-    override fun saveArticle(request: ArticleRequest, jwt: String) {
+    override fun saveArticle(request: ArticleRequest, jwt: String): ArticleResponse {
         logger.info("Saving article")
         val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
+        val motherArticle = request.articleMotherId?.let {
+            articleRepository.findById(it)
+                .orElseThrow { ArticleNotFoundException("Article not found") }
+        }
         val article = from(
             request = request,
-            userDetails = userDetails
+            userDetails = userDetails,
+            motherArticle = motherArticle
         )
         val created = articleRepository.save(article)
         sendArticleMessage(created)
         logger.info("Article saved successfully")
+        return articleResponseFactory.createResponse(created, userDetails.authorId)
     }
 
     override fun updateArticle(request: ArticleRequest, articleId: Int, jwt: String) {
@@ -185,12 +187,13 @@ class ArticleServiceImpl(
             authorId = article.authorId
         )
 
-    private fun from(request: ArticleRequest, userDetails: UserDetailsDTO): Article =
+    private fun from(request: ArticleRequest, userDetails: UserDetailsDTO, motherArticle: Article?): Article =
         Article(
             id = 0,
             createAt = Timestamp(System.currentTimeMillis()),
             content = request.text,
-            authorId = userDetails.authorId
+            authorId = userDetails.authorId,
+            motherArticle = motherArticle
         )
 
     private fun from(likerId: Int, likedArticle: Article): Like =
