@@ -37,6 +37,59 @@ class ArticleServiceImpl(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    override fun saveArticle(request: ArticleRequest, jwt: String): ArticleResponse {
+        logger.info("Saving article")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
+        val motherArticle = request.articleMotherId?.let {
+            articleRepository.findById(it)
+                .orElseThrow { ArticleNotFoundException("Article not found") }
+        }
+        val article = from(
+            request = request,
+            userDetails = userDetails,
+            motherArticle = motherArticle
+        )
+        val created = articleRepository.save(article)
+        sendArticleMessage(created)
+        logger.info("Article saved successfully")
+        return articleResponseFactory.createResponse(created, userDetails.authorId)
+    }
+
+    override fun handleLikeAction(articleId: Int, jwt: String): LikeResponse {
+        logger.info("Processing like for article ID: $articleId")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
+        val article = articleRepository.findById(articleId)
+            .orElseThrow { ArticleNotFoundException("Article not found") }
+
+        val hasLiked = article.likes.any { it.authorId == userDetails.authorId }
+        return if (hasLiked) {
+            removeLike(article, userDetails.authorId)
+            LikeResponse(DISLIKE_ACTION)
+        } else {
+            addLike(article, userDetails.authorId)
+            LikeResponse(LIKE_ACTION)
+        }
+    }
+
+    override fun updateArticle(request: ArticleRequest, articleId: Int, jwt: String) {
+        logger.info("Updating article by ID: $articleId")
+        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
+        val article = articleRepository.findById(articleId)
+            .orElseThrow { ArticleNotFoundException("Article not found") }
+
+        if (canUpdateArticle(article.authorId, userDetails.authorId)) {
+            val updated = from(
+                request = request,
+                articleToUpdate = article,
+                userDetails = userDetails
+            )
+            articleRepository.save(updated)
+            logger.info("Article updated successfully")
+        } else {
+            handleUnauthorizedUpdateAttempt(userDetails.username)
+        }
+    }
+
     override fun getLatestArticles(page: Int, size: Int, jwt: String): List<ArticleResponse> {
         logger.info("Fetching latest articles, page: $page, size: $size")
         val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
@@ -85,59 +138,6 @@ class ArticleServiceImpl(
         return articleRepository.findById(articleId)
             .map { toDTO(it) }
             .orElseThrow { ArticleNotFoundException("Article not found") }
-    }
-
-    override fun saveArticle(request: ArticleRequest, jwt: String): ArticleResponse {
-        logger.info("Saving article")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
-        val motherArticle = request.articleMotherId?.let {
-            articleRepository.findById(it)
-                .orElseThrow { ArticleNotFoundException("Article not found") }
-        }
-        val article = from(
-            request = request,
-            userDetails = userDetails,
-            motherArticle = motherArticle
-        )
-        val created = articleRepository.save(article)
-        sendArticleMessage(created)
-        logger.info("Article saved successfully")
-        return articleResponseFactory.createResponse(created, userDetails.authorId)
-    }
-
-    override fun updateArticle(request: ArticleRequest, articleId: Int, jwt: String) {
-        logger.info("Updating article by ID: $articleId")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER, ROLE_ADMIN)
-        val article = articleRepository.findById(articleId)
-            .orElseThrow { ArticleNotFoundException("Article not found") }
-
-        if (canUpdateArticle(article.authorId, userDetails.authorId)) {
-            val updated = from(
-                request = request,
-                articleToUpdate = article,
-                userDetails = userDetails
-            )
-            articleRepository.save(updated)
-            logger.info("Article updated successfully")
-        } else {
-            handleUnauthorizedUpdateAttempt(userDetails.username)
-        }
-    }
-
-    override fun handleLikeAction(articleId: Int, jwt: String): LikeResponse {
-        logger.info("Processing like for article ID: $articleId")
-        val userDetails = authorizationService.getUserDetailsAndValidate(jwt, ROLE_USER)
-        val article = articleRepository.findById(articleId)
-            .orElseThrow { ArticleNotFoundException("Article not found") }
-
-        val hasLiked = article.likes.any { it.authorId == userDetails.authorId }
-        return if (hasLiked) {
-            removeLike(article, userDetails.authorId)
-            LikeResponse(DISLIKE_ACTION)
-        } else {
-            addLike(article, userDetails.authorId)
-            LikeResponse(LIKE_ACTION)
-        }
     }
 
     override fun deleteArticleById(articleId: Int, jwt: String) {

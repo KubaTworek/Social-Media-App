@@ -45,7 +45,7 @@ interface ArticleRepository : JpaRepository<Article, Int> {
         "SELECT a FROM Article a " +
                 "LEFT JOIN FETCH a.likes " +
                 "WHERE a.authorId = :authorId " +
-                "ORDER BY a.createAt"
+                "ORDER BY a.createAt DESC"
     )
     fun findAllByAuthorIdOrderByCreateAt(@Param("authorId") authorId: Int): List<Article>
 
@@ -53,7 +53,7 @@ interface ArticleRepository : JpaRepository<Article, Int> {
         "SELECT a FROM Article a " +
                 "LEFT JOIN FETCH a.likes " +
                 "WHERE a.authorId IN :authorIds " +
-                "ORDER BY a.createAt"
+                "ORDER BY a.createAt DESC"
     )
     fun findAllByAuthorIdInOrderByCreateAt(@Param("authorIds") authorIds: List<Int>, pageable: Pageable): Page<Article>
 

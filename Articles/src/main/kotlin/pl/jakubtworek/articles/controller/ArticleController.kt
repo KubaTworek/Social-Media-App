@@ -18,6 +18,24 @@ class ArticleController(
     private val articleService: ArticleService
 ) {
 
+    // POST
+    @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun saveArticle(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @RequestBody request: ArticleRequest
+    ): ResponseEntity<ArticleResponse> = ResponseEntity.status(HttpStatus.CREATED)
+        .body(articleService.saveArticle(request, jwt))
+
+    @PostMapping("/like/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ResponseStatus(HttpStatus.CREATED)
+    fun likeArticle(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @PathVariable articleId: Int
+    ): ResponseEntity<LikeResponse> = ResponseEntity.status(HttpStatus.CREATED)
+        .body(articleService.handleLikeAction(articleId, jwt))
+
+    // GET
     @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getLatestArticles(
@@ -38,7 +56,7 @@ class ArticleController(
 
     @GetMapping("/id/external/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun getArticle(
+    fun getArticleDetailsById(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
     ): ResponseEntity<ArticleOneResponse> = ResponseEntity.status(HttpStatus.OK)
@@ -46,7 +64,7 @@ class ArticleController(
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
-    fun getArticlesByAuthor(
+    fun getArticlesByAuthorById(
         @PathVariable authorId: Int
     ): ResponseEntity<List<ArticleDTO>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getArticlesByAuthorId(authorId))
@@ -58,13 +76,7 @@ class ArticleController(
     ): ResponseEntity<ArticleDTO> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getArticleById(articleId))
 
-    @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.CREATED)
-    fun saveArticle(
-        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
-        @RequestBody request: ArticleRequest
-    ) = articleService.saveArticle(request, jwt)
-
+    // PUT
     @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun updateArticle(
@@ -73,14 +85,7 @@ class ArticleController(
         @PathVariable articleId: Int
     ) = articleService.updateArticle(request, articleId, jwt)
 
-    @PostMapping("/like/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.CREATED)
-    fun likeArticle(
-        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
-        @PathVariable articleId: Int
-    ): ResponseEntity<LikeResponse> = ResponseEntity.status(HttpStatus.CREATED)
-        .body(articleService.handleLikeAction(articleId, jwt))
-
+    // DELETE
     @DeleteMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteArticleById(
