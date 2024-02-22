@@ -20,11 +20,11 @@
             (mouseleave)="hideLikes(article.id)"
             class="article-details__like-button"
             id="like-button-{{article.id}}">❤️</span>
-      <span class="article-details__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+      <span class="article-details__likes" id="likes-{{article.id}}">{{ article.likes.users.length }}</span>
     </p>
     <p [routerLink]="['/home/', article.id]" class="article-details__comment-container">
       <span class="article-details__comment-button">🗨</span>
-      <span class="article-details__comments" id="comments-{{article.id}}">{{ article.numOfComments }}</span>
+      <span class="article-details__comments" id="comments-{{article.id}}">{{ article.comments.length }}</span>
     </p>
     <a (click)="openOptionsList()" *ngIf="canModify()" class="article-details__more-button">⋯</a>
     <div *ngIf="showOptions" class="article-details__more-options">

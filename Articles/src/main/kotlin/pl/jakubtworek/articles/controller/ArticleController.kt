@@ -4,39 +4,44 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import pl.jakubtworek.articles.controller.dto.ArticleOneResponse
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
-import pl.jakubtworek.articles.controller.dto.ArticleResponse
-import pl.jakubtworek.articles.controller.dto.LikeResponse
+import pl.jakubtworek.articles.controller.dto.*
 import pl.jakubtworek.articles.service.ArticleService
 import pl.jakubtworek.common.Constants.AUTHORIZATION_HEADER
 import pl.jakubtworek.common.model.ArticleDTO
 
-@RequestMapping("/api")
+@RequestMapping("/articles")
 @RestController
 class ArticleController(
     private val articleService: ArticleService
 ) {
 
     // POST
-    @PostMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun saveArticle(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
-        @RequestBody request: ArticleRequest
+        @RequestBody request: ArticleCreateRequest
     ): ResponseEntity<ArticleResponse> = ResponseEntity.status(HttpStatus.CREATED)
         .body(articleService.saveArticle(request, jwt))
 
-    @PostMapping("/like/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @PostMapping("/{articleId}/like", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.CREATED)
     fun likeArticle(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
-    ): ResponseEntity<LikeResponse> = ResponseEntity.status(HttpStatus.CREATED)
+    ): ResponseEntity<LikeActionResponse> = ResponseEntity.status(HttpStatus.CREATED)
         .body(articleService.handleLikeAction(articleId, jwt))
 
+    // PUT
+    @PutMapping(produces = [MediaType.APPLICATION_JSON_VALUE]) // "/{authorId}"
+    @ResponseStatus(HttpStatus.OK)
+    fun updateArticle(
+        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
+        @RequestBody request: ArticleUpdateRequest
+    ) = articleService.updateArticle(request, jwt)
+
     // GET
-    @GetMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getLatestArticles(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
@@ -45,7 +50,7 @@ class ArticleController(
     ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getLatestArticles(page, size, jwt))
 
-    @GetMapping("/following", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/authors/followed", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getLatestFollowingArticles(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
@@ -54,12 +59,12 @@ class ArticleController(
     ): ResponseEntity<List<ArticleResponse>> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getLatestFollowingArticles(page, size, jwt))
 
-    @GetMapping("/id/external/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getArticleDetailsById(
         @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
         @PathVariable articleId: Int
-    ): ResponseEntity<ArticleOneResponse> = ResponseEntity.status(HttpStatus.OK)
+    ): ResponseEntity<ArticleDetailsResponse> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getArticle(articleId, jwt))
 
     @GetMapping("/author/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -76,15 +81,6 @@ class ArticleController(
     ): ResponseEntity<ArticleDTO> = ResponseEntity.status(HttpStatus.OK)
         .body(articleService.getArticleById(articleId))
 
-    // PUT
-    @PutMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
-    @ResponseStatus(HttpStatus.OK)
-    fun updateArticle(
-        @RequestHeader(AUTHORIZATION_HEADER) jwt: String,
-        @RequestBody request: ArticleRequest,
-        @PathVariable articleId: Int
-    ) = articleService.updateArticle(request, articleId, jwt)
-
     // DELETE
     @DeleteMapping("/{articleId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -93,7 +89,7 @@ class ArticleController(
         @PathVariable articleId: Int
     ) = articleService.deleteArticleById(articleId, jwt)
 
-    @DeleteMapping("/authorId/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @DeleteMapping("/authorId/{authorId}", produces = [MediaType.APPLICATION_JSON_VALUE]) // "/author/{authorId}"
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteArticlesByAuthorId(
         @PathVariable authorId: Int

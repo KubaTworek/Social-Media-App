@@ -1,8 +1,8 @@
-import {LikesInfo} from "./likes-info.type";
+import {LikesInfo} from "./like-details.type";
 import {AuthorDto} from "./author.type";
 import {Article} from "./article.type";
 
-export class ArticleWithComments {
+export class ArticleDetails {
   public author: AuthorDto;
   public timestamp: Date;
   public text: string;
@@ -10,8 +10,6 @@ export class ArticleWithComments {
   public elapsed: string;
   public createDate: string;
   public likes: LikesInfo;
-  public numOfLikes: number;
-  public numOfComments: number;
   public comments: Article[];
 
   constructor(
@@ -22,7 +20,6 @@ export class ArticleWithComments {
     elapsed: string,
     createDate: string,
     likes: LikesInfo,
-    numOfLikes: number,
     comments: Article[]
   ) {
     this.author = author;
@@ -32,8 +29,6 @@ export class ArticleWithComments {
     this.elapsed = elapsed;
     this.createDate = createDate;
     this.likes = likes;
-    this.numOfLikes = numOfLikes;
-    this.numOfComments = comments.length;
     this.comments = comments;
   }
 }

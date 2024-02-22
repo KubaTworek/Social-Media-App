@@ -1,4 +1,4 @@
-import {LikesInfo} from "./likes-info.type";
+import {LikesInfo} from "./like-details.type";
 import {AuthorDto} from "./author.type";
 
 export class Article {
@@ -9,7 +9,6 @@ export class Article {
   public elapsed: string;
   public createDate: string;
   public likes: LikesInfo;
-  public numOfLikes: number;
   public numOfComments: number;
 
   constructor(
@@ -20,7 +19,6 @@ export class Article {
     elapsed: string,
     createDate: string,
     likes: LikesInfo,
-    numOfLikes: number,
     numOfComments: number
   ) {
     this.author = author;
@@ -30,7 +28,6 @@ export class Article {
     this.elapsed = elapsed;
     this.createDate = createDate;
     this.likes = likes;
-    this.numOfLikes = numOfLikes;
     this.numOfComments = numOfComments;
   }
 }

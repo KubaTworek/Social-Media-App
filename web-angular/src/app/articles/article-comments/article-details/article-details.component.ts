@@ -1,9 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation} from "@angular/core";
-import {Article} from "../../dto/article.type";
 import {ArticleDeleteComponent} from "./article-delete/article-delete.component";
 import {DataStorageService} from "../../../shared/data-storage.service";
-import {ArticleRequest} from "../../dto/article-request.type";
 import {AuthorizationService} from "../../../auth/service/authorization.service";
+import {ArticleUpdateRequest} from "../../dto/article-update.type";
+import {ArticleDetails} from "../../dto/article-details.type";
 
 @Component({
   selector: 'article-details',
@@ -15,7 +15,7 @@ export class ArticleDetailsComponent {
 
   @ViewChild('modal') deleteModalRef!: ElementRef;
   @ViewChild('overlay') overlayModalRef!: ElementRef;
-  @Input() article!: Article;
+  @Input() article!: ArticleDetails;
   @ViewChild(ArticleDeleteComponent) articleDeleteComponent!: ArticleDeleteComponent;
   @Output() saved = new EventEmitter<void>();
 
@@ -60,8 +60,8 @@ export class ArticleDetailsComponent {
     const textareaElement = document.querySelector(`#content-${this.article.id}`) as HTMLTextAreaElement;
 
     if (textareaElement) {
-      const request = new ArticleRequest(textareaElement.value);
-      this.dataStorage.updateArticle(this.article.id, request);
+      const request = new ArticleUpdateRequest(textareaElement.value, this.article.id);
+      this.dataStorage.updateArticle(request);
     }
   }
 

@@ -2,7 +2,7 @@ package pl.jakubtworek.articles.controller
 
 import org.junit.jupiter.api.Test
 import pl.jakubtworek.articles.AbstractIT
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
+import pl.jakubtworek.articles.controller.dto.ArticleCreateRequest
 import kotlin.test.assertEquals
 
 class LikeArticleTest : AbstractIT() {
@@ -10,7 +10,7 @@ class LikeArticleTest : AbstractIT() {
     @Test
     fun shouldLikeArticle() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -20,14 +20,14 @@ class LikeArticleTest : AbstractIT() {
         val like = response.returnResult().responseBody
         assertEquals("like", like?.status)
         val likedArticle = getArticleDetailsById(createdArticleId, "user-jwt")
-        assertEquals(1, likedArticle.returnResult()?.responseBody?.likes?.users?.size)
-        assertEquals("FirstName LastName", likedArticle.returnResult()?.responseBody?.likes?.users?.get(0))
+        assertEquals(1, likedArticle.returnResult().responseBody?.likes?.users?.size)
+        assertEquals("FirstName LastName", likedArticle.returnResult().responseBody?.likes?.users?.get(0))
     }
 
     @Test
     fun shouldLikeAndDislikeArticle() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -40,7 +40,7 @@ class LikeArticleTest : AbstractIT() {
         val dislike = responseDislike.returnResult().responseBody
         assertEquals("dislike", dislike?.status)
         val likedArticle = getArticleDetailsById(createdArticleId, "user-jwt")
-        assertEquals(0, likedArticle.returnResult()?.responseBody?.likes?.users?.size)
+        assertEquals(0, likedArticle.returnResult().responseBody?.likes?.users?.size)
     }
 
     @Test

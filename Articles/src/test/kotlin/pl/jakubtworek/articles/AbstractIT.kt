@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.kafka.support.SendResult
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import pl.jakubtworek.articles.controller.dto.ArticleOneResponse
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
-import pl.jakubtworek.articles.controller.dto.ArticleResponse
-import pl.jakubtworek.articles.controller.dto.LikeResponse
+import pl.jakubtworek.articles.controller.dto.*
 import pl.jakubtworek.articles.exception.ErrorResponse
 import pl.jakubtworek.articles.kafka.message.LikeMessage
 import pl.jakubtworek.articles.kafka.service.KafkaLikeService
@@ -80,8 +77,8 @@ abstract class AbstractIT {
     }
 
     // POST
-    fun saveArticle(articleRequest: ArticleRequest, jwt: String) =
-        webTestClient.post().uri("/api/")
+    fun saveArticle(articleRequest: ArticleCreateRequest, jwt: String) =
+        webTestClient.post().uri("/articles")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .bodyValue(articleRequest)
@@ -89,8 +86,8 @@ abstract class AbstractIT {
             .expectStatus().isCreated
             .expectBody(ArticleResponse::class.java)
 
-    fun saveArticleAndReturnError(articleRequest: ArticleRequest, jwt: String) =
-        webTestClient.post().uri("/api/")
+    fun saveArticleAndReturnError(articleRequest: ArticleCreateRequest, jwt: String) =
+        webTestClient.post().uri("/articles")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .bodyValue(articleRequest)
@@ -98,31 +95,31 @@ abstract class AbstractIT {
             .expectBody(ErrorResponse::class.java)
 
     fun likeArticle(articleId: Int, jwt: String) =
-        webTestClient.post().uri("/api/like/$articleId")
+        webTestClient.post().uri("/articles/like/$articleId")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isCreated
-            .expectBody(LikeResponse::class.java)
+            .expectBody(LikeActionResponse::class.java)
 
     fun likeArticleAndReturnError(articleId: Int, jwt: String) =
-        webTestClient.post().uri("/api/like/$articleId")
+        webTestClient.post().uri("/articles/like/$articleId")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .exchange()
             .expectBody(ErrorResponse::class.java)
 
     // PUT
-    fun updateArticle(articleRequest: ArticleRequest, articleId: Int, jwt: String) =
-        webTestClient.put().uri("/api/$articleId")
+    fun updateArticle(articleRequest: ArticleUpdateRequest, jwt: String) =
+        webTestClient.put().uri("/articles")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .bodyValue(articleRequest)
             .exchange()
             .expectStatus().isOk
 
-    fun updateArticleAndReturnError(articleRequest: ArticleRequest, articleId: Int, jwt: String) =
-        webTestClient.put().uri("/api/$articleId")
+    fun updateArticleAndReturnError(articleRequest: ArticleUpdateRequest, jwt: String) =
+        webTestClient.put().uri("/articles")
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", jwt)
             .bodyValue(articleRequest)
@@ -131,60 +128,60 @@ abstract class AbstractIT {
 
     // GET
     fun getLatestArticles(jwt: String, page: Int, size: Int) =
-        webTestClient.get().uri("/api/?page=$page&size=$size")
+        webTestClient.get().uri("/articles?page=$page&size=$size")
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isOk
             .expectBodyList(ArticleResponse::class.java)
 
     fun getLatestFollowingArticles(jwt: String, page: Int, size: Int) =
-        webTestClient.get().uri("/api/following?page=$page&size=$size")
+        webTestClient.get().uri("/articles/authors/followed?page=$page&size=$size")
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isOk
             .expectBodyList(ArticleResponse::class.java)
 
     fun getArticleDetailsById(articleId: Int, jwt: String) =
-        webTestClient.get().uri("/api/id/external/$articleId")
+        webTestClient.get().uri("/articles/$articleId")
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isOk
-            .expectBody(ArticleOneResponse::class.java)
+            .expectBody(ArticleDetailsResponse::class.java)
 
     fun getArticleDetailsAndReturnError(articleId: Int, jwt: String) =
-        webTestClient.get().uri("/api/id/external/$articleId")
+        webTestClient.get().uri("/articles/$articleId")
             .header("Authorization", jwt)
             .exchange()
             .expectBody(ErrorResponse::class.java)
 
     fun getArticlesByAuthorId(authorId: Int) =
-        webTestClient.get().uri("/api/author/$authorId")
+        webTestClient.get().uri("/articles/author/$authorId")
             .exchange()
             .expectStatus().isOk
             .expectBodyList(ArticleDTO::class.java)
 
     fun getArticleById(articleId: Int) =
-        webTestClient.get().uri("/api/id/$articleId")
+        webTestClient.get().uri("/articles/id/$articleId")
             .exchange()
             .expectStatus().isOk
             .expectBody(ArticleDTO::class.java)
 
     // DELETE
     fun deleteArticleById(articleId: Int, jwt: String) =
-        webTestClient.delete().uri("/api/$articleId")
+        webTestClient.delete().uri("/articles/$articleId")
             .header("Authorization", jwt)
             .exchange()
             .expectStatus().isNoContent
             .expectBody().isEmpty
 
     fun deleteArticleByIdAndReturnError(articleId: Int, jwt: String) =
-        webTestClient.delete().uri("/api/$articleId")
+        webTestClient.delete().uri("/articles/$articleId")
             .header("Authorization", jwt)
             .exchange()
             .expectBody(ErrorResponse::class.java)
 
     fun deleteArticlesByAuthorId(authorId: Int) =
-        webTestClient.delete().uri("/api/authorId/$authorId")
+        webTestClient.delete().uri("/articles/authorId/$authorId")
             .exchange()
             .expectStatus().isNoContent
             .expectBody().isEmpty

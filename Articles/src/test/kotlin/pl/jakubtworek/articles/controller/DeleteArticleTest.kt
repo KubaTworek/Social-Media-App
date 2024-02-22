@@ -2,7 +2,7 @@ package pl.jakubtworek.articles.controller
 
 import org.junit.jupiter.api.Test
 import pl.jakubtworek.articles.AbstractIT
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
+import pl.jakubtworek.articles.controller.dto.ArticleCreateRequest
 import kotlin.test.assertEquals
 
 class DeleteArticleTest : AbstractIT() {
@@ -10,7 +10,7 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticle() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -25,9 +25,9 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteComment() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
-        val commentRequest = ArticleRequest("Example Comment", createdArticleId)
+        val commentRequest = ArticleCreateRequest("Example Comment", createdArticleId)
         val commentId = saveArticle(commentRequest, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -44,9 +44,9 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticleWithComment() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
-        val commentRequest = ArticleRequest("Example Comment", createdArticleId)
+        val commentRequest = ArticleCreateRequest("Example Comment", createdArticleId)
         val commentId = saveArticle(commentRequest, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -64,7 +64,7 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticleWithLike() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
         likeArticle(createdArticleId!!, "user-jwt")
 
@@ -80,7 +80,7 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticle_byAnotherUser() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -94,7 +94,7 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticle_byAdmin() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When
@@ -109,7 +109,7 @@ class DeleteArticleTest : AbstractIT() {
     @Test
     fun shouldDeleteArticleByAuthorId() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
         val createdArticleId = saveArticle(request, "user-jwt").returnResult().responseBody?.id
 
         // When

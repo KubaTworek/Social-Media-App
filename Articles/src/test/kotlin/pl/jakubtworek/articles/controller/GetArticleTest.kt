@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import pl.jakubtworek.articles.AbstractIT
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
+import pl.jakubtworek.articles.controller.dto.ArticleCreateRequest
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -13,13 +13,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldReturnLatestArticles() {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -84,13 +87,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldReturnLatestFollowingArticles() {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -122,13 +128,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldReturnArticleDetailsById() {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -151,13 +160,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldReturnArticlesByAuthorId() {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -180,13 +192,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldReturnArticleById() {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -205,13 +220,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldPageLatestArticles(expectedSize: Int, page: Int, size: Int) {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")
@@ -228,13 +246,16 @@ class GetArticleTest : AbstractIT() {
     fun shouldPageLatestFollowingArticles(expectedSize: Int, page: Int, size: Int) {
         // Given
         val articleOneID =
-            saveArticle(ArticleRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
+            saveArticle(ArticleCreateRequest("Example Article 1", null), "user-jwt").returnResult().responseBody?.id
         val articleTwoID =
-            saveArticle(ArticleRequest("Example Article 2", null), "another-user-jwt").returnResult().responseBody?.id
-        saveArticle(ArticleRequest("Example Comment 1", articleOneID), "another-user-jwt")
-        saveArticle(ArticleRequest("Example Comment 2", articleTwoID), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 3", null), "user-jwt")
-        saveArticle(ArticleRequest("Example Article 4", null), "user-jwt")
+            saveArticle(
+                ArticleCreateRequest("Example Article 2", null),
+                "another-user-jwt"
+            ).returnResult().responseBody?.id
+        saveArticle(ArticleCreateRequest("Example Comment 1", articleOneID), "another-user-jwt")
+        saveArticle(ArticleCreateRequest("Example Comment 2", articleTwoID), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 3", null), "user-jwt")
+        saveArticle(ArticleCreateRequest("Example Article 4", null), "user-jwt")
         likeArticle(articleTwoID!!, "user-jwt")
         likeArticle(articleOneID!!, "user-jwt")
         likeArticle(articleOneID, "another-user-jwt")

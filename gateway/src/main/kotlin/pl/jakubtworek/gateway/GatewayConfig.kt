@@ -18,9 +18,9 @@ open class GatewayConfig {
     open fun myRoutes(builder: RouteLocatorBuilder): RouteLocator {
         return builder.routes()
             .route { p ->
-                p.path("/articles/api/**")
+                p.path("/api/articles/**")
                     .filters { f ->
-                        f.rewritePath("/articles/(?<segment>.*)", "/\${segment}")
+                        f.rewritePath("/api/(?<segment>.*)", "/\${segment}")
                         f.filter(createRequestLogger("ARTICLES"))
                         f.filter(createResponseLogger("ARTICLES"))
                     }

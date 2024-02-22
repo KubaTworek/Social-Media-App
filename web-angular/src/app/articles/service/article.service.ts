@@ -2,21 +2,21 @@ import {Injectable} from '@angular/core';
 import {Article} from '../dto/article.type';
 import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {AuthorDto} from "../dto/author.type";
-import {LikesInfo} from "../dto/likes-info.type";
-import {ArticleWithComments} from "../dto/article-with-comments.type";
+import {LikesInfo} from "../dto/like-details.type";
+import {ArticleDetails} from "../dto/article-details.type";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ArticleService {
   articlesChanged = new Subject<Article[]>();
-  activityChanged = new Subject<ArticleWithComments>();
+  activityChanged = new Subject<ArticleDetails>();
   private isForYouActiveSubject = new BehaviorSubject<boolean>(true);
   isForYouActive$: Observable<boolean> = this.isForYouActiveSubject.asObservable();
   private isFollowingActiveSubject = new BehaviorSubject<boolean>(false);
   isFollowingActive$: Observable<boolean> = this.isFollowingActiveSubject.asObservable();
   private articles: Article[] = [];
-  private article: ArticleWithComments = new ArticleWithComments(
+  private article: ArticleDetails = new ArticleDetails(
     new AuthorDto("", "", "", "", true),
     new Date(),
     "",
@@ -24,7 +24,6 @@ export class ArticleService {
     "",
     "",
     new LikesInfo([]),
-    0,
     []
   );
 
@@ -46,12 +45,12 @@ export class ArticleService {
     return [...this.articles];
   }
 
-  setArticle(article: ArticleWithComments) {
+  setArticle(article: ArticleDetails) {
     this.article = article;
     this.notifyChangesActivities();
   }
 
-  getArticle(): ArticleWithComments {
+  getArticle(): ArticleDetails {
     return this.article;
   }
 
@@ -125,7 +124,6 @@ export class ArticleService {
     } else {
       const art = this.getArticle();
       art.comments.unshift(article)
-      art.numOfComments++
     }
   }
 
@@ -156,19 +154,16 @@ export class ArticleService {
   }
 
   private likeArticle(article: Article, fullName: string): void {
-    article.numOfLikes += 1;
     article.likes.users.push(fullName);
   }
 
   private likeThisArticle(articleId: string, fullName: string): void {
     if (this.article.id == articleId) {
-      this.article.numOfLikes += 1;
       this.article.likes.users.push(fullName);
     }
   }
 
   private dislikeArticle(article: Article, fullName: string): void {
-    article.numOfLikes -= 1;
     const userIndex = article.likes.users.indexOf(fullName);
     if (userIndex !== -1) {
       article.likes.users.splice(userIndex, 1);
@@ -177,7 +172,6 @@ export class ArticleService {
 
   private dislikeThisArticle(articleId: string, fullName: string): void {
     if (this.article.id == articleId) {
-      this.article.numOfLikes -= 1;
       const userIndex = this.article.likes.users.indexOf(fullName);
       if (userIndex !== -1) {
         this.article.likes.users.splice(userIndex, 1);

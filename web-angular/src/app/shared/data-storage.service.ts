@@ -6,7 +6,7 @@ import {ArticleService} from "../articles/service/article.service";
 import {NotificationService} from "../notifications/service/notification.service";
 import {AuthorizationService} from "../auth/service/authorization.service";
 import {Article} from "../articles/dto/article.type";
-import {ArticleRequest} from "../articles/dto/article-request.type";
+import {ArticleCreateRequest} from "../articles/dto/article-create.type";
 import {Notification} from "../notifications/dto/notification.type";
 import {RegisterRequest} from "../auth/shared/register-request.type";
 import {LoginRequest} from "../auth/shared/login-request.type";
@@ -15,7 +15,8 @@ import {AuthorDto} from "../articles/dto/author.type";
 import {AuthorsService} from "../authors/service/authors.service";
 import {Author} from "../authors/dto/author.type";
 import {AuthorWithActivities} from "../authors/dto/author-with-activities.type";
-import {ArticleWithComments} from "../articles/dto/article-with-comments.type";
+import {ArticleDetails} from "../articles/dto/article-details.type";
+import {ArticleUpdateRequest} from "../articles/dto/article-update.type";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -31,10 +32,105 @@ export class DataStorageService {
   ) {
   }
 
+  // ARTICLES
+  // POST
+  storeArticle(request: ArticleCreateRequest): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles`;
+
+    this.http
+      .post<Article>(endpoint, JSON.stringify(request), {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap((newArticle: Article) => this.addArticle(newArticle, request.articleMotherId))
+      )
+      .subscribe();
+  }
+
+  likeArticle(articleId: string): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles/${articleId}/like`;
+
+    this.http
+      .post<any>(endpoint, null, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(response => {
+          const status: 'like' | 'dislike' = response?.status;
+          this.articleService.likeOrDislikeArticle(articleId, status);
+        })
+      )
+      .subscribe();
+  }
+
+  // PUT
+  updateArticle(request: ArticleUpdateRequest): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles`;
+
+    this.http
+      .put<void>(endpoint, JSON.stringify(request), {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(() => this.articleService.updateArticle(request.articleId, request.text))
+      )
+      .subscribe();
+  }
+
+  // GET
+  fetchArticles(page: number, size: number): Observable<Article[]> {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles?page=${page}&size=${size}`;
+
+    return this.http
+      .get<Article[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+      );
+  }
+
+  fetchFollowingArticles(page: number, size: number): Observable<Article[]> {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles/authors/followed?page=${page}&size=${size}`;
+
+    return this.http
+      .get<Article[]>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+      );
+  }
+
+  fetchArticle(articleId: string): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles/${articleId}`;
+
+    this.http
+      .get<ArticleDetails>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(article => this.articleService.setArticle(article))
+      )
+      .subscribe();
+  }
+
+  // DELETE
+  deleteArticle(articleId: string): void {
+    const headers = this.createHeaders();
+    const endpoint = `${this.apiUrl}/api/articles/${articleId}`;
+
+    this.http
+      .delete<void>(endpoint, {headers})
+      .pipe(
+        catchError(this.handleHttpError),
+        tap(() => this.articleService.deleteArticle(articleId))
+      )
+      .subscribe();
+  }
+
   fetchAuthors(): Observable<AuthorDto[]> {
     const headers = this.createHeaders();
     const endpoint = `${this.apiUrl}/authors/api/`;
-    console.log(endpoint)
+
     return this.http
       .get<AuthorDto[]>(endpoint, {headers})
       .pipe(catchError(this.handleHttpError));
@@ -47,58 +143,6 @@ export class DataStorageService {
     this.http
       .put<void>(endpoint, null, {headers})
       .pipe(catchError(this.handleHttpError))
-      .subscribe();
-  }
-
-  fetchArticles(page: number, size: number): Observable<Article[]> {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/?page=${page}&size=${size}`;
-    console.log(endpoint)
-
-    return this.http
-      .get<Article[]>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        map(this.mapArticleData)
-      );
-  }
-
-  fetchArticle(articleId: string): void {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/id/external/${articleId}`;
-    console.log(endpoint)
-    this.http
-      .get<ArticleWithComments>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        map(this.mapArticle),
-        tap(article => this.articleService.setArticle(article))
-      )
-      .subscribe();
-  }
-
-  fetchFollowingArticles(page: number, size: number): Observable<Article[]> {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/following?page=${page}&size=${size}`;
-    console.log(endpoint)
-    return this.http
-      .get<Article[]>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        map(this.mapArticleData)
-      );
-  }
-
-  updateArticle(id: string, request: ArticleRequest): void {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/${id}`;
-    console.log(request)
-    this.http
-      .put<void>(endpoint, JSON.stringify(request), {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        tap(() => this.articleService.updateArticle(id, request.text))
-      )
       .subscribe();
   }
 
@@ -129,48 +173,6 @@ export class DataStorageService {
         tap(() => {
           this.articleService.unfollowAuthor(id)
           this.authorizationService.unfollowAuthor()
-        })
-      )
-      .subscribe();
-  }
-
-  storeArticle(request: ArticleRequest): void {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/`;
-
-    this.http
-      .post<Article>(endpoint, JSON.stringify(request), {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        tap((newArticle: Article) => this.addArticle(newArticle, request.articleMotherId))
-      )
-      .subscribe();
-  }
-
-  deleteArticle(articleId: string): void {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/${articleId}`;
-
-    this.http
-      .delete<void>(endpoint, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        tap(() => this.articleService.deleteArticle(articleId))
-      )
-      .subscribe();
-  }
-
-  likeArticle(articleId: string): void {
-    const headers = this.createHeaders();
-    const endpoint = `${this.apiUrl}/articles/api/like/${articleId}`;
-
-    this.http
-      .post<any>(endpoint, null, {headers})
-      .pipe(
-        catchError(this.handleHttpError),
-        tap(response => {
-          const status: 'like' | 'dislike' = response?.status;
-          this.articleService.likeOrDislikeArticle(articleId, status);
         })
       )
       .subscribe();
@@ -307,8 +309,7 @@ export class DataStorageService {
     this.articleService.setArticlesAndNotify(articles);
 
   private addArticle(article: Article, articleMotherId: string | null) {
-    const mappedArticle = this.mapSingleArticleData(article)
-    this.articleService.addArticle(mappedArticle, articleMotherId)
+    this.articleService.addArticle(article, articleMotherId)
   }
 
   private createHeaders(): HttpHeaders {
@@ -334,78 +335,5 @@ export class DataStorageService {
   private handleHttpError(error: HttpErrorResponse): Observable<never> {
     console.error(error);
     return throwError(error);
-  }
-
-  private mapArticleData = (articles: Article[]): Article[] =>
-    articles.map(article => ({
-      ...article,
-      elapsed: this.getTimeElapsed(article.timestamp),
-      createDate: this.formatDateTime(article.timestamp),
-      numOfLikes: article.likes.users.length,
-      numOfComments: article.numOfComments
-    }));
-
-  private mapSingleArticleData(article: Article): Article {
-    return {
-      ...article,
-      elapsed: this.getTimeElapsed(article.timestamp),
-      createDate: this.formatDateTime(article.timestamp),
-      numOfLikes: article.likes.users.length,
-      numOfComments: article.numOfComments
-    };
-  }
-
-  private mapArticle = (article: ArticleWithComments): ArticleWithComments => ({
-    ...article,
-    elapsed: this.getTimeElapsed(article.timestamp),
-    createDate: this.formatDateTime(article.timestamp),
-    numOfLikes: article.likes.users.length,
-    numOfComments: article.comments.length,
-    comments: article.comments.map(comment => this.mapSingleArticleData(comment))
-  });
-
-  private getTimeElapsed(timestamp: Date): string {
-    const now = new Date();
-    const timeDiff = now.getTime() - new Date(timestamp).getTime();
-
-    if (timeDiff < 60000) {
-      const seconds = Math.floor(timeDiff / 1000);
-      return seconds + "s";
-    } else if (timeDiff < 3600000) {
-      const minutes = Math.floor(timeDiff / 60000);
-      return minutes + "m";
-    } else if (timeDiff < 86400000) {
-      const hours = Math.floor(timeDiff / 3600000);
-      return hours + "h";
-    } else if (timeDiff < 604800000) {
-      const days = Math.floor(timeDiff / 86400000);
-      return days + "d";
-    } else {
-      const weeks = Math.floor(timeDiff / 604800000);
-      return weeks + "w";
-    }
-  }
-
-  private formatDateTime(inputDateString: Date): string {
-    const date = new Date(inputDateString);
-
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    const day = date.getDate();
-    const month = date.toLocaleString('en-US', {month: 'short'});
-    const year = date.getFullYear();
-
-    const formattedTime = this.formatTime(hour, minute);
-    const formattedDate = `${month} ${day}, ${year}`;
-
-    return `${formattedTime} · ${formattedDate}`;
-  }
-
-  private formatTime(hour: number, minute: number): string {
-    const isPM = hour >= 12;
-    const formattedHour = hour % 12 || 12;
-    const period = isPM ? 'PM' : 'AM';
-
-    return `${formattedHour}:${minute.toString().padStart(2, '0')} ${period}`;
   }
 }

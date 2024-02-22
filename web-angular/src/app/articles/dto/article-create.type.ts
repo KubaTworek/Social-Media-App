@@ -1,4 +1,4 @@
-export class ArticleRequest {
+export class ArticleCreateRequest {
   public text: string;
   public articleMotherId: string | null;
 

@@ -2,14 +2,14 @@ package pl.jakubtworek.articles.controller
 
 import org.junit.jupiter.api.Test
 import pl.jakubtworek.articles.AbstractIT
-import pl.jakubtworek.articles.controller.dto.ArticleRequest
+import pl.jakubtworek.articles.controller.dto.ArticleCreateRequest
 import kotlin.test.assertEquals
 
 class CreateArticleTest : AbstractIT() {
     @Test
     fun shouldCreateArticle() {
         // Given
-        val request = ArticleRequest("Example Test", null)
+        val request = ArticleCreateRequest("Example Test", null)
 
         // When
         val response = saveArticle(request, "user-jwt")
@@ -27,13 +27,13 @@ class CreateArticleTest : AbstractIT() {
     @Test
     fun shouldCreateComment() {
         // Given
-        val articleRequest = ArticleRequest("Example Article", null)
+        val articleRequest = ArticleCreateRequest("Example Article", null)
         val articleId = saveArticle(articleRequest, "user-jwt").returnResult().responseBody?.id
-        val commentOneRequest = ArticleRequest("Example Comment 1", articleId)
+        val commentOneRequest = ArticleCreateRequest("Example Comment 1", articleId)
 
         // When
         val firstCommentId = saveArticle(commentOneRequest, "user-jwt").returnResult().responseBody?.id
-        val commentTwoRequest = ArticleRequest("Example Comment 2", firstCommentId)
+        val commentTwoRequest = ArticleCreateRequest("Example Comment 2", firstCommentId)
         saveArticle(commentTwoRequest, "user-jwt")
 
         // Then
@@ -64,7 +64,7 @@ class CreateArticleTest : AbstractIT() {
     @Test
     fun shouldThrowException_whenCommentNotExistArticle() {
         // Given
-        val commentOneRequest = ArticleRequest("Example Comment 1", 999)
+        val commentOneRequest = ArticleCreateRequest("Example Comment 1", 999)
 
         // When
         val response = saveArticleAndReturnError(commentOneRequest, "user-jwt")

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Subscription} from "rxjs";
 import {ArticleService} from "../service/article.service";
-import {ArticleWithComments} from "../dto/article-with-comments.type";
+import {ArticleDetails} from "../dto/article-details.type";
 
 @Component({
   selector: 'author-activities',
@@ -10,7 +10,7 @@ import {ArticleWithComments} from "../dto/article-with-comments.type";
 })
 export class ArticleCommentsComponent implements OnInit {
 
-  article!: ArticleWithComments;
+  article!: ArticleDetails;
   private articleSubscription: Subscription = new Subscription();
 
   constructor(
@@ -21,7 +21,7 @@ export class ArticleCommentsComponent implements OnInit {
   ngOnInit(): void {
     this.articleSubscription = this.articleService.activityChanged
       .subscribe(
-        (article: ArticleWithComments) => {
+        (article: ArticleDetails) => {
           this.article = article;
         }
       );

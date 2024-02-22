@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {ArticleRequest} from "../dto/article-request.type";
+import {ArticleCreateRequest} from "../dto/article-create.type";
 import {DataStorageService} from "../../shared/data-storage.service";
 
 @Component({
@@ -20,7 +20,7 @@ export class ArticlePostComponent {
       return;
     }
 
-    const request: ArticleRequest = {
+    const request: ArticleCreateRequest = {
       text: this.articleContent,
       articleMotherId: this.motherArticleId
     };

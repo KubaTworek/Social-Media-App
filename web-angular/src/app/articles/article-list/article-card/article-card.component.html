@@ -14,7 +14,7 @@
             (mouseleave)="hideLikes(article.id)"
             class="article-card__like-button"
             id="like-button-{{article.id}}">❤️</span>
-      <span class="article-card__likes" id="likes-{{article.id}}">{{ article.numOfLikes }}</span>
+      <span class="article-card__likes" id="likes-{{article.id}}">{{ article.likes.users.length }}</span>
     </p>
 
     <p [routerLink]="['/home/', article.id]" class="article-card__comment-container">
